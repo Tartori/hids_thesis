@@ -1,0 +1,159 @@
+%!TEX program = lualatex
+
+\documentclass[
+	a4paper,					% paper format
+	10pt,							% fontsize
+	twoside,					% double-sided
+	openright,				% begin new chapter on right side
+	notitlepage,			% use no standard title page
+	parskip=half,			% set paragraph skip to half of a line
+]{scrreprt}					% KOMA-script report
+
+\raggedbottom
+\KOMAoptions{cleardoublepage=plain}			% Add header and footer on blank pages
+
+\usepackage{csquotes}
+\usepackage{kpfonts}
+\usepackage[hidelinks]{hyperref}
+\usepackage{color}
+
+% Code Segments
+\usepackage{listings}
+
+\usepackage[standard-baselineskips]{cmbright}
+
+\usepackage[ngerman,english]{babel}										% english hyphenation
+\usepackage[utf8]{inputenc}  							% Unix/Linux - load extended character set (ISO 8859-1)
+%\usepackage[ansinew]{inputenc}  							% Windows - load extended character set (ISO 8859-1)
+\usepackage[T1]{fontenc}											% hyphenation of words with ä, ö and ü
+\usepackage{textcomp}													% additional symbols
+\usepackage{ae}																% better resolution of Type1-Fonts
+\usepackage{fancyhdr}													% simple manipulation of header and footer
+\usepackage{etoolbox}													% color manipulation of header and footer
+\usepackage{graphicx}                      		% integration of images
+\usepackage{float}														% floating objects
+\usepackage{caption}													% for captions of figures and tables
+\usepackage{booktabs}													% package for nicer tables
+\usepackage{tocvsec2}													% provides means of controlling the sectional numbering
+\usepackage{tabularx}
+    \newcolumntype{L}{>{\raggedright\arraybackslash}X}
+%---------------------------------------------------------------------------
+
+% Set up page dimension
+%---------------------------------------------------------------------------
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	left=28mm,
+	right=15mm,
+	top=30mm,
+	headheight=20mm,
+	headsep=10mm,
+	textheight=242mm,
+	footskip=15mm
+}
+
+
+% Compact Itemize:
+%---------------------------------------------------------------------------
+\newenvironment{compactitemize}
+{ \begin{itemize}
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{itemize}                  }
+\newenvironment{compactenumerate}
+{ \begin{enumerate}
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{enumerate}  				 }
+
+\RequirePackage{color}                          % Color (not xcolor!)
+\definecolor{linkblue}{rgb}{0,0,0.8}            % Standard
+\definecolor{darkblue}{rgb}{0,0.08,0.45}        % Dark blue
+\definecolor{bfhgrey}{rgb}{0.41,0.49,0.57}      % BFH grey
+\definecolor{linkcolor}{rgb}{0,0,0.8}  
+\definecolor{darkblue}{rgb}{0,.2,.4}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{brown}{rgb}{.4,.4,.3}
+\definecolor{darkred}{rgb}{.6,0,0}
+\definecolor{linenumbergray}{rgb}{.6,.6,.6}   			% Blue for the web- and cd-version!
+%\definecolor{linkcolor}{rgb}{0,0,0}        			% Black for the print-version!
+
+
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{lscape}
+
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+
+
+% Sequence Diagram
+\usepackage{geometry}
+\usepackage{pgf-umlsd}
+\usetikzlibrary{calc}
+
+% Glossary
+\usepackage[toc,section=section]{glossaries}
+\makeglossaries
+\input{glossary.tex}
+
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\usepackage[backend=biber, style=ieee]{biblatex}
+\addbibresource{thesis.bib}
+\usepackage{graphicx}
+\begin{document}
+\title{Alternative scalable HIDS with investigation capability}
+\date{\today} 
+\author{ Julian Stampfli (\texttt{julianjimmy.stampfli@students.bfh.ch}) }
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+\clearpage
+
+\chapter{Project Management}
+
+\section{Goal}
+\label{apdx-sec:goal}
+Before the start of the project the following main goal was defined:
+
+Building of an \gls{hids} that detects unauthorized or unusual behaviour on the file system. Compared to traditional \gls{hids} file system integrity checking, it should scale with a lot of data and have the possibility to be used for investigation (retain historic data) built in from the start.
+
+\subsection{Sub goals}
+
+From this primary goal, the following sub goals were defined. 
+
+\subsubsection{Searching}
+The system is capable of searching the file system for certain properties. The search is done by leveraging the sleuthkit tools. Thus the system is capable of interpreting the results from sleuthkit. It will further analyze them and decide on what to do with the results. Especially importance is given to the finding of differences. The use of sleuthkit tools is for enabling the scaling of file systems. 
+
+\subsubsection{Recording}
+The system records all findings. Including new, changed and deleted files in comparison to an earlier point in time. This recording enables the use of investigation as the evolution of the data can be viewed at any time. This data can also be used for machine learning algorithms to detect anomalies that are out of the scope of this thesis. 
+
+\subsubsection{Evaluation}
+The system is capable of evaluating the results by applying predefined rules. Those rules can be adjusted by configuring the system.
+
+It is thinkable that the system analyzes the recordings and makes decisions based on the historical behavior of the specific host and behavior from different similar hosts. This approach is not part of this thesis as it requires much historical data that is not present at the time of this thesis. 
+
+\subsubsection{Alerting}
+The system is capable of being run continuously. This capability enables it to find anomalies automatically. The system can report those anomalies by creating alerts. It allows configuration of these alerts.
+
+
+
+
+\newpage
+\clearpage
+
+\printglossaries
+
+\clearpage
+
+%% Print the bibibliography and add the section to the table of content
+
+\end{document}
