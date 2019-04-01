@@ -1,6 +1,6 @@
 # hids_thesis
 
-Todo:
+## Todos
 
 * Finish Setting up Latex
 * Decide on a Programming Language
@@ -15,3 +15,76 @@ Todo:
 * Add multiple connections to different database systems
 * Add multiple different versions of alerting
 * Add software hardening --> detection of modification of software or config
+
+## programming language decisions
+
+### java
+
+pros:
+
+* already very good knowledge
+* some community resources
+
+cons:
+
+* low motivation
+* low learning potential
+* big overhead
+
+### python
+
+pros:
+
+* already some basic foundation
+* a lot of community resources
+* active library to directly call sleuthkit tool
+* lot of activity in community
+* small overhead
+* easy to prototype
+
+cons:
+
+* dynamically typed
+
+### go
+
+pros:
+
+* interesting new language
+* made for (low level) server side applications
+
+cons:
+
+* no prior knowledge
+* no prior community support
+
+## meeting notes
+
+* I will contact expert and setup a meeting with him
+* Main points of that meeting is describing what I want to do / project
+* and Showing that I already put in some work.
+* ils command
+* fls -v output
+
+### schedule
+
+* daemon vs scheduled task
+* what timestamp to put
+* how to add it to db, once per file, batched
+* adding a tag for each run
+* different objects for different file systems
+* timezones (later)
+* cool name
+* Journal!
+
+### next meeting
+
+* 11.4.19 11:00 Cafeteria Biel
+
+KMail on phone for pgp mails
+
+## expert meeting notes 28.03
+
+Discussion Points:
+
+* what do I do
