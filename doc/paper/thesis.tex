@@ -36,7 +36,6 @@
 \usepackage{booktabs}													% package for nicer tables
 \usepackage{tocvsec2}													% provides means of controlling the sectional numbering
 \usepackage{tabularx}
-    \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 %---------------------------------------------------------------------------
 
 % Set up page dimension
@@ -208,9 +207,9 @@ The run of the system on a sufficiently big file system completes in an appropri
 
 \section{Workpackages}
 
-From those goals the following workpackages were defined. For a better overview they are assigned to categories. The categories are Architecture, Implementation, Validation and Environmental. Architecture is about defining how the system will look like and how it should work. Implementation is the effective implementation work for getting the system to run, this includes configuration and coding. Validation is about testing of the system. Environmental is everything that deals with project management and other workpackages that don't directly influence the system but need to be done.
+From those goals the workpackages in table \ref{tab:workpackages} were defined. For a better overview they are assigned to categories. The categories are Architecture, Implementation, Validation and Administrative. Architecture is about defining how the system will look like and how it should work. Implementation is the effective implementation work for getting the system to run, this includes configuration and coding. Validation is about testing of the system. Administrative is everything that deals with project management and other workpackages that don't directly influence the system but need to be done.
 
-The ID is a combination of the first letter of the category and a unique index. 
+The ID is a combination of the first letter of the category and a unique index. Administrative is shortened to D due to the conflict with Architecture.
 
 The priority is a value of high, medium and low. 
 
@@ -221,10 +220,10 @@ The workpackages are chrononically ordered. Meaning they should be worked on in 
     \caption{Workpackages}
     \label{tab:workpackages}
     \begin{tabular}{c|l|c|l}
-      \textbf{ID} & \textbf{Short description} & \textbf{Priority} & \textbf{Category} \\
+      \textbf{ID} & \textbf{Short description} & \textbf{Prio} & \textbf{Category} \\
       \hline
-      E00 & Setting up \LaTeX document & h & Environmental \\
-      E01 & Define workpackages and set deadlines & h & Environmental \\
+      D00 & Setting up \LaTeX -document & h & Administrative \\
+      D01 & Define workpackages and set deadlines & h & Administrative \\
 			A00 & Research other \gls{hids} and the sleuthkit tools & h & Architecture \\
 			A01 & Decide on a Programming Language & h & Architecture \\
 			I00 & Setup the developer environment & h & Implementation \\
@@ -246,18 +245,19 @@ The workpackages are chrononically ordered. Meaning they should be worked on in 
 			I09 & Add multiple alerting methods & m & Implementation \\
 			A05 & Define how to protect system and configuration from tampering & l & Architecture \\
 			I10 & Implement software hardening & l & Implementation \\
-			E02 & Finish user documentation & m & Environmental \\
-			E03 & Finish project documentation & h & Environmental \\ 
-			E04 & Create project presentation & h & Environmental \\
-			E05 & Create project poster & m & Environmental \\
-			E06 & Create project video & l & Environmental \\
+			D02 & Finish user documentation & m & Administrative \\
+			D03 & Finish project documentation & h & Administrative \\ 
+			D04 & Create project presentation & h & Administrative \\
+			D05 & Create project poster & m & Administrative \\
+			D06 & Create project video & l & Administrative \\
     \end{tabular}
   \end{center}
 \end{table}
 
 \section{Planning}
 
-For the planning of this project the following milestones were created. Each coveres multiple workpackages. The mapping can be seen in the following table.
+For the planning of this project the following milestones were created. Each coveres multiple workpackages. The mapping can be seen in table \ref{tab:milestones}. The milestones can also be seen in figure \ref{apdx-fig:milestones}. There they are displayed with an assumed and actual finish date.
+
 
 
 \begin{table}[h!]
@@ -267,21 +267,18 @@ For the planning of this project the following milestones were created. Each cov
     \begin{tabular}{c|l|c|l}
       \textbf{ID} & \textbf{Short description} & \textbf{Workpackages} \\
       \hline
-			00 & Setup & E00, E01, A00, A01, I00 \\
+			00 & Setup & D00, D01, A00, A01, I00 \\
 			01 & Initial functionality & A02, I01, I02, I03 \\
 			02 & Rules & A03, I04, I05, V00 \\
 			03 & Alerting & A04, I06, I07 \\
 			04 & Exhaustive testing & V01, V02, V03 \\
-			05 & Usability & I08, I09, E02 \\
+			05 & Usability & I08, I09, D02 \\
 			06 & Software Hardening & A05, I10 \\
-			07 & Presentation & E02, E03, E04, E05, E06 \\
+			07 & Presentation & D02, D03, D04, D05, D06 \\
     \end{tabular}
   \end{center}
 \end{table}
 
-\subsection{Timeplan}
-
-From the above milestones together with some dates defined from the project framework follows this timeplan.
 
 \begin{figure}[H]
 	\begin{ganttchart}[
