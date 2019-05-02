@@ -15,7 +15,15 @@ class Database:
 
     def setup(self):
         self.cursor.execute(
-            ("CREATE TABLE FIDS_FILES("
+            ("CREATE TABLE FIDS_RUN("
+                "id text, "
+                "config_hash text, "
+                "start_time int, "
+                "finish_time int);"))
+
+        self.cursor.execute(
+            ("CREATE TABLE FIDS_FILE("
+                "run_id text,"
                 "path text, "
                 "name text, "
                 "file_type int, "
@@ -26,18 +34,34 @@ class Database:
                 "access_time int, "
                 "changed_time int);"))
 
-    def safeFile(self, file):
+    def start_run(self, run):
         self.cursor.execute(
-            "INSERT INTO FIDS_FILES(path, name, file_type, size, mode, creation_time, modification_time, access_time, changed_time) values (?,?,?,?,?,?,?,?,?); ",
-            (file.path,
-             file.name,
-             int(file.file_type),
-             file.size,
-             file.mode,
-             file.creation_time,
-             file.modification_time,
-             file.access_time,
-             file.changed_time))
+            "INSERT INTO FIDS_RUN(id, config_hash, start_time) values (?,?,?); ",
+            (run.id,
+             run.config_hash,
+             run.start_time,
+             ))
+
+    def finish_run(self, run):
+        self.cursor.execute(
+            "UPDATE FIDS_RUN SET finish_time = ? WHERE id = ?; ",
+            (run.finish_time,
+             run.id,
+             ))
+
+    def safe_file(self, file, run):
+        self.cursor.execute(
+            "INSERT INTO FIDS_FILE(run_id, path, name, file_type, size, mode, creation_time, modification_time, access_time, changed_time) values (?,?,?,?,?,?,?,?,?,?); ",
+            (run.id,
+                file.path,
+                file.name,
+                int(file.file_type),
+                file.size,
+                file.mode,
+                file.creation_time,
+                file.modification_time,
+                file.access_time,
+                file.changed_time))
 
     def commit(self):
         self.conn.commit()

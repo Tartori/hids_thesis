@@ -10,3 +10,8 @@ class Config:
         print(cfg)
         self.fids_config = FidsConfig(cfg['fids'])
         self.db_config = DbConfig(cfg['db'])
+
+    def __repr__(self):
+        return ("Config("
+                f"fids_config={self.fids_config},"
+                f"db_config={self.db_config}")
