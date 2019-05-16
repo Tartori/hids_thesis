@@ -23,6 +23,16 @@
 * extending fids file table to contain all the information of TSK for file and directory
 * the alerting stuff
 
+``` bash
+file.info.meta.attr is sadly not acessible... 
+
+>>> file.info.meta.
+file.info.meta.addr         file.info.meta.content_len  file.info.meta.ctime        file.info.meta.link         file.info.meta.nlink        file.info.meta.type
+file.info.meta.atime        file.info.meta.content_ptr  file.info.meta.ctime_nano   file.info.meta.mode         file.info.meta.seq          file.info.meta.uid
+file.info.meta.atime_nano   file.info.meta.crtime       file.info.meta.flags        file.info.meta.mtime        file.info.meta.size         
+file.info.meta.attr_state   file.info.meta.crtime_nano  file.info.meta.gid          file.info.meta.mtime_nano   file.info.meta.tag   
+```
+
 #### mile stones
 
 * finished coding with prototype
@@ -100,3 +110,8 @@ KMail on phone for pgp mails
 Discussion Points:
 
 * what do I do
+
+## links
+
+<http://www.sleuthkit.org/sleuthkit/docs/api-docs/4.2/structTSK__FS__FILE.html#a74c7fc77db20b5c4efc617806fd49e2e>
+<https://github.com/py4n6/pytsk/wiki/Development>
