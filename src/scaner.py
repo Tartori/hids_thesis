@@ -1,6 +1,6 @@
 import pytsk3
 from hids_file import HidsFile
-from config.fids_config import FidsConfig
+from .config.fids_config import FidsConfig
 
 
 class Scanner:
@@ -41,5 +41,3 @@ class Scanner:
 
 if __name__ == "__main__":
     from pprint import pprint
-    scanner = Scanner(path="/", image_path="../images/usb1.dd")
-    pprint(scanner.scan())

@@ -5,24 +5,75 @@ class HidsFile:
     def __init__(
             self,
             path="",
-            name="",
-            file_type="",
-            size=0,
-            creation_time=0,
-            modification_time=0,
-            access_time=0,
-            changed_time=0,
-            mode=0,
+            meta_addr=0,
+            meta_access_time=0,
+            meta_access_time_nano=0,
+            meta_attr_state=0,
+            meta_content_len=0,
+            meta_content_ptr=0,
+            meta_creation_time=0,
+            meta_changed_time=0,
+            meta_creation_time_nano=0,
+            meta_changed_time_nano=0,
+            meta_flags=0,
+            meta_gid=0,
+            meta_link=0,
+            meta_mode=0,
+            meta_modification_time=0,
+            meta_modification_time_nano=0,
+            meta_nlink=0,
+            meta_seq=0,
+            meta_size=0,
+            meta_tag=0,
+            meta_type=0,
+            meta_uid=0,
+            name_flags=0,
+            name_meta_addr=0,
+            name_meta_seq=0,
+            name_name=0,
+            name_size=0,
+            name_par_addr=0,
+            name_par_seq=0,
+            name_short_name=0,
+            name_short_name_size=0,
+            name_tag=0,
+            name_type=0,
+            attributes=[],
     ):
         self.path = path
-        self.name = name
-        self.file_type = file_type
-        self.size = size
-        self.mode = mode
-        self.creation_time = creation_time
-        self.modification_time = modification_time
-        self.access_time = access_time
-        self.changed_time = changed_time
+        self.meta_addr = meta_addr
+        self.meta_access_time = meta_access_time
+        self.meta_access_time_nano = meta_access_time_nano
+        self.meta_attr_state = meta_attr_state
+        self.meta_content_len = meta_content_len
+        self.meta_content_ptr = meta_content_ptr
+        self.meta_creation_time = meta_creation_time
+        self.meta_creation_time_nano = meta_creation_time_nano
+        self.meta_changed_time = meta_changed_time
+        self.meta_changed_time_nano = meta_changed_time_nano
+        self.meta_flags = meta_flags
+        self.meta_gid = meta_gid
+        self.meta_link = meta_link
+        self.meta_mode = meta_mode
+        self.meta_modification_time = meta_modification_time
+        self.meta_modification_time_nano = meta_modification_time_nano
+        self.meta_nlink = meta_nlink
+        self.meta_seq = meta_seq
+        self.meta_size = meta_size
+        self.meta_tag = meta_tag
+        self.meta_type = meta_type
+        self.meta_uid = meta_uid
+        self.name_flags = name_flags
+        self.name_meta_addr = name_meta_addr
+        self.name_meta_seq = name_meta_seq
+        self.name_name = name_name
+        self.name_size = name_size
+        self.name_par_addr = name_par_addr
+        self.name_par_seq = name_par_seq
+        self.name_short_name = name_short_name
+        self.name_short_name_size = name_short_name_size
+        self.name_tag = name_tag
+        self.name_type = name_type
 
     def set_path(self, path):
         self.path = path
@@ -30,30 +81,81 @@ class HidsFile:
     def parse_tsk_file(self, tsk_file):
         """ return void
             will parse a TSK_FS_FILE in the structure defined here.
-            The TSK API Documentation can be found here 
+            The TSK API Documentation can be found here
             <http://www.sleuthkit.org/sleuthkit/docs/api-docs/4.5/structTSK__FS__FILE.html>
             Be sure to set the path either in the constructor or with the set_path function.
         """
-        self.name = tsk_file.info.name.name.decode("ascii")
-        self.file_type = int(tsk_file.info.name.type)
-        self.size = tsk_file.info.meta.size  # size in bytes
-        self.creation_time = tsk_file.info.meta.crtime
-        self.modification_time = tsk_file.info.meta.mtime
-        self.access_time = tsk_file.info.meta.atime
-        self.changed_time = tsk_file.info.meta.ctime
-        self.mode = int(tsk_file.info.meta.mode)
+        self.meta_addr = tsk_file.info.meta.addr
+        self.meta_access_time = tsk_file.info.meta.atime
+        self.meta_access_time_nano = tsk_file.info.meta.atime_nano
+        self.meta_attr_state = tsk_file.info.meta.attr_state
+        self.meta_content_len = tsk_file.info.meta.content_len
+        self.meta_content_ptr = tsk_file.info.meta.content_ptr
+        self.meta_creation_time = tsk_file.info.meta.crtime
+        self.meta_creation_time_nano = tsk_file.info.meta.crtime_nano
+        self.meta_changed_time = tsk_file.info.meta.ctime
+        self.meta_changed_time_nano = tsk_file.info.meta.ctime_nano
+        self.meta_flags = int(tsk_file.info.meta.flags)
+        self.meta_gid = tsk_file.info.meta.gid
+        self.meta_link = tsk_file.info.meta.link
+        self.meta_mode = int(tsk_file.info.meta.mode)
+        self.meta_modification_time = tsk_file.info.meta.mtime
+        self.meta_modification_time_nano = tsk_file.info.meta.mtime_nano
+        self.meta_nlink = tsk_file.info.meta.nlink
+        self.meta_seq = tsk_file.info.meta.seq
+        self.meta_size = tsk_file.info.meta.size
+        self.meta_tag = tsk_file.info.meta.tag
+        self.meta_type = tsk_file.info.meta.type
+        self.meta_uid = tsk_file.info.meta.uid
+        self.name_flags = int(tsk_file.info.name.flags)
+        self.name_meta_addr = tsk_file.info.name.meta_addr
+        self.name_meta_seq = tsk_file.info.name.meta_seq
+        self.name_name = tsk_file.info.name.name.decode("ascii")
+        self.name_size = tsk_file.info.name.name_size
+        self.name_par_addr = tsk_file.info.name.par_addr
+        self.name_par_seq = tsk_file.info.name.par_seq
+        self.name_short_name = tsk_file.info.name.shrt_name
+        self.name_short_name_size = tsk_file.info.name.shrt_name_size
+        self.name_tag = tsk_file.info.name.tag
+        self.name_type = tsk_file.info.name.type
 
     def __repr__(self):
         return ('HidsFile('
                 f'path="{self.path}",'
-                f'name="{self.name}",'
-                f'file_type="{self.file_type}",'
-                f'size={self.size},'
-                f'creation_time={self.creation_time},'
-                f'modification_time={self.modification_time},'
-                f'access_time={self.access_time},'
-                f'changed_time={self.changed_time},'
-                f'mode={self.mode},)')
+                f'meta_addr={self.meta_addr},'
+                f'meta_access_time={self.meta_access_time},'
+                f'meta_access_time_nano={self.meta_access_time_nano},'
+                f'meta_attr_state={self.meta_attr_state},'
+                f'meta_content_len={self.meta_content_len},'
+                f'meta_content_ptr={self.meta_content_ptr},'
+                f'meta_creation_time={self.meta_creation_time},'
+                f'meta_creation_time_nano={self.meta_creation_time_nano},'
+                f'meta_changed_time={self.meta_changed_time},'
+                f'meta_changed_time_nano={self.meta_changed_time_nano},'
+                f'meta_flags={self.meta_flags},'
+                f'meta_gid={self.meta_gid},'
+                f'meta_link={self.meta_link},'
+                f'meta_mode={self.meta_mode},'
+                f'meta_modification_time={self.meta_modification_time},'
+                f'meta_modification_time_nano={self.meta_modification_time_nano},'
+                f'meta_nlink={self.meta_nlink},'
+                f'meta_seq={self.meta_seq},'
+                f'meta_size={self.meta_size},'
+                f'meta_tag={self.meta_tag},'
+                f'meta_type={self.meta_type},'
+                f'meta_uid={self.meta_uid},'
+                f'name_flags={self.name_flags},'
+                f'name_meta_addr={self.name_meta_addr},'
+                f'name_meta_seq={self.name_meta_seq},'
+                f'name_name={self.name_name},'
+                f'name_size={self.name_size},'
+                f'name_par_addr={self.name_par_addr},'
+                f'name_par_seq={self.name_par_seq},'
+                f'name_short_name={self.name_short_name},'
+                f'name_short_name_size={self.name_short_name_size},'
+                f'name_tag={self.name_tag},'
+                f'name_type={self.name_type},'
+                ')')
 
 
 # pytsk3.TSK_FS_META_MODE_IRUSR.__str__()
