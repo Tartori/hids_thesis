@@ -1,6 +1,6 @@
 import yaml
-from .fids_config import FidsConfig
-from .db_config import DbConfig
+from fids_config import FidsConfig
+from db_config import DbConfig
 
 
 class Config:
