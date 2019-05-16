@@ -15,12 +15,15 @@
 * Add multiple connections to different database systems
 * Add multiple different versions of alerting
 * Add software hardening --> detection of modification of software or config
+
+### new todos
+
 * adding table wiht errors
 * storing everything on every run
 * extending fids file table to contain all the information of TSK for file and directory
 * the alerting stuff
 
-### mile stones
+#### mile stones
 
 * finished coding with prototype
 * update documentation
