@@ -1,6 +1,61 @@
 import pytsk3
 
 
+class Run:
+    def __init__(self,
+                 block_addr=0,
+                 length=0,
+                 ):
+        self.block_addr = block_addr
+        self.length = length
+
+    def __repr__(self):
+        return ('Run('
+                f'block_addr={self.block_addr},'
+                f'length={self.length},'
+                ')')
+
+
+class Attribute:
+    def __init__(self,
+                 tsk_attribute=None,
+                 flags=0,
+                 id=0,
+                 name="",
+                 name_size=0,
+                 at_type="",
+                 runs=[]
+                 ):
+        self.flags = flags
+        self.id = id
+        self.name = name
+        self.name_size = name_size
+        self.at_type = at_type
+        self.runs = runs
+        if tsk_attribute is not None:
+            self.parse_tsk_attribute(tsk_attribute)
+
+    def parse_tsk_attribute(self, tsk_attribute):
+        self.flags = tsk_attribute.info.flags
+        self.id = tsk_attribute.info.id
+        self.name = tsk_attribute.info.name
+        self.name_size = tsk_attribute.info.name_size
+        self.at_type = tsk_attribute.info.type
+        self.runs = []
+        for run in tsk_attribute:
+            self.runs.append(Run(block_addr=run.addr, length=run.len))
+
+    def __repr__(self):
+        return ('Attribute('
+                f'flags="{self.flags}",'
+                f'id={self.id},'
+                f'name={self.name},'
+                f'name_size={self.name_size},'
+                f'at_type={self.at_type},'
+                f'at_type={self.runs},'
+                ')')
+
+
 class HidsFile:
     def __init__(
             self,
@@ -74,6 +129,7 @@ class HidsFile:
         self.name_short_name_size = name_short_name_size
         self.name_tag = name_tag
         self.name_type = name_type
+        self.attributes = attributes
 
     def set_path(self, path):
         self.path = path
@@ -118,6 +174,9 @@ class HidsFile:
         self.name_short_name_size = tsk_file.info.name.shrt_name_size
         self.name_tag = tsk_file.info.name.tag
         self.name_type = tsk_file.info.name.type
+        self.attributes = []
+        for tsk_attribute in tsk_file:
+            self.attributes.append(Attribute(tsk_attribute=tsk_attribute))
 
     def __repr__(self):
         return ('HidsFile('
