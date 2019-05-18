@@ -1,6 +1,6 @@
 import pytsk3
 from hids_file import HidsFile
-from .config.fids_config import FidsConfig
+from config.fids_config import FidsConfig
 
 
 class Scanner:
