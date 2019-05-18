@@ -32,9 +32,11 @@ fs_info.info
 curDir = fs_info.open_dir(path)
 
 tsk_file = curDir.__next__()
-tsk_file.name.name
+tsk_file.info.name.name  # .
 tsk_file = curDir.__next__()
+tsk_file.info.name.name  # ..
 tsk_file = curDir.__next__()
+tsk_file.info.name.name
 
 open_directory_rec(path)
 
@@ -47,16 +49,3 @@ pytsk3.TSK_FS_META_MODE_IWOTH.__str__()
 pytsk3.TSK_FS_META_MODE_IXUSR.__str__()
 pytsk3.TSK_FS_META_MODE_IXGRP.__str__()
 pytsk3.TSK_FS_META_MODE_IXOTH.__str__()
-
-
-print("Attribute %s, type %s, id %s" %
-      (at.info.name, at.info.type, at.info.id))
-
-
-for attr in f:
-    print("Attribute %s, type %s, id %s" % (attr.info.name,
-                                            attr.info.type,
-                                            attr.info.id))
-    for run in attr:
-        print("   Blocks %s to %s (%s blocks)" %
-              (run.addr, run.addr + run.len, run.len))
