@@ -1,6 +1,21 @@
 import pytsk3
 
 
+class Run:
+    def __init__(self,
+                 block_addr=0,
+                 length=0,
+                 ):
+        self.block_addr = block_addr
+        self.length = length
+
+    def __repr__(self):
+        return ('Run('
+                f'block_addr={self.block_addr},'
+                f'length={self.length},'
+                ')')
+
+
 class Attribute:
     def __init__(self,
                  tsk_attribute=None,
@@ -9,12 +24,14 @@ class Attribute:
                  name="",
                  name_size=0,
                  at_type="",
+                 runs=[]
                  ):
         self.flags = flags
         self.id = id
         self.name = name
         self.name_size = name_size
         self.at_type = at_type
+        self.runs = runs
         if tsk_attribute is not None:
             self.parse_tsk_attribute(tsk_attribute)
 
@@ -24,6 +41,9 @@ class Attribute:
         self.name = tsk_attribute.info.name
         self.name_size = tsk_attribute.info.name_size
         self.at_type = tsk_attribute.info.type
+        self.runs = []
+        for run in tsk_attribute:
+            self.runs.append(Run(block_addr=run.addr, length=run.len))
 
     def __repr__(self):
         return ('Attribute('
@@ -32,6 +52,7 @@ class Attribute:
                 f'name={self.name},'
                 f'name_size={self.name_size},'
                 f'at_type={self.at_type},'
+                f'at_type={self.runs},'
                 ')')
 
 
