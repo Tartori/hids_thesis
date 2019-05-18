@@ -1,7 +1,7 @@
 from scaner import Scanner
 from hids_file import HidsFile
-from .config.config import Config
-from .db_connector.db import Database
+from config.config import Config
+from db_connector.db import Database
 from fids_run import FidsRun
 
 
