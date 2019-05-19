@@ -114,4 +114,10 @@ Discussion Points:
 ## links
 
 <http://www.sleuthkit.org/sleuthkit/docs/api-docs/4.2/structTSK__FS__FILE.html#a74c7fc77db20b5c4efc617806fd49e2e>
-<https://github.com/py4n6/pytsk/wiki/Development>
+<https://github.com/py4n6/pytsk/wiki/Development>$
+
+
+
+## source
+
+https://github.com/Tartori/fids<https://github.com/Tartori/fids>
