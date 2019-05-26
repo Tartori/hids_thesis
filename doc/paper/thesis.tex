@@ -170,7 +170,12 @@
 
 \chapter{Introduction}
 
+This Thesis is about writing and evaluating of a \gls{hids}. A 
+\gls{hids} deals with detecting attacks on a local machine. This implementation will only analyze file artifacts and no processes. Additionally it will not calculate any \gls{hash} and only look at file metadata like timestamps, permissions, names and the size. This is unusual as most \gls{hids} that operate on file basis generate a \gls{hash} for each file and compare them to make sure that the file has not changed. This implementation uses the risk based approach of not calculating those hashes for the faster execution time which means detecting changes faster. For a big file system this might lead to a better overall security. 
+
 \section{Background}
+
+In \gls{it} attacks are frequent and often lead to data exposure. Detecting such an attack as early as possible is crucial for any \gls{itsec} team. That is the job of a \gls{hids}. 
 
 \section{Goal}
 
@@ -178,7 +183,11 @@
 
 \section{HIDS}
 
+\subsection{Trippwire}
+
 \subsection{AIDE}
+
+\section{File Systems}
 
 \section{TSK}
 
@@ -210,7 +219,7 @@
 
 \chapter{Discussion}
 
-\subsection{Future Work}
+\section{Future Work}
 
 \section{Conclusion}
 
