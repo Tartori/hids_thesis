@@ -172,9 +172,9 @@
 
 An \gls{ids} is used to protect a computer from \gls{malware} attacks. It does so by tracking and evaluating activity form one or many hosts. The \gls{ids} then tries to find \glspl{anomaly} usually by comparing the activity to some type of configuration which often contains some form of blacklist or whitelist. The \glspl{anomaly} are then alerted or logged to some framework. The process of intrusion detection is generally split into a host based part with \gls{hids} and a network based part with \gls{nids}. \gls{nids} are used to detect unusual behaviour of the network. Examples include communication from hosts which usually don't comunicate. \gls{hids} on the other hand are used to detect \glspl{anomaly} on a host. This is done by detecting changes in the way processes are used or when the \gls{fs} is changed. Both types of \gls{ids} have different advantages and they should be used in conjunction for best results. \cite{needed}
 
-This Thesis is about writing of a \gls{hids} that operates on the \gls{fs}. As already mentioned a \gls{hids} operates on the host machine and detects \glspl{anomaly} by comparing resources available on the host. For detecting changes to the \gls{fs} a \gls{hids} usually generates \glspl{hash} and compares them to previous calculations. If the \gls{hash} changes, then the file has been altered. If this alteration is detected as an \gls{anomaly} it will be alerted. This approach has one weakness. The caclulation of a \gls{hash} takes time. This is historically not relevant as it is efficient enough that the entire \gls{fs} could be hashed in a small amount of time. But data requirements grew and today even in private environments storage media with multiple \gls{tb} of data are no longer the exception. With that the calculation of \glspl{hash} needs more time and traditional \gls{hids} can't scan big systems within a valuable amount of time anymore. Finding anomalies based on \gls{metadata} is faster, because the files don't need to be parsed and the size of them doesn't matter. Thus, such a \gls{hids} can be run frequently and with that \glspl{intrusion} can be detected faster, which is essential for protection. \cite{needed}
+This Thesis is about writing of a \gls{hids} that operates on the \gls{fs}. As already mentioned a \gls{hids} operates on the host machine and detects \glspl{anomaly} by comparing resources available on the host. For detecting changes to the \gls{fs} a \gls{hids} usually generates \glspl{hash} and compares them to previous calculations. If the \gls{hash} changes, then the file has been altered. If this alteration is detected as an \gls{anomaly} it will be alerted. This approach has one weakness. The caclulation of a \gls{hash} takes time. \cite{hash:slow} This is historically not relevant as it is efficient enough that the entire \gls{fs} could be hashed in a small amount of time. But storage media grew and with it the amount of data on a server. \cite{bruce:imaging} With that the calculation of \glspl{hash} needs more time and traditional \gls{hids} can't scan big systems within a valuable amount of time anymore. Finding anomalies based on \gls{metadata} is faster, because the files don't need to be parsed and the size of them doesn't matter. Thus, such a \gls{hids} can be run frequently and with that \glspl{intrusion} can be detected faster, which is essential for protection. \cite{inode}
 
-The \gls{hids} written in this thesis tries to gain another advantage. \gls{hids} are used to protect against \glspl{intrusion}. They don't offer much support in \gls{investigation} once an \gls{intrusion} happend. \cite{needed} Those \gls{investigation} capabilities are built in this implementation. 
+The \gls{hids} written in this thesis tries to gain another advantage. \gls{hids} are used to protect against \glspl{intrusion}. They don't offer much support in \gls{investigation} once an \gls{intrusion} happend. Those \gls{investigation} capabilities are built in this implementation. 
 
 \section{Drawbacks}
 
@@ -182,12 +182,16 @@ This implementation doesn't calculate \glspl{hash}, changes within a file can th
 
 \chapter{Technical Background}
 
-In this chapter I provide some technical introduction to relevant topics. Furt
+In this chapter I provide some technical introduction to relevant topics. Further information is avaliable in the linked resources.
 
-\section{File Systems}
+\section{Filesystem}
 \label{sec:fs}
 
-\section{Hashing}
+\gls{storagemedia} takes many forms. There are the traditional \gls{hdd}, there are newer \gls{ssd}. Both are built based on different assumptions and using different technologies. There are more \gls{storagemedia} like \gls{cd}, \gls{dvd}, \gls{usb} flash drives and more. \gls{storagemedia} operates on blocks of data. One such block is typicaly 512 bytes or 4 \gls{kb}. \cite{bruce:imaging}
+
+An operating system typically needs to store files of data. This is where \glspl{fs} come in. They create a layer of abstraction for the \gls{storagemedia}. A \gls{fs} uses the blocks of the \gls{storagemedia} and stores the files in a data structure called inode. \cite{inode} The \gls{fs} also keeps track of \gls{metadata} like creation time, accessed time, permissions, etc. Which \gls{metadata} is stored depends on the \gls{fs}. \cite{bruce:imaging}
+
+\section{\gls{hash}}
 \label{sec:hashing}
 
 \section{HIDS}
