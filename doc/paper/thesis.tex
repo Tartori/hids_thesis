@@ -212,7 +212,9 @@ Aide is an \gls{opensource} alternative to tripwire. It was created after tripwi
 
 When aide is first run, it generates a database as a reference. This database contains all the information for each file that is within a path of interest. Depending on the config it will contain more or less information, including \glspl{hash}. Each subsequent run will then compare the files found to this initially created database. The database needs to be updated manually if needed. It generates a log of all the changes and distributes that per email or similar if configured. Both the configuration and the database are usually stored on the file system that is scanned. \cite{aide, aide:doc}
 
-Aide can compare multiple \glspl{hash}, some non \glspl{hash} and some \gls{metadata}. It claims to run on any modern unix system \cite{aide} and uses gpg keys to sign their releases. Since it is an \gls{opensource} project it has a good comunity behind it. It only offers a \gls{cli} and has no 
+Aide can compare multiple \glspl{hash}, some non \glspl{hash} and some \gls{metadata}. It claims to run on any modern unix system \cite{aide} and uses gpg keys to sign their releases. Since it is an \gls{opensource} project it has a good comunity behind it. It only offers a \gls{cli} and has no fancy user interface and it is written in the programming language C. \cite{aide:github}
+
+Aide offers a good starting point for my system. I took several 
 
 \section{TSK}
 
