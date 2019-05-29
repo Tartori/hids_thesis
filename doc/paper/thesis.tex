@@ -194,6 +194,12 @@ An operating system typically needs to store files of data. This is where \glspl
 \section{\gls{hash}}
 \label{sec:hashing}
 
+A hash function is generally a function which takes an input of unlimited size and generates an output of a fixed size. Hash functions are used widely in programming and databases to easily access certain data within a datastructure. By design, hash functions have collisions, meaning that multiple inputs generate the same output. This must be true if you consider the unlimited inputsize and limited output size. If there are more inputs than outputs there must be at least one value that is assigned to multiple inputs. For data storage and other usecases this is not a huge problem because collisions can be handled and if the hash function has a good distribution collisions are unlikely.
+
+In any cryptographic context those collisions can bring a system down. The main difference is that in a cryptographic context the user has controll over a lot of data
+
+
+
 \section{HIDS}
 
 \subsection{Tripwire}
