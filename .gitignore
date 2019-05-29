@@ -365,3 +365,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+*_temp.tex
