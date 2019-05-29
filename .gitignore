@@ -39,6 +39,7 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+*_temp.tex
 
 ## Auxiliary and intermediate files from other packages:
 # algorithms
@@ -367,4 +368,4 @@ dmypy.json
 .pyre/
 
 
-*_temp.tex
+*/*_temp.tex

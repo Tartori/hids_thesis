@@ -1,27 +1,45 @@
 \usepackage{glossaries}
 
-
-\newglossaryentry{anomaly}{
-  name=anomaly, 
-  description={An unexpected change in the file system. For a change to be unexpected it needs to be covered by the configuration changes are unexpected only if the configuration says so. Some examples that might cause anomalies, changed rights, new files, deleted files. }}
-  \newglossaryentry{hash}{
-    name=hash, 
-    description={A mathematical function which defines one specific output per input that can not be reversed.}}
-  \newacronym{hids}{HIDS}{host based intrusion detection system} 
+\newacronym{ids}{IDS}{intrusion detection system}
+\newacronym{hids}{HIDS}{host based intrusion detection system} 
+\newacronym{nids}{NIDS}{network based intrusion detection system} 
 \newacronym{nist}{NIST}{National Institute of Standards and Technology}
 \newacronym{it}{IT}{Information Security}
+\newacronym{tb}{TB}{terrabyte}
 \newacronym{itsec}{ITSec}{\gls{it} Security}
+\newglossaryentry{yaml}{name=YAML, description={YAML Ain't Markup Language}}
+\newacronym{tsk}{TSK}{The Sleuth Kit}
 \newacronym{tls}{TLS}{Transport Layer Security}
 \newacronym{api}{API}{Application Programming Interface}
 \newacronym{json}{JSON}{JavaScript Object Notation}
-\newglossaryentry{sha-256}{name=SHA-256, description={Secure Hash Algorithm 2 with 256 Bit Output}}
-\newacronym{utf-8}{UTF-8}{Universal Transformation Format}
-\newacronym{nfc}{NFC}{Near Field Communication}
-\newacronym{usb}{USB}{Universal Serial Bus}
-\newacronym{mitm}{MitM}{Man in the Middle}
 \newacronym{loa}{LoA}{Level of Assurance}
-\newglossaryentry{base64}{
-name={Base 64},
-  description={Base 64 is a binary-to-text encoding that uses 64 ASCII characters to represent 6 bit. This results in an overhead of 2 bit per byte. There is also a Base 64 URL encoding which uses slightly different characters.}}
-\newglossaryentry{csa}{name={credential stuffing attacks}, description={Using credentials that were leaked on one site to access other sites. This is often an attack against passwords when passwords are reused}}
+
+
+\newglossaryentry{}{name=, description={}}
+\newglossaryentry{malware}{name=malware, description={Malware is any program that is designed to harm a computer system. The term includes well known terms like Virus, Worm, Adware, Keylogger, Trojan, etc. Malware usually tries to hide it's traces to achieve longer infection periods of time. }}
+\newglossaryentry{anomaly}{
+name=anomaly, 
+plural=anomalies,
+description={An unexpected change in the file system. For a change to be unexpected it needs to be covered by the configuration changes are unexpected only if the configuration says so. Some examples that might cause anomalies, changed rights, new files, deleted files. }}
+\newglossaryentry{intrusion}{
+name=intrusion, 
+plural=intrusions,
+description={An unauthorized access to a system or to data. }}
+\newglossaryentry{investigation}{
+name=investigation, 
+plural=investigations,
+description={The process of finding out what exactly happened after an incident.}}
+\newglossaryentry{hash}{
+name=cryptographic hash function, 
+plural=cryptographic hash functions,
+description={A deterministic one way function that fullfills collision resistance and other cryptographic properties. Implementations are MD5, the SHA1,2,3 families.}}
+\newglossaryentry{fs}{
+name=file system, 
+description={A file system is used to create a layer of abstraction between the hardware of the storage medium and the operating system. There are multiple file system types which are in use with different capabilities. Additionally to the files the file systems keep track of meta data to each file. This meta data includes some timestamps (created, last accessed, etc) and more.}}
+\newglossaryentry{pytsk}{name=pytsk3, description={Python bindings for \gls{tsk}}}
+\newglossaryentry{metadata}{name=metadata, description={Data that gives information on other data. In this thesis it is mostly used to describe attributes of the \gls{fs} that describes files. Exmaples are creation date and permissions.}}
+\newglossaryentry{git}{name=git, description={A distributed version-control system used for source code tracking in software engineering. Nicknamed \'the stupid content tracker\', stands for either \'global information tracker\' or \'goddamn idiotic truckload of s...\'}}
+
+
+
 
