@@ -202,13 +202,21 @@ In any cryptographic context those collisions can bring a system down. The main 
 
 \section{HIDS}
 
+In this section I will present two of the most used \gls{hids}, Tripwire and Aide. They built the main competition of the integration developed in this thesis.
+
 \subsection{Tripwire}
 
-In 1992 the first \gls{hids} named tripwire was created and publicly released as a free tool. In 1997 the creator of tripwire then  \cite{Tripwire:Impl,Tripwire:company} 
+In 1992 the first \gls{hids} named tripwire was created and publicly released as a free tool. In 1997 the creator of tripwire then created the company Tripwire Inc. and bought the naming right for Tripwire. The free version was monetized and they released new versions of Tripwire. \cite{Tripwire:Impl,Tripwire:company} Now they mostly market to enterprise and industrial customer and have more products than only one for file integrity. \cite{tripwire}
+
+As it is a comercial product it is hard to see how they work in detail since most of the information is only available to paying customer. 
 
 \subsection{AIDE}
 
+Aide is an \gls{opensource} alternative to tripwire. It was created after tripwire went comercial. \cite{aide:totherescue, aide:github}
 
+When aide is first run, it generates a database as a reference. This database contains all the information for each file that is within a path of interest. Depending on the config it will contain more or less information, including \glspl{hash}. Each subsequent run will then compare the files found to this initially created database. The database needs to be updated manually if needed. It generates a log of all the changes and distributes that per email or similar if configured. Both the configuration and the database are usually stored on the file system that is scanned. \cite{aide, aide:doc}
+
+Aide can compare multiple \glspl{hash}, some non \glspl{hash} and some \gls{metadata}. It claims to run on any modern unix system \cite{aide} and uses gpg keys to sign their releases. Since it is an \gls{opensource} project it has a good comunity behind it. It only offers a \gls{cli} and has no fancy user interface and it is written in the programming language C. \cite{aide:github} It also contains an extensive configuration covered in section \ref{sec:aide:config}.
 
 \section{TSK}
 
@@ -227,6 +235,9 @@ In 1992 the first \gls{hids} named tripwire was created and publicly released as
 \subsection{Detection}
 
 \subsection{Configuration}
+
+\subsubsection{Aide Configuration}
+\label{sec:aide:config}
 
 \subsection{Database}
 
