@@ -8,6 +8,8 @@
 \newacronym{nist}{NIST}{National Institute of Standards and Technology}
 \newacronym{it}{IT}{Information Security}
 \newacronym{tb}{TB}{Terrabyte}
+\newacronym{mb}{MB}{Megabyte}
+\newacronym{kb}{KB}{Kilobyte}
 \newacronym{itsec}{ITSec}{\gls{it} Security}
 \newglossaryentry{yaml}{name=YAML, description={YAML Ain't Markup Language}}
 \newacronym{tsk}{TSK}{The Sleuth Kit}
@@ -20,11 +22,13 @@
 \newacronym{cd}{CD}{Compact Disc}
 \newacronym{dvd}{DVD}{Digital Versatile Disc}
 \newacronym{usb}{USB}{Universal Serial Bus}
-\newacronym{kb}{KB}{Kilobyte}
+\newacronym{ioc}{IoC}{Indicator of Compromise}
+\newglossaryentry{sql}{name=SQL, description={A domain specific language used for querying a relational database.}}
 
 
 \newglossaryentry{}{name=, description={}}
 \newglossaryentry{opensource}{name=opensource, description={Software where both the source and the software is freely accessible and changable.}}
+\newglossaryentry{github}{name=github, description={A platform for \gls{opensource} projects. It is free to use and hosts the source code for many projects.}}
 \newglossaryentry{storagemedia}{name=storage media, description={media that is used to store data in a computer system.}}
 \newglossaryentry{malware}{name=malware, description={Malware is any program that is designed to harm a computer system. The term includes well known terms like Virus, Worm, Adware, Keylogger, Trojan, etc. Malware usually tries to hide it's traces to achieve longer infection periods of time. }}
 \newglossaryentry{anomaly}{
@@ -42,7 +46,11 @@ description={The process of finding out what exactly happened after an incident.
 \newglossaryentry{hash}{
 name=cryptographic hash function, 
 plural=cryptographic hash functions,
-description={A deterministic one way function that fullfills collision resistance and other cryptographic properties. Implementations are MD5, the SHA1,2,3 families.}}
+description={A deterministic one way function that fullfills collision resistance and other cryptographic properties. Implementations are the SHA-2 and SHA-3 families.}}
+\newglossaryentry{nonhash}{
+name=non-cryptographic hash function, 
+plural=non-cryptographic hash functions,
+description={A deterministic one way function that does not the hard to achieve properties that make a \gls{hash}. Often used when speed is more important than collision resistance.}}
 \newglossaryentry{fs}{
 name=file system, 
 description={A file system is used to create a layer of abstraction between the hardware of the storage medium and the operating system. There are multiple file system types which are in use with different capabilities. Additionally to the files the file systems keep track of meta data to each file. This meta data includes some timestamps (created, last accessed, etc) and more.}}
