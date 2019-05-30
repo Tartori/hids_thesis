@@ -220,15 +220,29 @@ When aide is first run, it generates a database as a reference. This database co
 
 Aide can compare multiple \glspl{hash}, some non \glspl{hash} and some \gls{metadata}. It claims to run on any modern unix system \cite{aide} and uses gpg keys to sign their releases. Since it is an \gls{opensource} project it has a good comunity behind it. It only offers a \gls{cli} and has no fancy user interface and it is written in the programming language C. \cite{aide:github} It also contains an extensive configuration covered in section \ref{sec:aide:config}.
 
-\section{TSK}
+\section{The Sleuth Kit}
 \label{sec:tsk}
 
+\gls{tsk} is an \gls{opensource} toolkit used to investigate disk images. It is based on the coroner's toolkit \cite{tct} and contains multiple command line interfaces and \gls{api} for various purposes. \cite{tsk, tsk:about} It is written in C and even though it is maily written in C. It runs on Linux, OsX, Windows and more and can be used to analyze many \glspl{fs}. It is used in forensic investigations to find deleted or corrupted files and for other information gathering on a disk image.
 
-\section{Programming Language}
-\label{sec:prog:lang}
+One of those command line tools is fls. It can be used to access directories, files and the attributes of each. With it the directories can be displayed recursively and for each file the attributes can be printed to the console. \cite{tsk:fls} This tool plays a central part in this thesis as it is used to recover all the files and attributes to detect intrusions. On how exactly it is used please refer to section. \ref{sec:Scanner}
 
+\section{Python}
+\label{sec:python}
 
-\section{pytsk3}
+Python was the programming language of choice for this product. Python offers many advantages over other languages. Some of those are:
+
+\begin{itemize}
+	\item Platform independant
+	\item Good community support in forensic community
+	\item Active library for \gls{tsk}
+	\item Small overhead
+	\item Easy for prototyping
+\end{itemize}
+
+This decision was not made very lightly. Other programming languages were considered. For more information on those refer to section \ref{sec:decisions:language}.
+
+\subsection{pytsk3}
 \label{sec:pytsk3}
 
 \section{Scope}
@@ -279,6 +293,12 @@ Aide can compare multiple \glspl{hash}, some non \glspl{hash} and some \gls{meta
 \chapter{Journal}
 
 \chapter{Implementation Details}
+
+\section{Decisions}
+\label{sec:decisions}
+
+\subsection{Programming Language}
+\label{sec:decisions:language}
 
 \chapter{User Documentation}
 
