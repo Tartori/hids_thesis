@@ -172,7 +172,7 @@
 
 An \gls{ids} is used to protect a computer from \gls{malware} attacks. It does so by tracking and evaluating activity form one or many hosts. The \gls{ids} then tries to find \glspl{anomaly} usually by comparing the activity to some type of configuration which often contains some form of blacklist or whitelist. The \glspl{anomaly} are then alerted or logged to some framework. The process of intrusion detection is generally split into a host based part with \gls{hids} and a network based part with \gls{nids}. \gls{nids} are used to detect unusual behaviour of the network. Examples include communication from hosts which usually don't comunicate. \gls{hids} on the other hand are used to detect \glspl{anomaly} on a host. This is done by detecting changes in the way processes are used or when the \gls{fs} is changed. Both types of \gls{ids} have different advantages and they should be used in conjunction for best results. \cite{needed}
 
-This Thesis is about writing of a \gls{hids} that operates on the \gls{fs}. As already mentioned a \gls{hids} operates on the host machine and detects \glspl{anomaly} by comparing resources available on the host. For detecting changes to the \gls{fs} a \gls{hids} usually generates \glspl{hash} and compares them to previous calculations. If the \gls{hash} changes, then the file has been altered. If this alteration is detected as an \gls{anomaly} it will be alerted. This approach has one weakness. The caclulation of a \gls{hash} takes time. \cite{hash:slow} This is historically not relevant as it is efficient enough that the entire \gls{fs} could be hashed in a small amount of time. But storage media grew and with it the amount of data on a server. \cite{bruce:imaging} With that the calculation of \glspl{hash} needs more time and traditional \gls{hids} can't scan big systems within a valuable amount of time anymore. Finding anomalies based on \gls{metadata} is faster, because the files don't need to be parsed and the size of them doesn't matter. Thus, such a \gls{hids} can be run frequently and with that \glspl{intrusion} can be detected faster, which is essential for protection. \cite{inode}
+This Thesis is about writing of a \gls{hids} that operates on the \gls{fs}. As already mentioned a \gls{hids} operates on the host machine and detects \glspl{anomaly} by comparing resources available on the host. For detecting changes to the \gls{fs} a \gls{hids} usually generates \glspl{hash} and compares them to previous calculations. If the \gls{hash} changes, then the file has been altered. If this alteration is detected as an \gls{anomaly} it will be alerted. This approach has one weakness. The caclulation of a \gls{hash} takes time. Additionally to the time needed to actually calculate the hash, this approach needs to read the whole content of all relevant files, which takes up some more time. \cite{hash:slow} This is historically not relevant as it is efficient enough that the entire \gls{fs} could be hashed in a small amount of time. But storage media grew and with it the amount of data on a server. \cite{bruce:imaging} With that the calculation of \glspl{hash} needs more time and traditional \gls{hids} can't scan big systems within a valuable amount of time anymore. Finding anomalies based on \gls{metadata} is faster, because the files don't need to be parsed and the size of them doesn't matter. Thus, such a \gls{hids} can be run frequently and with that \glspl{intrusion} can be detected faster, which is essential for protection. \cite{inode}
 
 The \gls{hids} written in this thesis tries to gain another advantage. \gls{hids} are used to protect against \glspl{intrusion}. They don't offer much support in \gls{investigation} once an \gls{intrusion} happend. Those \gls{investigation} capabilities are built in this implementation. 
 
@@ -191,26 +191,28 @@ In this chapter I provide some technical introduction to relevant topics. Furthe
 
 An operating system typically needs to store files of data. This is where \glspl{fs} come in. They create a layer of abstraction for the \gls{storagemedia}. A \gls{fs} uses the blocks of the \gls{storagemedia} and stores the files in a data structure called inode. \cite{inode} The \gls{fs} also keeps track of \gls{metadata} like creation time, accessed time, permissions, etc. Which \gls{metadata} is stored depends on the \gls{fs}. \cite{bruce:imaging}
 
-\section{\gls{hash}}
+\section{Cryptographic Hashing Function}
 \label{sec:hashing}
 
-A hash function is generally a function which takes an input of unlimited size and generates an output of a fixed size. Hash functions are used widely in programming and databases to easily access certain data within a datastructure. By design, hash functions have collisions, meaning that multiple inputs generate the same output. This must be true if you consider the unlimited inputsize and limited output size. If there are more inputs than outputs there must be at least one value that is assigned to multiple inputs. For data storage and other usecases this is not a huge problem because collisions can be handled and if the hash function has a good distribution collisions are unlikely.
+A hash function is generally a function which takes an input of unlimited size and generates an output of a fixed size. Hash functions are used widely in programming and databases to easily access certain data within a datastructure. By design, hash functions have collisions, meaning that multiple inputs generate the same output. This must be true if you consider the unlimited inputsize and limited output size. If there are more inputs than outputs there must be at least one value that is assigned to multiple inputs. For data storage and other usecases this is not a huge problem because collisions can be handled and if the hash function has a good distribution collisions are unlikely. In many systems a hashing function with weak collision resistance is deliberately chosen because it is faster to execute. \cite{hash:noncrypto, hash:slow}
 
-In any cryptographic context those collisions can bring a system down. The main difference is that in a cryptographic context the user has controll over a lot of data
-
+In a cryptographic context this trade off can not be taken. There are two big factors that play into why not. Firstly in cryptography hashes are often used as an assurance that the content of some data has not changed. If collisions are easy to find, the data can be altered in ways that result in the same hash, meaning that the hash no longer fullfils the usecase. Additionally, the potential gain can be big. If a collision can be provoked, even if challenging, data can be changed again. This data could be a legal document or a bank transaction, neither of which we want to change. For those reasons a cryptographic hash function needs to be highly collision resistant. The drawback of collision resistant algorithms over easier hashing functions is operations needed for it, while modern hashing functions are performant and secure, they still take some time for a lot of data. \cite{crypto}
 
 
 \section{HIDS}
+\label{sec:hids}
 
 In this section I will present two of the most used \gls{hids}, Tripwire and Aide. They built the main competition of the integration developed in this thesis.
 
 \subsection{Tripwire}
+\label{sec:tripwire}
 
 In 1992 the first \gls{hids} named tripwire was created and publicly released as a free tool. In 1997 the creator of tripwire then created the company Tripwire Inc. and bought the naming right for Tripwire. The free version was monetized and they released new versions of Tripwire. \cite{Tripwire:Impl,Tripwire:company} Now they mostly market to enterprise and industrial customer and have more products than only one for file integrity. \cite{tripwire}
 
 As it is a comercial product it is hard to see how they work in detail since most of the information is only available to paying customer. 
 
 \subsection{AIDE}
+\label{sec:aide}
 
 Aide is an \gls{opensource} alternative to tripwire. It was created after tripwire went comercial. \cite{aide:totherescue, aide:github}
 
@@ -219,42 +221,60 @@ When aide is first run, it generates a database as a reference. This database co
 Aide can compare multiple \glspl{hash}, some non \glspl{hash} and some \gls{metadata}. It claims to run on any modern unix system \cite{aide} and uses gpg keys to sign their releases. Since it is an \gls{opensource} project it has a good comunity behind it. It only offers a \gls{cli} and has no fancy user interface and it is written in the programming language C. \cite{aide:github} It also contains an extensive configuration covered in section \ref{sec:aide:config}.
 
 \section{TSK}
+\label{sec:tsk}
+
 
 \section{Programming Language}
+\label{sec:prog:lang}
+
 
 \section{pytsk3}
+\label{sec:pytsk3}
 
 \section{Scope}
+\label{sec:scope}
+
 
 \chapter{Results}
 
 \section{System Architecture}
+\label{sec:Architecture}
 
 \subsection{Scanner}
+\label{sec:Scanner}
 
 \subsection{Detection}
+\label{sec:Detection}
 
 \subsection{Configuration}
+\label{sec:Configuration}
 
 \subsubsection{Aide Configuration}
 \label{sec:aide:config}
 
 \subsection{Database}
+\label{sec:Database}
 
 \section{Security}
+\label{sec:Security}
 
 \subsection{Limitations}
+\label{sec:Limitations}
 
 \subsection{Attack Scenarios}
 \label{sec:attack_scenarios}
 
 \section{Application Flow}
+\label{sec:flwo}
 
 \chapter{Discussion}
+\label{sec:Discussion}
 
 \section{Future Work}
+\label{sec:future:work}
 
 \section{Conclusion}
+\label{sec:Conclusion}
 
 \chapter{Journal}
 

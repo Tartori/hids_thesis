@@ -15,6 +15,7 @@
 * Add multiple connections to different database systems
 * Add multiple different versions of alerting
 * Add software hardening --> detection of modification of software or config
+* use tkiz for diagram
 
 ### new todos
 
