@@ -17,11 +17,10 @@
 
 % Code Segments
 \usepackage{listings}
+\input{yaml-highlighting.tex}
 
 \usepackage[english]{babel}										% english hyphenation
 %\usepackage[ansinew]{inputenc}  							% Windows - load extended character set (ISO 8859-1)
-\usepackage{fancyhdr}													% simple manipulation of header and footer
-\usepackage{etoolbox}													% color manipulation of header and footer
 \usepackage{graphicx}                      		% integration of images
 \usepackage{float}														% floating objects
 \usepackage{caption}													% for captions of figures and tables
@@ -101,8 +100,6 @@
 \setdefaultlanguage{english}
 \usepackage[backend=biber, style=ieee]{biblatex}
 \addbibresource{thesis.bib}
-\usepackage{graphicx}
-\usepackage{tikz}
 \usepackage{pgfgantt}
 
 \definecolor{ganttplanned}{RGB}{0,80,200}
@@ -243,6 +240,9 @@ In this thesis \gls{nids} are not in the center. The implementation will not loo
 
 \gls{tsk} is an \gls{opensource} toolkit used to investigate disk images. It is based on the coroner's toolkit \cite{tct} and contains multiple command line interfaces and an \gls{api} for various purposes. \cite{tsk, tsk:about} It is mainly written in C, runs on Linux, OsX, Windows and more and can be used to analyze many different \glspl{fs}. It is heavily used in forensic investigations to find deleted or corrupted files and for other information gathering on a disk image.
 
+\subsubsection{fls}
+\label{sec:fls}
+
 One of those command line tools is fls. It can be used to access directories, files and the attributes of each. With it the directories can be displayed recursively and for each file the attributes can be printed to the console. \cite{tsk:fls} This tool plays a central part in this thesis as it is used to recover all the files and attributes to detect intrusions. On how exactly it is used please refer to section. \ref{sec:Scanner}
 
 \subsection{Python}
@@ -303,28 +303,106 @@ In this chapter I will talk more about the implementation details of the \gls{hi
 \section{System Architecture}
 \label{sec:Architecture}
 
+As seen in figure \ref{fig:systemArchitecture} the system itself contains of two components, the scanner and the investigator component. It is split this way to gain flexibility, specifically, that both components can be executed independantly. This has the advantage that the scanner and the investigator don't need to be run on the same system. Also it means that previous results of the investigator can be recreated by running the investigator on the previously captured data. Additionally, if someone is only interested in the results of the scanner, the investigator doesn't need to be run.
+
+Besides the scanner and the investigator which were produced in this thesis, there are four other components which build the environment of the \gls{hids}. There is the \gls{fs} which contains the data in which we are interested. As already mentioned, this could be a mounted device that is directly accessible through the operating system. It could also be run on the disk images of virtual machines or on previously created disk images. To run it on a previously created disk image might be interesting to see a history if an image was taken at multiple different times. Also it could be used on backup images, if backups are made in such a way that they create a disk image. 
+
+Then there is the forensic component. This component is the combination of \gls{tsk} and \gls{pytsk}. The main purpose of this component is the abstraction of the \gls{fs} into python classes which can then be used within the Scanner. This abstraction is important to be compatible to multiple different \glspl{fs}. \gls{tsk} offers a lot of different functionality, in this thesis I am only using the utility that is also used for the fls command described in section \ref{sec:fls}. 
+
+The scanner and investigator are explained in detail in section \ref{sec:Scanner} and \ref{sec:Investigator}, the database in section \ref{sec:Database} which leaves the alerting component. This component will be part of the section \ref{sec:Investigator}. One component that is not on the diagram is the configuration. This component is special because it influences every other component and at the same time is relatively simple. The configuration is covered in section \ref{sec:Configuration}.
+
 \begin{figure}[ht]
   \includegraphics[width=8cm]{../img/Overview_FIDS.png}
   \centering
-  \caption{Authenticator Data}
-  \label{fig:authenticationMapping}
+  \caption{System Architecture}
+  \label{fig:systemArchitecture}
 \end{figure}
-
-
-\subsection{Scanner}
-\label{sec:Scanner}
-
-\subsection{Detection}
-\label{sec:Detection}
 
 \subsection{Configuration}
 \label{sec:Configuration}
+
+The configuration file is provided in \gls{yaml}. \gls{yaml} is a human friendly data serialization language used in many programming languages. Its main advantage over other languages for configuration files is the readability and the ease to extend already existing configuration files. There were more reasons why \gls{yaml} is used documented in section \ref{sec:decisions:config:language}.
+
+\subsubsection{Database Configuration}
+
+The configuration consists of three parts. The first part is the database configuration. Options are to either use the system with a \gls{sqlite} database file, which is the most simple solution, or to use it with a \gls{postgres} database server. For the sqlite configuration only the filename is required as seen in listing \ref{lst:cfg:sqlite}. For a postgres server there needs to be more configuration. The host and port need to be provided, as well as the database, the user and a password as evident in listing \ref{lst:cfg:postgres}. This configuration defines where the data will be sent to and read from in the scanner and investigator parts respectively. As both parts need access to the database this part of the configuration is in a seperate part. 
+
+\begin{lstlisting}[language=yaml, caption=SQLite Configuration, label=lst:cfg:sqlite]
+sqlite:
+	filename: fids_db3.db
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=yaml, caption=Postgres Configuration, label=lst:cfg:postgres]
+sqlite:
+	filename: fids_db3.db
+\end{lstlisting}
+
+\subsubsection{Scanner Configuration}
+
+The second part of the configuration is the part that defines the scanner. An example config can be seen in \ref{lst:cfg:scanner} It consists of one main key which is named scan. If this config entry is missing, the scanner part of the \gls{hids} will not be executed by default. Then it contains the following subkeys:
+
+\begin{itemize}
+	\item		\textbf{image\_path} Path to the \gls{fs} that is used for the scan.
+	\item		\textbf{scan\_paths} List of paths to scan. Paths will be scanned recursively. "/" will thus scan all the paths.
+	\item		\textbf{ignore\_paths} Paths that should not be scanned. Can be a subdirectory of any path in scan paths. The recursion will stop at this path and not continue downwards. Practical if certain directories are not interesting for intrusion detection.
+\end{itemize}
+
+\begin{lstlisting}[language=yaml, caption=Scanner Configuration, label=lst:cfg:scanner]
+scan:
+	image_path: /dev/nvme0n1p5
+	scan_paths: 
+		[
+			"/",
+			"/nonExisting",
+		]
+	ignore_paths: 
+		[
+			"/temp/"
+		]
+\end{lstlisting}
+
+\subsubsection{Investigator Configuration}
+
+The investigator configuration is simmilar to the scanner configuration in the way that it contains a top level node called detection. If this is missing the investigator part will not start. As can be seen in listing \ref{lst:cfg:investigator} it has the following subkeys:
+
+\begin{itemize}
+	\item \textbf{relevant\_paths} This configuration specifies which paths need to be evaluated for the following changes. 
+	\item \textbf{filename\_regex} This configuration specifies the regex which the files need to confirm to.  
+	\item \textbf{same\_config} This configuration specifies whether a changed config should result in an alert. Defaults to True.
+	\item \textbf{greater} This configuration specifies all the attributes that need to be equal or greater than for the previous run.
+	\item \textbf{equal} Simmilar to greater, this configuration specifies all the attributes that need to be equal to the previous run.
+\end{itemize}
+
+\begin{lstlisting}[language=yaml, caption=Investigator Configuration, label=lst:cfg:investigator]
+detection:
+	relevant_paths:[
+		"/"
+	]
+	filename_regex: ''
+	greater: [
+		"meta_size"
+	]
+	equal: [
+		"meta_creation_time"
+	]
+	same_config: True
+\end{lstlisting}
 
 \subsubsection{Aide Configuration}
 \label{sec:aide:config}
 
 \subsection{Database}
 \label{sec:Database}
+
+\subsection{Scanner}
+\label{sec:Scanner}
+
+
+
+\subsection{Investigator}
+\label{sec:Investigator}
+
 
 
 \section{Application Flow}
@@ -362,6 +440,10 @@ In this chapter I will talk more about the implementation details of the \gls{hi
 
 \subsection{Programming Language}
 \label{sec:decisions:language}
+
+\subsection{Language for Configuration File}
+\label{sec:decisions:config:language}
+
 
 \chapter{User Documentation}
 
@@ -495,7 +577,7 @@ For the planning of this project the following milestones were created. Each cov
 	\ganttplannedmilestone{Software Hardening}{15}
 	\ganttactualmilestone{}{0}\\
 	\ganttplannedmilestone{Presentation}{17}
-	\ganttactualmilestone{}{0}
+	\ganttactualmilestone{}{17}
 	\end{ganttchart}
 	\caption{Milestones}
 	\label{apdx-fig:milestones}
