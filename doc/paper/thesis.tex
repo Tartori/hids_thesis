@@ -197,6 +197,8 @@ A hash function is generally a function which takes an input of unlimited size a
 
 In a cryptographic context this trade off can not be taken. There are two big factors that play into why not. Firstly in cryptography hashes are often used as an assurance that the content of some data has not changed. If collisions are easy to find, the data can be altered in ways that result in the same hash, meaning that the hash no longer fullfils the usecase. Additionally, the potential gain can be big. If a collision can be provoked, even if challenging, data can be changed again. This data could be a legal document or a bank transaction, neither of which we want to change. For those reasons a cryptographic hash function needs to be highly collision resistant. The drawback of collision resistant algorithms over easier hashing functions is operations needed for it, while modern hashing functions are performant and secure, they still take some time for a lot of data. \cite{crypto}
 
+One \gls{hash} is called \gls{sha256}. \gls{sha256} is a standard published by the \gls{nist}. It creates a 256 bit output and has not yet been successfully atacked. \cite{sha} This hashing algorithm is used to make sure that the configuration of this implementation has not changed between multiple runs.
+
 
 \subsection{HIDS}
 \label{sec:def:hids}
@@ -309,7 +311,7 @@ Besides the scanner and the investigator which were produced in this thesis, the
 
 Then there is the forensic component. This component is the combination of \gls{tsk} and \gls{pytsk}. The main purpose of this component is the abstraction of the \gls{fs} into python classes which can then be used within the Scanner. This abstraction is important to be compatible to multiple different \glspl{fs}. \gls{tsk} offers a lot of different functionality, in this thesis I am only using the utility that is also used for the fls command described in section \ref{sec:fls}. 
 
-The scanner and investigator are explained in detail in section \ref{sec:Scanner} and \ref{sec:Investigator}, the database in section \ref{sec:Database} which leaves the alerting component. This component will be part of the section \ref{sec:Investigator}. One component that is not on the diagram is the configuration. This component is special because it influences every other component and at the same time is relatively simple. The configuration is covered in section \ref{sec:Configuration}.
+The scanner and investigator are explained in detail in section \ref{sec:flow} and \ref{sec:Investigator}, the database in section \ref{sec:Database} which leaves the alerting component. This component will be part of the section \ref{sec:Investigator}. One component that is not on the diagram is the configuration. This component is special because it influences every other component and at the same time is relatively simple. The configuration is covered in section \ref{sec:Configuration}.
 
 \begin{figure}[ht]
   \includegraphics[width=8cm]{../img/Overview_FIDS.png}
@@ -325,15 +327,15 @@ The configuration file is provided in \gls{yaml}. \gls{yaml} is a human friendly
 
 \subsubsection{Database Configuration}
 
-The configuration consists of three parts. The first part is the database configuration. Options are to either use the system with a \gls{sqlite} database file, which is the most simple solution, or to use it with a \gls{postgres} database server. For the sqlite configuration only the filename is required as seen in listing \ref{lst:cfg:sqlite}. For a postgres server there needs to be more configuration. The host and port need to be provided, as well as the database, the user and a password as evident in listing \ref{lst:cfg:postgres}. This configuration defines where the data will be sent to and read from in the scanner and investigator parts respectively. As both parts need access to the database this part of the configuration is in a seperate part. 
+The configuration consists of three parts. The first part is the database configuration. Options are to either use the system with a \gls{sqlite} database file, which is the most simple solution, or to use it with a \gls{postgres} database server. For the sqlite configuration only the filename is required as seen in listing \ref{lst:cfg:sqlite}. For a postgres server there needs to be more configuration. The host and port need to be provided, as well as the database, the user and a password as evident in listing \ref{lst:cfg:postgres}. This configuration defines where the data will be sent to and read from in the scanner and investigator parts respectively. As both parts need access to the database this part of the configuration is in a seperate part. It is possible to extend the system to use more \gls{dbms}, it is not part of the scope of this thesis though.
 
-\begin{lstlisting}[language=yaml, caption=SQLite Configuration, label=lst:cfg:sqlite]
+\begin{lstlisting}[language=yaml, numbers=left, caption=SQLite Configuration, label=lst:cfg:sqlite]
 sqlite:
 	filename: fids_db3.db
 \end{lstlisting}
 
 
-\begin{lstlisting}[language=yaml, caption=Postgres Configuration, label=lst:cfg:postgres]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Postgres Configuration, label=lst:cfg:postgres]
 sqlite:
 	filename: fids_db3.db
 \end{lstlisting}
@@ -348,7 +350,7 @@ The second part of the configuration is the part that defines the scanner. An ex
 	\item		\textbf{ignore\_paths} Paths that should not be scanned. Can be a subdirectory of any path in scan paths. The recursion will stop at this path and not continue downwards. Practical if certain directories are not interesting for intrusion detection.
 \end{itemize}
 
-\begin{lstlisting}[language=yaml, caption=Scanner Configuration, label=lst:cfg:scanner]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:cfg:scanner]
 scan:
 	image_path: /dev/nvme0n1p5
 	scan_paths: 
@@ -374,7 +376,7 @@ The investigator configuration is simmilar to the scanner configuration in the w
 	\item \textbf{equal} Simmilar to greater, this configuration specifies all the attributes that need to be equal to the previous run.
 \end{itemize}
 
-\begin{lstlisting}[language=yaml, caption=Investigator Configuration, label=lst:cfg:investigator]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Investigator Configuration, label=lst:cfg:investigator]
 detection:
 	relevant_paths:[
 		"/"
@@ -392,44 +394,387 @@ detection:
 \subsubsection{Aide Configuration}
 \label{sec:aide:config}
 
+
+
 \subsection{Database}
 \label{sec:Database}
+
+The database is another component that is shared between the scanner and the investigator. As already mentioned, multiple \gls{dbms} can be used in conjunction with this \gls{hids}. In this section I will not focus on the \gls{dbms} used. The database consists of five relations. Firstly, I will explain some reoccuring types, how they are stored and what they represent after that, the relations and then quickly how the different \gls{dbms} can be used. 
+
+Some ideas are not specific to a relation. Most relations contain timestamps and \gls{uuid}. How they are stored can be seen below:
+
+\begin{description}
+	\item [Timestamps] To save space, Timestamps are stored as an integer value. This value represents the \gls{unixts}. 
+	\item [\gls{uuid}] \gls{id} are stored as \gls{uuid} in their \gls{hex} representation. 
+	\item [Enum] \gls{tsk} defines many enums. Most of those enums have an int representation. To save space, this representation is stored in the database. The enums can be viewed in the \gls{tsk} \gls{api} reference. \cite{tsk:file:header}
+\end{description}
+
+\subsubsection{FIDS\_RUN}
+
+The run table is relatively simple. It contains a \gls{id} so that each run can be identified. This \gls{id} will be used in the other relations as well to create a link to the run. Besides that it contains a \gls{sha256} hash of the configuration that it was started with. It then contains a start and and end time of this particular run. The table definition is shown in listing \ref{lst:cfg:fids:run}
+
+\begin{lstlisting}[language=sql, numbers=left, caption=Fids Run Table Definition, label=lst:cfg:fids:run]
+CREATE TABLE FIDS_RUN(
+	id varchar(32), 
+	config_hash varchar(64), 
+	start_time int, 
+	finish_time int, 
+	PRIMARY KEY(id)
+);
+\end{lstlisting}
+
+
+
+\subsubsection{FIDS\_ERROR}
+
+With each run there is the possibility of errors. Those errors are stored in this table. It is rather simple as well. Additionally to the run \gls{id} it contains an \gls{id} as well. Next to that it contains a description and a location of where it occured. The table definition is shown in listing \ref{lst:cfg:fids:error}
+
+\begin{lstlisting}[language=sql, numbers=left, caption=Fids Error Table Definition, label=lst:cfg:fids:error]
+CREATE TABLE FIDS_ERROR(
+	run_id varchar(32), 
+	id varchar(32), 
+	description text, 
+	location varchar(255), 
+	PRIMARY KEY(run_id, id)
+);
+\end{lstlisting}
+
+\subsubsection{FIDS\_FILE}
+
+This table contains most of the information. It again has \gls{id} additional to the \gls{id} of the run. Then it has the path in which the file was located and all the meta information about the file. Most attributes start with meta, while the rest start with name. This is a reference to \gls{tsk} which has multiple structs for meta and name information about each file. I kept the naming of \gls{tsk}, thus more information about each attribute can be found on the \gls{api} reference of \gls{tsk}. \cite{tsk:file:struct} The table definition is shown in listing \ref{lst:cfg:fids:file}
+
+\begin{lstlisting}[language=sql, numbers=left, caption=Fids File Table Definition, label=lst:cfg:fids:file]
+CREATE TABLE FIDS_FILE(
+	run_id varchar(32),
+	id varchar(32),
+	path text, 
+	meta_addr int,
+	meta_access_time int,
+	meta_access_time_nano int,
+	meta_attr_state int,
+	meta_content_len int,
+	meta_content_ptr int,
+	meta_creation_time int,
+	meta_changed_time int,
+	meta_creation_time_nano int,
+	meta_changed_time_nano int,
+	meta_flags int,
+	meta_gid int,
+	meta_link int,
+	meta_mode int,
+	meta_modification_time int,
+	meta_modification_time_nano int,
+	meta_nlink int,
+	meta_seq int,
+	meta_size int,
+	meta_tag int,
+	meta_type varchar(255),
+	meta_uid int,
+	name_flags int,
+	name_meta_addr int,
+	name_meta_seq int,
+	name_name int,
+	name_size int,
+	name_par_addr int,
+	name_par_seq int,
+	name_short_name int,
+	name_short_name_size int,
+	name_tag int,
+	name_type varchar(255),
+	PRIMARY KEY (run_id, id)
+);
+\end{lstlisting}
+
+\subsubsection{FIDS\_FILE\_ATTRIBUTE}
+
+In \gls{tsk} each file can contain multiple attributes. Those attributes are stored in this table. It contains the previous \gls{id} and another one for each attribute as each file can have multiple attributes. The attributes contain flags, a name and a type. The flags and the type enums called `TSK\_FS\_ATTR\_FLAG\_ENUM' and `TSK\_FS\_ATTR\_TYPE\_ENUM'. More information available in the \gls{tsk} \gls{api} reference. \cite{tsk:attr:struct,tsk:file:header} The table definition is shown in listing \ref{lst:cfg:fids:file:attr}
+
+\begin{lstlisting}[language=sql, numbers=left, caption=Fids File Attribute Table Definition, label=lst:cfg:fids:file:attr]
+CREATE TABLE FIDS_FILE_ATTRIBUTE(
+	run_id varchar(32),
+	file_id varchar(32),
+	id varchar(32),
+	flags int,
+	tsk_id int,
+	name varchar(255),
+	name_size int,
+	at_type varchar(255), 
+	PRIMARY KEY (run_id, file_id, id)
+);
+\end{lstlisting}
+
+\subsubsection{FIDS\_FILE\_ATTRIBUTE\_RUN}
+
+Attributes can contain multiple data runs. Those data runs are represented in this relation. It contains all the \gls{id} from the attributes and an additional for the run. It then has a block address and a lenght. More information can again be found in the \gls{tsk} \gls{api} reference. \cite{tsk:attr:run:struct} The table definition is shown in listing \ref{lst:cfg:fids:file:attr:run}
+
+\begin{lstlisting}[language=sql, numbers=left, caption=Fids File Attribute Run Table Definition, label=lst:cfg:fids:file:attr:run]
+CREATE TABLE FIDS_FILE_ATTRIBUTE_RUN(
+	run_id varchar(32),
+	file_id varchar(32),
+	attribute_id varchar(32), 
+	id varchar(32), 
+	block_addr int, 
+	length int, 
+	PRIMARY KEY(run_id, file_id, attribute_id, id) 
+);
+\end{lstlisting}
+
+\subsection{Shared}
+
+There are other shared components. Mainly the model of the system. It contains of multiple classes for the types. There is one class for each relation. They can parse \gls{tsk} objects and they can parse database rows. This way both the scanner and the investigator can work with the same classes. Except for parsing they don't have any functionality.
+
+
+\section{Application Flow}
+\label{sec:flow}
+
+The main application flow consists of first reading the config file. If no config file path is passed the default path is used. It then starts the scanner if a scan configuration is found. After the scanner is completed it starts the investigator if the detection config is found. It works if any of the two configs are found. If none is found then the system will simply do nothing. 
+
 
 \subsection{Scanner}
 \label{sec:Scanner}
 
+The scanner component is the first specific component. It is executed when the system is run and a scan config is available. It is responsible for getting all the information from the \gls{fs} for the configured paths. It has multiple stages.
+
+\begin{enumerate}
+	\item Initialization
+	\item Scan
+	\item Error Logging
+	\item Storing
+	\item Error Logging
+	\item Finalizing
+\end{enumerate}
+
+In the initialization phase the scanner creates a run object. This object is already saved to the database. This way user know just by looking at the database if there are any runs still running. This also creates a first opportunity to look for inconsistencies. If there are a lot of started runs, something suspicious might be going on. It also creates the hash of the configuration and already saves it to the database.
+
+The scan phase has more steps to it. First it creates the \gls{pytsk} object called `img\_info'. This is done by passing the path to the disk image to \gls{pytsk}. Then the actually important `fs\_info' object is created by passing the img info object. This way we have access to the \gls{fs}. The scan actually starts by calling `open\_directory\_rec' for each scan path. This function keeps track of all diretories it already traversed into as to avoid circular loops and unnecessary steps. Then it checks if the path is in the ignored paths. It then iterates over all objects in the directory. 
+
+For all entries it checks if it is a valid entry with the required attributes to continue. Afterwards it checks if it is a directory. For all the directories the function first checks if the directory has already been visited and if not it calls itself with the new directory as the parameter. If the entry is a file, it is parsed into a python object and then stored into a local list of found files. Any errors that occur are saved by creating an error object that is stored into a list of errors.
+
+In the error logging phase all errors that have occured in the scan process are stored in the database. This is done by iterating over all the errors and saving them one by one. The database is then commited and even if the files can't be saved for some reason, the errors will be persisted.
+
+After the first error logging phase is the file saving phase. Here the files are saved again by iterating over them and saving one by one. Should any additional error occur while saving the files, they are again added to a list of errors. 
+
+There is a second error logging phase. In this phase the errors that occured while saving the files get stored into the database. The functionality is the same as for the first error logging phase.
+
+In the finalizing phase the run object gets updated and the endtime added. It is then also updated on the database. At this point the scanner is finished. It has written all the files from the \gls{fs} to the database. Also all errors that occured during this process are logged. The run object on the database will have a valid start and end timestamp. 
 
 
 \subsection{Investigator}
 \label{sec:Investigator}
 
-
-
-\section{Application Flow}
-\label{sec:flwo}
-
+TODO: finish investigator logic first. Could document current logic, but is not useful as it is not fast enough. 
 
 \section{Security}
 \label{sec:Security}
 
+A \gls{hids} is a system that tries to improve the security of a host by detecting intrusions. Thus, it is extremely important to evaluate the security of such a system. This is the goal of this section. First, I will show some limitations of the produced system. It has some downsides and it is important to look at them. After that I will loook at some risk associated with running the \gls{hids}. Those risks might be associated with all competitors. Then I will give some attack scenarios. Those will include some scenarios where the proposed \gls{hids} is better suited than previous \gls{hids}, but also some that specifically attack the limitations and risks. Lastly, I will dive into how to circumvent those attack scenarios. Some might be defeated if we change some small things, some will need more work.
+
 \subsection{Limitations}
 \label{sec:Limitations}
+
+There are multiple limitations that I will list below. I will reference those in the attack scenarios and mittigations. I will also list how easily they can be exploited and how easy it is to detect those limitations.
+
+\subsubsection{Changing Attributes}
+\label{sec:limitation:chattr}
+As already mentioned multiple times, the proposed system doesn't use \glspl{hash} for detection of intrusions. This is a big issue as it means that changed files might not be found. Attributes can be changed which could lead this implementation to miss an intrusion.  \cite{chaning:times, changing:attributes}
+
+It is rather easy to change the \gls{fs} attributes. However, it is not trivial to change all of them. Some will leave traces and for some attributes root access is needed. Additionally the attacker would first need remember the times which would be correct such that he can correctly reset the times. This can be quite challenging. However, it is likely that the attacker will not change all attributes or that he sets them incorrectly, such that the system can still discover the changes. Some changes to the attributes will leave other traces, such as kernel level logs. Those can be evaluated to find this kind of intrusion.
+
+\subsubsection{Non file based intrusion}
+\label{sec:limitation:nonFileBased}
+Another limitation are intrusions that are not file based, which are getting more popular even as \gls{apt}. Many of the biggest threats for web applications according to \gls{owasp} are not creating any files on the host. \cite{owasp} There are also other attacks which don't need to use files if they can hijack an already started process. Those attacks are not detectable because the system only works on file basis.
+
+Those kind of intrusions are getting more common and as already said, can't be discovered by only checking the \gls{fs}. However, they leave other traces. They often leave logs in the application because for most of the \gls{owasp} top ten, many trial and error is required. For \gls{apt} it is more difficult to find them. They mostly leave traces as well in form of weird network behaviour. Because to achieve persistance they need to redownload the malware after a host has been rebooted.
+
+\subsubsection{Intrusion in non watched location}
+\label{sec:limitation:nonWatched}
+When the scanner is started it is fed with which paths to scan and which to ignore. If an intrusion injects a file in a place that is not watched, it will not be found. This limitation comes from a faulty configuration.
+
+For non watched locations it is as if the host would not run a \gls{hids}. Maybe the intrusion will at some point write or read something in a watched location, but otherwise the threat can go unnoticed for a long time. To avoid such intrusions it is recommended that at least the scanner part of the \gls{hids} on the whole system. Additionally it is recommended to run the investigator on the whole system as well, but maybe with a lower frequency.
+
+\subsubsection{Preexisting intrusions}
+\label{sec:limitation:preexisting}
+The system can only detect intrusion by unexpected changes. If it is started on an already running host, it is possible that this host is already infected. This infection can not be seen by the system, as long as the files from the intrusion stay consistent. 
+
+Preexisting intrusions are hard to detect if they don't alter their files. Luckily malware behaves like a normal software project. At some point it will probably change its executable. It might also read or write other files that seem suspicious. Additionally, if the \gls{hids} is deployed with new machines additionally to the already running machines, those are going to detect the intrusion as soon as the already infected hosts try to infect the newly deployed ones.
+
+\subsubsection{Shut down \gls{hids}}
+\label{sec:limitation:noscan}
+The system relies on the running of the scanner. On a host this would probably be done by creating a scheduled task. If this can be disabled, then the scanner will no longer run and no further intrusions will be detected. Additionally the investigator could also be stopped. This would lead to the same issue.
+
+Should the scanner be shut down then the investigator will no longer find any intrusions. This can be detected if the database is checked on new entries from another source. This is easiest done when an external database is used or when the sqlite file is copied from the host to an external machine at some points. Also, if logs are configured to be written after each execution, it can be suspicious if those entries are missing or are showing to be evaluating the same runs over and over again. 
+
+This limitation is not highly likely, because the intruder first needs to get administrative access to the host to be able to shut down the \gls{hids}. This is not always easy to achieve and once the attacker has administrative access he can do whatever he want on the system. 
+
+\subsection{Risks}
+\label{sec:risk}
+
+Aside from the limitations there are some risks with running this system. As with the limitations, I will give some comment to each risk and talk about how to evaluate them.
+
+\subsubsection{Running unknown code}
+\label{sec:risk:unknowncode}
+
+As for any program, it is always a risk associated to execute code that was downloaded from the internet. It is possible that it was modified or that it is exploitable. However, this is an \gls{opensource} program. This makes it easier to evaluate the code. The same would need to be done for all the dependencies, more specifically for \gls{pytsk} and \gls{tsk}. This is possible but requires a lot of work. However, the \gls{opensource} community is generally well trusted, which might be enough. To protect from alterations to the tool that was downloaded, hashes can be validated. Additionally, the system behaves very straightforward. It will scan the file system and then write to a database. It will then read from the database and create alerts. This functionality can be monitored. Should the system do something else it might either have a bug or is being abused.
+
+\subsubsection{File access}
+\label{sec:risk:file}
+
+Any \gls{hids} that operates on file basis needs access to the files. Depending on the data that is stored on the host this might be a cause for concern. The system has full access on any of those files. This can not be circumvented. What can be done is using only the scanner on this system. Let it write either to a centrally managed database or a sqlite file. Then let the investigator run on the data from another host. This way the system can be monitored to make sure it doesn't open any other communication.
+
+\subsubsection{Root access}
+\label{sec:risk:root}
+
+The system needs access to the disk image which is mounted. To gain access to that it needs to run with administration privileges. With those permissions the system could theoreically do anything on the host. The best way would be to limit the amount of time that it is executing with those privileges. To do that the scanner and the investigator can be executed in different processes where only the scanner has administrative access. The investigator only needs to read the database and send alerts, for neither it needs administrative privileges.
 
 \subsection{Attack Scenarios}
 \label{sec:attack_scenarios}
 
+In this section I describe several attack scenarios. I will only explain what the intruder does and how he does it. I might give some description of the host and which processes are running. I will also list which limitations or which risks the attacker uses. In section \ref{sec:mittigations} I explain how those attacks can be avoided or detected and what is needed for the detection. Finally in the discussion I give a short summary on how my system stands against other systems like Aide. 
+
+\subsubsection{Classic Intrusion with persistance}
+\label{sec:attack:classic}
+
+The classic way to gain a foothold on a host is to write a file on the \gls{fs}. This file is then executed remotely and the host is compromised. How exactly the attacker was able to upload a file is not relevant for this scenario. The attacker will not do anything special with the file and leave it where it lands. He does not change any attributes or uses any other tactic to hide.
+
+This attack actually exploits none of the risks and limitations as this is the basic kind of attack that the system is made to find. 
+
+\subsubsection{Intrusion with persistance, attacker changes all metadata}
+\label{sec:attack:changeattr}
+
+The attacker is able to change a file or create a file on the host and then resets the attribes in such a way that the system can't find anything wrong.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:chattr}
+	\item \nameref{sec:limitation:nonWatched}
+\end{itemize}
+
+\subsubsection{Intrusion without persistance to use as intermediate host}
+\label{sec:attack:nopersistanceintermediatehost}
+
+The attacker is able to exploit a running process. He uses the host to gain access to other machines in the network and does not read or write anything from or to the host. 
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:nonFileBased}
+\end{itemize}
+
+\subsubsection{Intrusion without persistance to exfiltrate data}
+\label{sec:attack:nopersistanceexfiltration}
+
+As in scenario named `\nameref{sec:attack:nopersistanceintermediatehost}' the attacker gains access through an exploit of an already running process. However, in this scenario he does read files of interest, for instance private keys for encryption. 
+
+Risks and Limitations:
+\begin{itemize}
+	\item Partially: \nameref{sec:limitation:nonFileBased}
+\end{itemize}
+
+\subsubsection{Intrusion without persistance but as apt}
+\label{sec:attack:nopersistanceapt}
+
+This scenario is simmilar as the previous two. Here the attacker is again able to exploit a process that is already running. He then goes on to use this process to do things that are uncharacteristic for this process. He does neither read nor write files from the host. His goal is to stay hidden for as long as possible. Additionally he wants to reinfect the host whenever the process is restarted.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:nonFileBased}
+\end{itemize}
+
+\subsubsection{Attacker exploits \gls{hids} to gain administrative privileges}
+\label{sec:attack:exploitforroot}
+
+Differently from before, this time the attacker somehow can exploit the \gls{hids} to gain administrative privileges. The most likely way is to give it a different configuration or change the code that is already running on the system. It needs to be either because the scanner subsystem does not have any additional entrypoints.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:nonFileBased}
+	\item \nameref{sec:risk:root}
+	\item \nameref{sec:risk:unknowncode}
+\end{itemize}
+
+\subsubsection{Attacker changes the code maliciously}
+\label{sec:attack:codechange}
+
+The attacker is able to change the code that the user downloads. He injects his own malicious code in the version that was downloaded. It is then executed ant the attacker is able to take over the host.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:preexisting}
+	\item \nameref{sec:risk:root}
+	\item \nameref{sec:risk:unknowncode}
+\end{itemize}
+
+\subsection{Attack Mittigations}
+\label{sec:mittigations}
+
+To avoid the attacks described in \nameref{sec:attack_scenarios} there are multiple things one can do. First I give some information how the specific scenarios can be detected if possible. Then there are some general recommendations on what can be done to increase the security of the system or of the host.
+
+\subsubsection{Classic Intrusion with persistance}
+\label{sec:defense:classic}
+
+This attack scenario is actually the easiest. It will be detected if the system is configured correctly. Compared to other \gls{hids}, this kind of attack will be found faster, because the system can be run more often. 
+
+\subsubsection{Intrusion with persistance, attacker changes all metadata}
+\label{sec:defense:changeattr}
+
+This kind of attack can only be found, if the attacker takes longer than the system has to scan. It is possible that the \gls{hids} discovers it while the attacker has not yet changed all the attributes. Additionally, it is possible that the attacker did not change all the relevant attributes. In both cases the system will find the intrusion and alert it. Should the attacker be fast enough the system will not find the changed file. Then it depends on how well the attacker hides. If he does not do anything on the \gls{fs}, it is possible that this kind of intrusion will go unnoticed for a long time by the \gls{hids}. 
+
+Here a \gls{nids} or a different \gls{hids} comes into play. The host can be configured in such a way that there is a different \gls{hids} running that only runs on a part of the \gls{fs} that has more exposure. A \gls{nids} can also detect this kind of intrusion, because the attacker will need to communicate to or from the compromised host at some point. 
+
+\subsubsection{Intrusion without persistance to use as intermediate host}
+\label{sec:defense:nopersistanceintermediatehost}
+
+This type of attack can not be detected by any \gls{hids} that only works on file basis. Here again a \gls{nids} can help. Most likely the attacker wants to gain access to other hosts in the network. When there is a \gls{nids} installed, it should be able to detect this traffic and alert them. Another way would be to deploy an additional \gls{hids} that does not work on file basis, but checks network information. This way it would find the intrusion and can alert it.
+
+\subsubsection{Intrusion without persistance to exfiltrate data}
+\label{sec:defense:nopersistanceexfiltration}
+
+This type of attack is again very visible for a \gls{nids}. Large amounts of data will be transfered in a way, that might not be usual. This can result in alerts from a \gls{nids}. Here the proposed system might be able to alert the attack as well. As the attacker reads the data, it changes the modified timestamp. If the attacker does not reset this timestamp, the system will be able to alert the change. 
+
+\subsubsection{Intrusion without persistance but as apt}
+\label{sec:defense:nopersistanceapt}
+
+This type of intrusion is again not possible to detect by a \gls{hids} that works on file basis, except the attacker reads files. Here again a \gls{nids} is needed which will be able to detect it, because after the infected process is restarted, another host will reinfect it. This is the kind of traffic a \gls{nids} should be able to detect.
+
+\subsubsection{Attacker exploits \gls{hids} to gain administrative privileges}
+\label{sec:defense:exploitforroot}
+
+For the system, this attack is probably not detectable, because the attacker changes the system itself. The best way to protect against that is to closely monitor what it does. The scanner part should only be allowed to read data from the disk image and write it to the specified data. To protect further, the investigator should be executed seperately without admin privileges. This way the attack surface is smaller. The only thing that can be used to generate an exploit would be the scanner config. Another way to notice the change might be the changed configuration which might already have been saved to the database. This way one might notice that something is wrong.
+
+\subsubsection{Attacker changes the code maliciously}
+\label{sec:defense:codechange}
+
+This attack is not detectable from the system again, because firstly, the system itself was changed and behaves abnoramally. And secondly, because when the system was executed, the intrusion already happened. To protect from this form of attack, the system administrator should check the hash of the \gls{hids}. Additionally, he should verify the \gls{pgp} key. This way an administrator can make sure that the package which is installed has not been altered. Further, the source code can be checked and compiled by the system administrator himself. This would take more work but the possibility for malicious inclusions are fewer. 
+
+\subsection{General defense}
+\label{sec:defense:general}
+
+Generally it makes sense to use a \gls{nids} in conjunction with any \gls{hids}. Some intrusions are easier to detect on the host level and others on a network level. Both make sense so both should be used. Additionally, it makes sense to use an additional \gls{hids} which is specialized in detecting intrusions on process or network activity level. This way the host is monitored fully and intrusions can be even better detected. 
+
+For the system specifically, it makes sense to run the scanner and the investigator seperately. To gain the most security, the scanner should run on the system and write the output to a \gls{dbms} which is outside the host with a user that can only append to most tables and additionally update the endtime column of the fids run relation. The investigator should then be started on a seperate host that only validates intrusions. This way the attack surface is as small as possible. 
 
 \chapter{Discussion}
 \label{sec:Discussion}
 
+The designed and implemented \gls{hids} works differently than previous \gls{hids}. Many will argue that because it does not generate \glspl{hash} it is insecure. I argue against that, because finding intrusions always takes risks. If a conventional \gls{hids} finds more intrusions but takes a long time to scan the whole system, it is not useful. Finding an intrusion days or even weeks after it happened might not be interesting. The attacker then has a long time to either hide, move on or extract all the information he is interested in. Finding intrusions in a timely fashion is very important and this is where my implementation shines. Additionally, even if it didn't find the intrusion, the database can be very helpful for forensic investigators to find out what the attacker did. This might help finding similar attacks in the future by adapting the configuration or by chaning other components. The argument this system makes is not even to be the one and only. In its current form this does not make sense. I hevily advise people to use a \gls{nids} or a \gls{hids} with other focusses. I also advise people to use a \gls{hids} on file basis which uses \glspl{hash} for highly critical parts of the system. However, if only a hash based \gls{hids} is used, then many attacks will be found to late, or not at all. Another benefit that this implementation has is that it runs on any system. \gls{tsk} runs on Linux, OsX and Windows, so does python. By using those components, this system should work on any of those systems as well.
+
+During my work I realized the system and I tested it with modified data. However, the system has not yet been used in a productive environment and has not yet detected an intrusion. This means that it can not be said without doubt if it would work. The main reason why it has not been tested is that the time ran out. Besides that there were ethical and judical conserns of creating a host that is easily exploitable just so that it can be attacked. This would lead to criminals gaining access to a host to do their work which is not in my interest. Even if my system would find their intrusions, it is still possible that they can abuse the host for some time. Additionally, it is possible that they would use an attack which my system can not detect. This would mean that they have access to the host for a prolonged time. The system would needs to be tested in a live environment where attacks naturally happen. Sadly, I did not have access to such a system. 
+
 \section{Future Work}
 \label{sec:future:work}
 
-\section{Attack Mittigations}
-\label{sec:mittigations}
+It would make sense to extend this \gls{hids} to extend past the \gls{fs}. It would be great if the scanner can also scan the processes and network connections. Not only would this data be important to finding intrusions by the system, but it could also give investigators much more information. Information which they are currently mostly missing.
+
+The system should also be extensively tested. For this it needs to run for a prolonged time in a productive system. The output and the found intrusions would then need to be compared to other system to gain important information about how fast and how many intrusions are found using this system. 
+
+One other path that could be improved on would be the investigator. Currently it operates only on a configuration which someone must write. It would be great to autonomously analyse the scanner output and find anomalies on them. This could be done if a lot of data has already been collected on many different types of hosts. The types could then be grouped and an algorithm could detect similar patterns to find simmilar intrusions. 
+
+Generally, the field of finding intrusions has a lot of opportunities for research. This system can be one part of an extensive system that checks for intrusions. Especially since disk sizes and data usage is still growing it is important to have such a system that can find intrusions fast.
 
 \chapter{Conclusion}
 \label{sec:Conclusion}
+
+In this thesis the goal was to create a \gls{hids} which finds intrusions in big \gls{fs} fast and helps with forensic investigation. Such a system was built. I am using \gls{tsk} to only check \gls{fs} \gls{metadata} to find intrusions. This way the system is extremely fast compared to systems that use \glspl{hash}. My system thus takes a risk based approach to finding intrusions. It will not find them as reliably as other systems, but it will find them faster. 
+
 
 \chapter{Journal}
 
