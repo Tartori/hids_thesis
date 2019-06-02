@@ -165,6 +165,15 @@
 \tableofcontents
 \clearpage
 
+
+\chapter{Acknowledgements}
+
+Firstly, I want to tank my tutor Bruce Nikkel and for his outstanding guidance and ongoing support during this project.
+
+Next I want to thank Amir Blum for supervising this work as my expert and for giving valuable feedback at the start of the project.
+
+Further I want to thank the \gls{opensource} community behind \gls{tsk} and \gls{pytsk} without whom this project would not have been possible. Especially Joachim Metz who is very active in the \gls{pytsk} community and helped me find the solution to one of my issues.
+
 \chapter{Introduction}
 
 An \gls{ids} is used to protect a computer from \gls{malware} attacks. It does so by tracking and evaluating activity form one or many hosts. The \gls{ids} then tries to find \glspl{anomaly} usually by comparing the activity to some type of configuration which often contains some form of blacklist or whitelist. The \glspl{anomaly} are then alerted or logged to some framework. The process of intrusion detection is generally split into a host based part with \gls{hids} and a network based part with \gls{nids}. \gls{nids} are used to detect unusual behaviour of the network. Examples include communication from hosts which usually don't comunicate. \gls{hids} on the other hand are used to detect \glspl{anomaly} on a host. This is done by detecting changes in the way processes are used or when the \gls{fs} is changed. Both types of \gls{ids} have different advantages and they should be used in conjunction for best results. \cite{needed}
@@ -769,6 +778,8 @@ The system should also be extensively tested. For this it needs to run for a pro
 One other path that could be improved on would be the investigator. Currently it operates only on a configuration which someone must write. It would be great to autonomously analyse the scanner output and find anomalies on them. This could be done if a lot of data has already been collected on many different types of hosts. The types could then be grouped and an algorithm could detect similar patterns to find simmilar intrusions. 
 
 Generally, the field of finding intrusions has a lot of opportunities for research. This system can be one part of an extensive system that checks for intrusions. Especially since disk sizes and data usage is still growing it is important to have such a system that can find intrusions fast.
+
+It would also be interesting to add the output of the scanner to a super timeline. It would help seeing what happened on the host at any point in time. 
 
 \chapter{Conclusion}
 \label{sec:Conclusion}
