@@ -1,0 +1,42 @@
+
+\section{Application Flow}
+\label{sec:flow}
+
+The main application flow consists of first reading the config file. If no config file path is passed the default path is used. It then starts the scanner if a scan configuration is found. After the scanner is completed it starts the investigator if the detection config is found. It works if any of the two configs are found. If none is found then the system will simply do nothing. 
+
+
+\subsection{Scanner}
+\label{sec:Scanner}
+
+The scanner component is the first specific component. It is executed when the system is run and a scan config is available. It is responsible for getting all the information from the \gls{fs} for the configured paths. It has multiple stages.
+
+\begin{enumerate}
+	\item Initialization
+	\item Scan
+	\item Error Logging
+	\item Storing
+	\item Error Logging
+	\item Finalizing
+\end{enumerate}
+
+In the initialization phase the scanner creates a run object. This object is already saved to the database. This way user know just by looking at the database if there are any runs still running. This also creates a first opportunity to look for inconsistencies. If there are a lot of started runs, something suspicious might be going on. It also creates the hash of the configuration and already saves it to the database.
+
+The scan phase has more steps to it. First it creates the \gls{pytsk} object called `img\_info'. This is done by passing the path to the disk image to \gls{pytsk}. Then the actually important `fs\_info' object is created by passing the img info object. This way we have access to the \gls{fs}. The scan actually starts by calling `open\_directory\_rec' for each scan path. This function keeps track of all diretories it already traversed into as to avoid circular loops and unnecessary steps. Then it checks if the path is in the ignored paths. It then iterates over all objects in the directory. 
+
+For all entries it checks if it is a valid entry with the required attributes to continue. Afterwards it checks if it is a directory. For all the directories the function first checks if the directory has already been visited and if not it calls itself with the new directory as the parameter. If the entry is a file, it is parsed into a python object and then stored into a local list of found files. Any errors that occur are saved by creating an error object that is stored into a list of errors.
+
+In the error logging phase all errors that have occured in the scan process are stored in the database. This is done by iterating over all the errors and saving them one by one. The database is then commited and even if the files can't be saved for some reason, the errors will be persisted.
+
+After the first error logging phase is the file saving phase. Here the files are saved again by iterating over them and saving one by one. Should any additional error occur while saving the files, they are again added to a list of errors. 
+
+There is a second error logging phase. In this phase the errors that occured while saving the files get stored into the database. The functionality is the same as for the first error logging phase.
+
+In the finalizing phase the run object gets updated and the endtime added. It is then also updated on the database. At this point the scanner is finished. It has written all the files from the \gls{fs} to the database. Also all errors that occured during this process are logged. The run object on the database will have a valid start and end timestamp. 
+
+
+\subsection{Investigator}
+\label{sec:Investigator}
+
+TODO: finish investigator logic first. Could document current logic, but is not useful as it is not fast enough. 
+
+

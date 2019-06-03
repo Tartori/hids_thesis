@@ -1,0 +1,143 @@
+% !TEX root = ../thesis.tex
+
+\chapter*{APPENDICES}
+\addcontentsline{toc}{chapter}{APPENDICES}
+\settocdepth{section}
+
+\begingroup\let\clearpage\relax
+\chapter{Project Management}
+\endgroup
+
+\section{Goal}
+\label{apdx-sec:goal}
+Before the start of the project the following main goal was defined:
+
+Building of an \gls{hids} that detects unauthorized or unusual behaviour on the file system. Compared to traditional \gls{hids} file system integrity checking, it should scale with a lot of data and have the possibility to be used for investigation (retain historic data) built in from the start.
+
+\subsection{Sub goals}
+
+From this primary goal, the following sub goals were defined. 
+
+\subsubsection{Scanning}
+The system is capable of scanning the file system for certain properties. The search is done by leveraging the sleuthkit tools. Thus the system is capable of interpreting the results from sleuthkit. It will further analyze them and decide on what to do with the results. Especially importance is given to the finding of differences.
+
+\subsubsection{Recording}
+The system records all findings. Including new, changed and deleted files in comparison to an earlier point in time. This recording enables the use of investigation as the evolution of the data can be viewed at any time. This data can also be used for machine learning algorithms to detect anomalies that are out of the scope of this thesis. 
+
+\subsubsection{Evaluation}
+The system is capable of evaluating the results by applying predefined rules. Those rules can be adjusted by configuring the system.
+
+It is thinkable that the system analyzes the recordings and makes decisions based on the historical behavior of the specific host and behavior from different similar hosts. This approach is not part of this thesis as it requires much historical data that is not present at the time of this thesis. 
+
+\subsubsection{Alerting}
+The system is capable of being run continuously. This capability enables it to find anomalies automatically. The system can report those anomalies by creating alerts. It allows configuration of these alerts.
+
+\subsubsection{Scaling}
+The run of the system on a big file system completes in an appropriate amount of time. This speed allows the finding of anomalies that appeared recently. Additionally, it allows the storing of more states of the system which results in a her probability of capturing short-lived anomalies for future investigations. 
+
+\section{Workpackages}
+
+From those goals the workpackages in table \ref{tab:workpackages} were defined. For a better overview they are assigned to categories. The categories are Architecture, Implementation, Validation and Administrative. Architecture is about defining how the system will look like and how it should work. Implementation is the effective implementation work for getting the system to run, this includes configuration and coding. Validation is about testing of the system. Administrative is everything that deals with project management and other workpackages that don't directly influence the system but need to be done.
+
+The ID is a combination of the first letter of the category and a unique index. Administrative is shortened to D due to the conflict with Architecture.
+
+The priority is a value of high, medium and low. 
+
+The workpackages are chrononically ordered. Meaning they should be worked on in approximately the order that they are given. 
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{Workpackages}
+    \label{tab:workpackages}
+    \begin{tabular}{c|l|c|l}
+      \textbf{ID} & \textbf{Short description} & \textbf{Prio} & \textbf{Category} \\
+      \hline
+      D00 & Setting up \LaTeX -document & h & Administrative \\
+      D01 & Define workpackages and set deadlines & h & Administrative \\
+			A00 & Research other \gls{hids} and the sleuthkit tools & h & Architecture \\
+			A01 & Decide on a Programming Language & h & Architecture \\
+			I00 & Setup the developer environment & h & Implementation \\
+			I01 & Add the ability to scan the whole system using sleuthkit & h & Implementation \\
+			A02 & Decide which database connectors should be used & h & Architecture \\
+			I02 & Add one database connector & h & Implementation \\
+			I03 & Implement a recording functionality & h & Implementation \\
+			A03 & Decide how the rules should be defined & h & Architecture \\
+			I04 & Add template rules and ability to parse them & h & Implementation \\
+			I05 & Add functionality to parse output according to rules & h & Implementation \\
+			V00 & Verify that the system runs on a big file system & h & Validation \\
+			I06 & Add functionality of repeated scans & m & Implementation \\
+			A04 & Define which alerting methods make sense & m & Architecture \\ 
+			I07 & Add alerting functionality using one method & m & Implementation \\
+			V01 & Verify the functionality of the software by changing the system & h & Validation \\
+			V02 & Verify the functionality of the software by running it on an infected system & m & Validation \\
+			V03 & Verify the alerting of the software by running it on an infectable system & m & Validation \\
+			I08 & Add multiple database connectors to different systems & m & Implementation \\
+			I09 & Add multiple alerting methods & m & Implementation \\
+			A05 & Define how to protect system and configuration from tampering & l & Architecture \\
+			I10 & Implement software hardening & l & Implementation \\
+			D02 & Finish user documentation & m & Administrative \\
+			D03 & Finish project documentation & h & Administrative \\ 
+			D04 & Create project presentation & h & Administrative \\
+			D05 & Create project poster & m & Administrative \\
+			D06 & Create project video & l & Administrative \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\section{Planning}
+
+For the planning of this project the following milestones were created. Each coveres multiple workpackages. The mapping can be seen in table \ref{tab:milestones}. The milestones can also be seen in figure \ref{apdx-fig:milestones}. There they are displayed with an assumed and actual finish date.
+
+
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{Milestones}
+    \label{tab:milestones}
+    \begin{tabular}{c|l|c|l}
+      \textbf{ID} & \textbf{Short description} & \textbf{Workpackages} \\
+      \hline
+			00 & Setup & D00, D01, A00, A01, I00 \\
+			01 & Initial functionality & A02, I01, I02, I03 \\
+			02 & Rules & A03, I04, I05, V00 \\
+			03 & Alerting & A04, I06, I07 \\
+			04 & Exhaustive testing & V01, V02, V03 \\
+			05 & Usability & I08, I09, D02 \\
+			06 & Software Hardening & A05, I10 \\
+			07 & Presentation & D02, D03, D04, D05, D06 \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\begin{figure}[H]
+	\begin{ganttchart}[
+		hgrid,
+		vgrid,
+		x unit=7mm,
+		y unit chart=10mm,
+		milestone label font = \footnotesize
+	]{1}{17}
+	\gantttitle{2019}{17}\\
+	\gantttitlelist{1,...,17}{1}\\
+	
+	\ganttplannedmilestone{Setup}{4}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Initial functionality}{5}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Rules}{7}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Alerting}{8}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Exhaustive testing}{10}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Usability}{13}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Software Hardening}{15}
+	\ganttactualmilestone{}{0}\\
+	\ganttplannedmilestone{Presentation}{17}
+	\ganttactualmilestone{}{17}
+	\end{ganttchart}
+	\caption{Milestones}
+	\label{apdx-fig:milestones}
+	\end{figure}

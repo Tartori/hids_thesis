@@ -1,0 +1,188 @@
+
+\section{Security}
+\label{sec:Security}
+
+A \gls{hids} is a system that tries to improve the security of a host by detecting intrusions. Thus, it is extremely important to evaluate the security of such a system. This is the goal of this section. First, I will show some limitations of the produced system. It has some downsides and it is important to look at them. After that I will loook at some risk associated with running the \gls{hids}. Those risks might be associated with all competitors. Then I will give some attack scenarios. Those will include some scenarios where the proposed \gls{hids} is better suited than previous \gls{hids}, but also some that specifically attack the limitations and risks. Lastly, I will dive into how to circumvent those attack scenarios. Some might be defeated if we change some small things, some will need more work.
+
+\subsection{Limitations}
+\label{sec:Limitations}
+
+There are multiple limitations that I will list below. I will reference those in the attack scenarios and mittigations. I will also list how easily they can be exploited and how easy it is to detect those limitations.
+
+\subsubsection{Changing Attributes}
+\label{sec:limitation:chattr}
+As already mentioned multiple times, the proposed system doesn't use \glspl{hash} for detection of intrusions. This is a big issue as it means that changed files might not be found. Attributes can be changed which could lead this implementation to miss an intrusion.  \cite{chaning:times, changing:attributes}
+
+It is rather easy to change the \gls{fs} attributes. However, it is not trivial to change all of them. Some will leave traces and for some attributes root access is needed. Additionally the attacker would first need remember the times which would be correct such that he can correctly reset the times. This can be quite challenging. However, it is likely that the attacker will not change all attributes or that he sets them incorrectly, such that the system can still discover the changes. Some changes to the attributes will leave other traces, such as kernel level logs. Those can be evaluated to find this kind of intrusion.
+
+\subsubsection{Non file based intrusion}
+\label{sec:limitation:nonFileBased}
+Another limitation are intrusions that are not file based, which are getting more popular even as \gls{apt}. Many of the biggest threats for web applications according to \gls{owasp} are not creating any files on the host. \cite{owasp} There are also other attacks which don't need to use files if they can hijack an already started process. Those attacks are not detectable because the system only works on file basis.
+
+Those kind of intrusions are getting more common and as already said, can't be discovered by only checking the \gls{fs}. However, they leave other traces. They often leave logs in the application because for most of the \gls{owasp} top ten, many trial and error is required. For \gls{apt} it is more difficult to find them. They mostly leave traces as well in form of weird network behaviour. Because to achieve persistance they need to redownload the malware after a host has been rebooted.
+
+\subsubsection{Intrusion in non watched location}
+\label{sec:limitation:nonWatched}
+When the scanner is started it is fed with which paths to scan and which to ignore. If an intrusion injects a file in a place that is not watched, it will not be found. This limitation comes from a faulty configuration.
+
+For non watched locations it is as if the host would not run a \gls{hids}. Maybe the intrusion will at some point write or read something in a watched location, but otherwise the threat can go unnoticed for a long time. To avoid such intrusions it is recommended that at least the scanner part of the \gls{hids} on the whole system. Additionally it is recommended to run the investigator on the whole system as well, but maybe with a lower frequency.
+
+\subsubsection{Preexisting intrusions}
+\label{sec:limitation:preexisting}
+The system can only detect intrusion by unexpected changes. If it is started on an already running host, it is possible that this host is already infected. This infection can not be seen by the system, as long as the files from the intrusion stay consistent. 
+
+Preexisting intrusions are hard to detect if they don't alter their files. Luckily malware behaves like a normal software project. At some point it will probably change its executable. It might also read or write other files that seem suspicious. Additionally, if the \gls{hids} is deployed with new machines additionally to the already running machines, those are going to detect the intrusion as soon as the already infected hosts try to infect the newly deployed ones.
+
+\subsubsection{Shut down \gls{hids}}
+\label{sec:limitation:noscan}
+The system relies on the running of the scanner. On a host this would probably be done by creating a scheduled task. If this can be disabled, then the scanner will no longer run and no further intrusions will be detected. Additionally the investigator could also be stopped. This would lead to the same issue.
+
+Should the scanner be shut down then the investigator will no longer find any intrusions. This can be detected if the database is checked on new entries from another source. This is easiest done when an external database is used or when the sqlite file is copied from the host to an external machine at some points. Also, if logs are configured to be written after each execution, it can be suspicious if those entries are missing or are showing to be evaluating the same runs over and over again. 
+
+This limitation is not highly likely, because the intruder first needs to get administrative access to the host to be able to shut down the \gls{hids}. This is not always easy to achieve and once the attacker has administrative access he can do whatever he want on the system. 
+
+\subsection{Risks}
+\label{sec:risk}
+
+Aside from the limitations there are some risks with running this system. As with the limitations, I will give some comment to each risk and talk about how to evaluate them.
+
+\subsubsection{Running unknown code}
+\label{sec:risk:unknowncode}
+
+As for any program, it is always a risk associated to execute code that was downloaded from the internet. It is possible that it was modified or that it is exploitable. However, this is an \gls{opensource} program. This makes it easier to evaluate the code. The same would need to be done for all the dependencies, more specifically for \gls{pytsk} and \gls{tsk}. This is possible but requires a lot of work. However, the \gls{opensource} community is generally well trusted, which might be enough. To protect from alterations to the tool that was downloaded, hashes can be validated. Additionally, the system behaves very straightforward. It will scan the file system and then write to a database. It will then read from the database and create alerts. This functionality can be monitored. Should the system do something else it might either have a bug or is being abused.
+
+\subsubsection{File access}
+\label{sec:risk:file}
+
+Any \gls{hids} that operates on file basis needs access to the files. Depending on the data that is stored on the host this might be a cause for concern. The system has full access on any of those files. This can not be circumvented. What can be done is using only the scanner on this system. Let it write either to a centrally managed database or a sqlite file. Then let the investigator run on the data from another host. This way the system can be monitored to make sure it doesn't open any other communication.
+
+\subsubsection{Root access}
+\label{sec:risk:root}
+
+The system needs access to the disk image which is mounted. To gain access to that it needs to run with administration privileges. With those permissions the system could theoreically do anything on the host. The best way would be to limit the amount of time that it is executing with those privileges. To do that the scanner and the investigator can be executed in different processes where only the scanner has administrative access. The investigator only needs to read the database and send alerts, for neither it needs administrative privileges.
+
+\subsection{Attack Scenarios}
+\label{sec:attack_scenarios}
+
+In this section I describe several attack scenarios. I will only explain what the intruder does and how he does it. I might give some description of the host and which processes are running. I will also list which limitations or which risks the attacker uses. In section \ref{sec:mittigations} I explain how those attacks can be avoided or detected and what is needed for the detection. Finally in the discussion I give a short summary on how my system stands against other systems like Aide. 
+
+\subsubsection{Classic Intrusion with persistance}
+\label{sec:attack:classic}
+
+The classic way to gain a foothold on a host is to write a file on the \gls{fs}. This file is then executed remotely and the host is compromised. How exactly the attacker was able to upload a file is not relevant for this scenario. The attacker will not do anything special with the file and leave it where it lands. He does not change any attributes or uses any other tactic to hide.
+
+This attack actually exploits none of the risks and limitations as this is the basic kind of attack that the system is made to find. 
+
+\subsubsection{Intrusion with persistance, attacker changes all metadata}
+\label{sec:attack:changeattr}
+
+The attacker is able to change a file or create a file on the host and then resets the attribes in such a way that the system can't find anything wrong.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:chattr}
+	\item \nameref{sec:limitation:nonWatched}
+\end{itemize}
+
+\subsubsection{Intrusion without persistance to use as intermediate host}
+\label{sec:attack:nopersistanceintermediatehost}
+
+The attacker is able to exploit a running process. He uses the host to gain access to other machines in the network and does not read or write anything from or to the host. 
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:nonFileBased}
+\end{itemize}
+
+\subsubsection{Intrusion without persistance to exfiltrate data}
+\label{sec:attack:nopersistanceexfiltration}
+
+As in scenario named `\nameref{sec:attack:nopersistanceintermediatehost}' the attacker gains access through an exploit of an already running process. However, in this scenario he does read files of interest, for instance private keys for encryption. 
+
+Risks and Limitations:
+\begin{itemize}
+	\item Partially: \nameref{sec:limitation:nonFileBased}
+\end{itemize}
+
+\subsubsection{Intrusion without persistance but as apt}
+\label{sec:attack:nopersistanceapt}
+
+This scenario is simmilar as the previous two. Here the attacker is again able to exploit a process that is already running. He then goes on to use this process to do things that are uncharacteristic for this process. He does neither read nor write files from the host. His goal is to stay hidden for as long as possible. Additionally he wants to reinfect the host whenever the process is restarted.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:nonFileBased}
+\end{itemize}
+
+\subsubsection{Attacker exploits \gls{hids} to gain administrative privileges}
+\label{sec:attack:exploitforroot}
+
+Differently from before, this time the attacker somehow can exploit the \gls{hids} to gain administrative privileges. The most likely way is to give it a different configuration or change the code that is already running on the system. It needs to be either because the scanner subsystem does not have any additional entrypoints.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:nonFileBased}
+	\item \nameref{sec:risk:root}
+	\item \nameref{sec:risk:unknowncode}
+\end{itemize}
+
+\subsubsection{Attacker changes the code maliciously}
+\label{sec:attack:codechange}
+
+The attacker is able to change the code that the user downloads. He injects his own malicious code in the version that was downloaded. It is then executed ant the attacker is able to take over the host.
+
+Risks and Limitations:
+\begin{itemize}
+	\item \nameref{sec:limitation:preexisting}
+	\item \nameref{sec:risk:root}
+	\item \nameref{sec:risk:unknowncode}
+\end{itemize}
+
+\subsection{Attack Mittigations}
+\label{sec:mittigations}
+
+To avoid the attacks described in \nameref{sec:attack_scenarios} there are multiple things one can do. First I give some information how the specific scenarios can be detected if possible. Then there are some general recommendations on what can be done to increase the security of the system or of the host.
+
+\subsubsection{Classic Intrusion with persistance}
+\label{sec:defense:classic}
+
+This attack scenario is actually the easiest. It will be detected if the system is configured correctly. Compared to other \gls{hids}, this kind of attack will be found faster, because the system can be run more often. 
+
+\subsubsection{Intrusion with persistance, attacker changes all metadata}
+\label{sec:defense:changeattr}
+
+This kind of attack can only be found, if the attacker takes longer than the system has to scan. It is possible that the \gls{hids} discovers it while the attacker has not yet changed all the attributes. Additionally, it is possible that the attacker did not change all the relevant attributes. In both cases the system will find the intrusion and alert it. Should the attacker be fast enough the system will not find the changed file. Then it depends on how well the attacker hides. If he does not do anything on the \gls{fs}, it is possible that this kind of intrusion will go unnoticed for a long time by the \gls{hids}. 
+
+Here a \gls{nids} or a different \gls{hids} comes into play. The host can be configured in such a way that there is a different \gls{hids} running that only runs on a part of the \gls{fs} that has more exposure. A \gls{nids} can also detect this kind of intrusion, because the attacker will need to communicate to or from the compromised host at some point. 
+
+\subsubsection{Intrusion without persistance to use as intermediate host}
+\label{sec:defense:nopersistanceintermediatehost}
+
+This type of attack can not be detected by any \gls{hids} that only works on file basis. Here again a \gls{nids} can help. Most likely the attacker wants to gain access to other hosts in the network. When there is a \gls{nids} installed, it should be able to detect this traffic and alert them. Another way would be to deploy an additional \gls{hids} that does not work on file basis, but checks network information. This way it would find the intrusion and can alert it.
+
+\subsubsection{Intrusion without persistance to exfiltrate data}
+\label{sec:defense:nopersistanceexfiltration}
+
+This type of attack is again very visible for a \gls{nids}. Large amounts of data will be transfered in a way, that might not be usual. This can result in alerts from a \gls{nids}. Here the proposed system might be able to alert the attack as well. As the attacker reads the data, it changes the modified timestamp. If the attacker does not reset this timestamp, the system will be able to alert the change. 
+
+\subsubsection{Intrusion without persistance but as apt}
+\label{sec:defense:nopersistanceapt}
+
+This type of intrusion is again not possible to detect by a \gls{hids} that works on file basis, except the attacker reads files. Here again a \gls{nids} is needed which will be able to detect it, because after the infected process is restarted, another host will reinfect it. This is the kind of traffic a \gls{nids} should be able to detect.
+
+\subsubsection{Attacker exploits \gls{hids} to gain administrative privileges}
+\label{sec:defense:exploitforroot}
+
+For the system, this attack is probably not detectable, because the attacker changes the system itself. The best way to protect against that is to closely monitor what it does. The scanner part should only be allowed to read data from the disk image and write it to the specified data. To protect further, the investigator should be executed seperately without admin privileges. This way the attack surface is smaller. The only thing that can be used to generate an exploit would be the scanner config. Another way to notice the change might be the changed configuration which might already have been saved to the database. This way one might notice that something is wrong.
+
+\subsubsection{Attacker changes the code maliciously}
+\label{sec:defense:codechange}
+
+This attack is not detectable from the system again, because firstly, the system itself was changed and behaves abnoramally. And secondly, because when the system was executed, the intrusion already happened. To protect from this form of attack, the system administrator should check the hash of the \gls{hids}. Additionally, he should verify the \gls{pgp} key. This way an administrator can make sure that the package which is installed has not been altered. Further, the source code can be checked and compiled by the system administrator himself. This would take more work but the possibility for malicious inclusions are fewer. 
+
+\subsection{General defense}
+\label{sec:defense:general}
+
+Generally it makes sense to use a \gls{nids} in conjunction with any \gls{hids}. Some intrusions are easier to detect on the host level and others on a network level. Both make sense so both should be used. Additionally, it makes sense to use an additional \gls{hids} which is specialized in detecting intrusions on process or network activity level. This way the host is monitored fully and intrusions can be even better detected. 
+
+For the system specifically, it makes sense to run the scanner and the investigator seperately. To gain the most security, the scanner should run on the system and write the output to a \gls{dbms} which is outside the host with a user that can only append to most tables and additionally update the endtime column of the fids run relation. The investigator should then be started on a seperate host that only validates intrusions. This way the attack surface is as small as possible. 

@@ -1,0 +1,71 @@
+%
+% Project documentation template
+% ===========================================================================
+% This is part of the document "Project documentation template".
+% Authors: brd3, kaa1
+%
+
+\begin{titlepage}
+
+
+% BFH-Logo absolute placed at (28,12) on A4 and picture (16:9 or 15cm x 8.5cm)
+% Actually not a realy satisfactory solution but working.
+%---------------------------------------------------------------------------
+\setlength{\unitlength}{1mm}
+\begin{textblock}{20}[0,0](28,12)
+	\includegraphics[scale=1.0]{../img/BFH_Logo_B.png}
+\end{textblock}
+
+% Institution / titel / subtitel / authors / experts:
+%---------------------------------------------------------------------------
+\begin{flushleft}
+
+\vspace*{21mm}
+
+\fontsize{26pt}{40pt}\selectfont 
+\heading				\\							% Read heading from file leader/title.tex
+\vspace{2mm}
+
+\fontsize{16pt}{24pt}\selectfont\vspace{0.3em}
+Hosed based intrusion detection system without hashing			\\				% Insert subheading
+\vspace{5mm}
+
+\fontsize{10pt}{12pt}\selectfont
+\textbf{Bachelor thesis} \\		% Insert text
+\vspace{7mm}
+
+% Abstract (eingeben):
+%---------------------------------------------------------------------------
+\begin{textblock}{150}(28,100)
+\fontsize{10pt}{12pt}\selectfont
+In this thesis I show how a host based intrusion detection system can be built for scalability. More specifically I show how the sleuth kit can be used to create an intrusion detection system that does not rely on hashing, but on \gls{fs} attributes. This way it gains speed which enables us to take the risk not to calculate hashes.
+\end{textblock}
+
+\begin{textblock}{150}(28,225)
+\fontsize{10pt}{17pt}\selectfont
+\begin{tabbing}
+xxxxxxxxxxxxxxx\=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
+Degree course:	\> Engineering and Information Technology	\\		% insert name of degree course
+Author:		\> 		Julian Stampfli\\					% insert names
+Tutor:	\> Dr.~Bruce Nikkel		\\							% insert names
+Expert:		\> Armin Blum				\\							% insert names
+Date:			\> \versiondate					\\							% read from file leader/version.tex
+\end{tabbing}
+
+\end{textblock}
+\end{flushleft}
+
+\begin{textblock}{150}(28,280)
+\noindent 
+\color{bfhgrey}\fontsize{9pt}{10pt}\selectfont
+Berner Fachhochschule | Haute \'ecole sp\'ecialis\'ee bernoise | Bern University of Applied Sciences
+\color{black}\selectfont
+\end{textblock}
+
+
+\end{titlepage}
+
+%
+% ===========================================================================
+% EOF
+%
