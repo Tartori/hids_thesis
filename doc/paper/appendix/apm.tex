@@ -52,34 +52,34 @@ The workpackages are chrononically ordered. Meaning they should be worked on in 
     \begin{tabular}{c|l|c|l}
       \textbf{ID} & \textbf{Short description} & \textbf{Prio} & \textbf{Category} \\
       \hline
-      D00 & Setting up \LaTeX -document & h & Administrative \\
-      D01 & Define workpackages and set deadlines & h & Administrative \\
-			A00 & Research other \gls{hids} and the sleuthkit tools & h & Architecture \\
-			A01 & Decide on a Programming Language & h & Architecture \\
-			I00 & Setup the developer environment & h & Implementation \\
-			I01 & Add the ability to scan the whole system using sleuthkit & h & Implementation \\
-			A02 & Decide which database connectors should be used & h & Architecture \\
-			I02 & Add one database connector & h & Implementation \\
-			I03 & Implement a recording functionality & h & Implementation \\
-			A03 & Decide how the rules should be defined & h & Architecture \\
-			I04 & Add template rules and ability to parse them & h & Implementation \\
-			I05 & Add functionality to parse output according to rules & h & Implementation \\
-			V00 & Verify that the system runs on a big file system & h & Validation \\
-			I06 & Add functionality of repeated scans & m & Implementation \\
-			A04 & Define which alerting methods make sense & m & Architecture \\ 
-			I07 & Add alerting functionality using one method & m & Implementation \\
-			V01 & Verify the functionality of the software by changing the system & h & Validation \\
-			V02 & Verify the functionality of the software by running it on an infected system & m & Validation \\
-			V03 & Verify the alerting of the software by running it on an infectable system & m & Validation \\
-			I08 & Add multiple database connectors to different systems & m & Implementation \\
-			I09 & Add multiple alerting methods & m & Implementation \\
-			A05 & Define how to protect system and configuration from tampering & l & Architecture \\
-			I10 & Implement software hardening & l & Implementation \\
-			D02 & Finish user documentation & m & Administrative \\
-			D03 & Finish project documentation & h & Administrative \\ 
-			D04 & Create project presentation & h & Administrative \\
-			D05 & Create project poster & m & Administrative \\
-			D06 & Create project video & l & Administrative \\
+		D00 & Setting up \LaTeX -document & h & Admin. \\
+		D01 & Define workpackages and set deadlines & h & Admin. \\
+		A00 & Research other \gls{hids} and the sleuthkit tools & h & Archit. \\
+		A01 & Decide on a Programming Language & h & Archit. \\
+		I00 & Setup the developer environment & h & Impl. \\
+		I01 & Add the ability to scan the whole system using sleuthkit & h & Impl. \\
+		A02 & Decide which database connectors should be used & h & Archit. \\
+		I02 & Add one database connector & h & Impl. \\
+		I03 & Implement a recording functionality & h & Impl. \\
+		A03 & Decide how the rules should be defined & h & Archit. \\
+		I04 & Add template rules and ability to parse them & h & Impl. \\
+		I05 & Add functionality to parse output according to rules & h & Impl. \\
+		V00 & Verify that the system runs on a big file system & h & Valid. \\
+		I06 & Add functionality of repeated scans & m & Impl. \\
+		A04 & Define which alerting methods make sense & m & Archit. \\ 
+		I07 & Add alerting functionality using one method & m & Impl. \\
+		V01 & Verify the functionality of the software by changing the system & h & Valid. \\
+		V02 & Verify the functionality of the software by running it on an infected system & m & Valid. \\
+		V03 & Verify the alerting of the software by running it on an infectable system & m & Valid. \\
+		I08 & Add multiple database connectors to different systems & m & Impl. \\
+		I09 & Add multiple alerting methods & m & Impl. \\
+		A05 & Define how to protect system and configuration from tampering & l & Archit. \\
+		I10 & Implement software hardening & l & Impl. \\
+		D02 & Finish user documentation & m & Admin. \\
+		D03 & Finish project documentation & h & Admin. \\ 
+		D04 & Create project presentation & h & Admin. \\
+		D05 & Create project poster & m & Admin. \\
+		D06 & Create project video & l & Admin. \\
     \end{tabular}
   \end{center}
 \end{table}
@@ -110,34 +110,34 @@ For the planning of this project the following milestones were created. Each cov
 \end{table}
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\begin{ganttchart}[
 		hgrid,
 		vgrid,
 		x unit=7mm,
 		y unit chart=10mm,
 		milestone label font = \footnotesize
-	]{1}{17}
-	\gantttitle{2019}{17}\\
-	\gantttitlelist{1,...,17}{1}\\
-	
-	\ganttplannedmilestone{Setup}{4}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Initial functionality}{5}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Rules}{7}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Alerting}{8}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Exhaustive testing}{10}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Usability}{13}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Software Hardening}{15}
-	\ganttactualmilestone{}{0}\\
-	\ganttplannedmilestone{Presentation}{17}
-	\ganttactualmilestone{}{17}
+		]{1}{17}
+		\gantttitle{2019}{17}\\
+		\gantttitlelist{1,...,17}{1}\\
+		
+		\ganttplannedmilestone{Setup}{4}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Initial functionality}{5}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Rules}{7}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Alerting}{8}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Exhaustive testing}{10}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Usability}{13}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Software Hardening}{15}
+		\ganttactualmilestone{}{0}\\
+		\ganttplannedmilestone{Presentation}{17}
+		\ganttactualmilestone{}{17}
 	\end{ganttchart}
 	\caption{Milestones}
 	\label{apdx-fig:milestones}
-	\end{figure}
+\end{figure}
