@@ -66,36 +66,102 @@ scan:
 \end{lstlisting}
 
 \subsubsection{Investigator Configuration}
+\label{sec:conf:investigator}
 
-The investigator configuration is simmilar to the scanner configuration in the way that it contains a top level node called detection. If this is missing the investigator part will not start. As can be seen in listing \ref{lst:cfg:investigator} it has the following subkeys:
+The investigator configuration is simmilar to the scanner configuration in the way that it contains a top level node called investigator. If this is missing the investigator part will not start. As can be seen in listing \ref{lst:cfg:investigator} it is actually a lot more complex than the scanner config. 
 
 \begin{itemize}
-	\item \textbf{relevant\_paths} This configuration specifies which paths need to be evaluated for the following changes. 
-	\item \textbf{filename\_regex} This configuration specifies the regex which the files need to confirm to.  
 	\item \textbf{same\_config} This configuration specifies whether a changed config should result in an alert. Defaults to True.
-	\item \textbf{greater} This configuration specifies all the attributes that need to be equal or greater than for the previous run.
-	\item \textbf{equal} Simmilar to greater, this configuration specifies all the attributes that need to be equal to the previous run.
+	\item \textbf{validation\_run} This can define a run that is used for validation. If empty the second last one will automatically be used.
+	\item \textbf{\nameref{sec:config:rules}} Rules are ways to create templates on what should be used to compare the files. \nameref{sec:config:rules} are explained more through below.
+	\item \textbf{\nameref{sec:config:investigations}} Investigations define which paths and which files should be checked for intrusions. \nameref{sec:config:investigations} are explained more through below.
 \end{itemize}
 
 \begin{lstlisting}[language=yaml, numbers=left, caption=Investigator Configuration, label=lst:cfg:investigator]
-detection:
-	relevant_paths:[
-		"/"
-	]
-	filename_regex: ''
-	greater: [
-		"meta_size"
-	]
-	equal: [
-		"meta_creation_time"
-	]
+investigator:
 	same_config: True
+	validation_run: 
+	rules: 
+		- name: php
+		  rules: 
+			- m
+			- i
+			- l
+			- n
+			- a
+		  equal:
+			- meta_creation_time
+			- meta_size
+		- name: logs
+		  greater:
+			- meta_size
+		  equal:
+			- meta_creation_time
+	investigations:
+		- paths:
+			- '/etc'
+		  fileregexwhitelist:
+			- '*.php'
+		  rules:
+			- php
+		- fileregexwhitelist: '/*'
+		  fileregexblacklist: '*evilfile*'
+		  rules:
+			- logs
 \end{lstlisting}
 
-\subsubsection{Aide Configuration}
-\label{sec:aide:config}
+\subsubsection{Rules}
+\label{sec:config:rules}
+
+Rules represent templates that are later used in the investigations to find anomalies. Rules can be based upon other rules to extend them. Recursive rules are allowed. They simply extend each other. An example of the rule configuration can be seen in listing \ref{lst:cfg:investigator}, the fields are explained below.
+
+\begin{itemize}
+	\item \textbf{paths} For investigations different paths can be defined. This changes the behaviour in such a way that only the specified path will be investigated. Usefull if certain paths need special observations.
+	\item \textbf{rules} The rules which are used within this investigation is based on are defined here. They are referenced by name.
+	\item \textbf{fileregexblacklist} All files which are found may not include this \gls{regex}. If their path with filename results in a match with this \gls{regex} it will be alerted. 
+	\item \textbf{fileregexwhitelist} The whitelist has a different behaviour than the blacklist. It will work simmilarly to the paths config. Only files will be analyzed that match this \gls{regex}.
+\end{itemize}
 
 
+Additionally to the configurable rules there are some predefined rules. Those were heavily influenced by the aide configuration. The ruleswhich are preconfigured can be seen in listing \ref{lst:cfg:precon}
+
+\begin{lstlisting}[language=python, numbers=left, caption=Investigator Configuration, label=lst:cfg:precon]
+self.rules.append(RuleConfig(name='p', equal=['meta_mode']))
+self.rules.append(RuleConfig(name='ftype', equal=['meta_conten']))
+self.rules.append(RuleConfig(name='i', equal=['meta_addr']))
+self.rules.append(RuleConfig(name='l', equal=['meta_link']))
+self.rules.append(RuleConfig(name='n', equal=['meta_nlink']))
+self.rules.append(RuleConfig(name='u', equal=['']))
+self.rules.append(RuleConfig(name='g', equal=['meta_gid']))
+self.rules.append(RuleConfig(name='s', equal=['meta_size']))
+self.rules.append(RuleConfig(name='b', equal=['']))
+self.rules.append(RuleConfig(
+	name='m', 
+	equal=['meta_modification_time',
+		'meta_modification_time_nano']))
+self.rules.append(RuleConfig(
+	name='a', 
+	equal=['meta_access_time', 
+		'meta_access_time_nano']))
+self.rules.append(RuleConfig(
+	name='c', 
+	equal=['meta_changed_time', 
+		'meta_changed_time_nano']))
+self.rules.append(RuleConfig(name='S', greater=['meta_size']))
+self.rules.append(RuleConfig(name='empty'))	
+\end{lstlisting}
+
+\subsubsection{Investigations}
+\label{sec:config:investigations}
+
+The investigation configuration defines the objects which are scanned for intrusion, as well as how they are scanned. They contain rules and some configuration on what should be scanned. An example of the investigation configuration can be seen in listing \ref{lst:cfg:investigator}, the fields are explained below.
+
+\begin{itemize}
+	\item \textbf{name} Each rule has a name. If two rules with the same name are defined the one defined below will be used but without guarantee. The name is used to extend rules.
+	\item \textbf{rules} The rules which are used within this rule are defined here. They are referenced by name.
+	\item \textbf{greater} Those are the properties which are allowed to grow between the runs. Greater also includes equal.
+	\item \textbf{equal} Those are the properties that are suposed to stay equal during all runs.
+\end{itemize}
 
 \subsection{Database}
 \label{sec:Database}
@@ -142,7 +208,7 @@ CREATE TABLE FIDS_ERROR(
 
 \subsubsection{FIDS\_FILE}
 
-This table contains most of the information. It again has \gls{id} additional to the \gls{id} of the run. Then it has the path in which the file was located and all the meta information about the file. Most attributes start with meta, while the rest start with name. This is a reference to \gls{tsk} which has multiple structs for meta and name information about each file. I kept the naming of \gls{tsk}, thus more information about each attribute can be found on the \gls{api} reference of \gls{tsk}. \cite{tsk:file:struct} The table definition is shown in listing \ref{lst:cfg:fids:file}
+This table contains most of the information. It again has \gls{id} additional to the \gls{id} of the run. Then it has the path in which the file was located and all the meta information about the file. Most attributes start with meta, while the rest start with name. This is a reference to \gls{tsk} which has multiple structs for meta and name information about each file. I kept the naming of \gls{tsk}, thus more information about each attribute can be found on the \gls{api} reference of \gls{tsk}. There are also two indeices. One on the inode address and one on the combination of path and file. Those are made so that the investigator can be executed faster. \cite{tsk:file:struct} The table definition is shown in listing \ref{lst:cfg:fids:file}.
 
 \begin{lstlisting}[language=sql, numbers=left, caption=Fids File Table Definition, label=lst:cfg:fids:file]
 CREATE TABLE FIDS_FILE(
@@ -184,6 +250,8 @@ CREATE TABLE FIDS_FILE(
 	name_type varchar(255),
 	PRIMARY KEY (run_id, id)
 );
+CREATE INDEX inode ON FIDS_FILE(meta_addr);
+CREATE INDEX fullpath ON FIDS_FILE(path, name_name);
 \end{lstlisting}
 
 \subsubsection{FIDS\_FILE\_ATTRIBUTE}
