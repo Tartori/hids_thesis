@@ -37,6 +37,35 @@ In the finalizing phase the run object gets updated and the endtime added. It is
 \subsection{Investigator}
 \label{sec:Investigator}
 
-TODO: finish investigator logic first. Could document current logic, but is not useful as it is not fast enough. 
+The investigator component is responsible for finding intrusions. As discussed in section \ref{sec:conf:investigator} it does so with predefined rules and investigations. To best explain how the investigator works it is best to split it into different steps as with the scanner.
 
+\begin{enumerate}
+	\item Parsing configuration
+	\item Fetching runs
+	\item Fetching files
+	\item Parsing top level information
+	\item Iterate through the files
+	\item Create alert
+\end{enumerate}
 
+First the investigator needs to parse the configuration. This is more work than the other configuration parts of the system, because of the alerts. One investigation path has none or many alerts, which themselves can have multiple alerts again. To break this structure into a less complex structure the first step is to flatten it out. Simply, by eliminating the nesting of alerts and creating one list of alerts this can be done. Then to make it even simpler, the configurations in each alert are taken out so that the investigation has one list for equal and one for greater. Those lists are then pruned by removing duplicates and by making sure that each database column only appears at most once. 
+
+Afterwards, the run ids need to be fetched. By default all the runs are fetched and the most recent is compared to the second most recent. This can be changed if the validation run configuration is set. Then this will be taken as comparison for the most recent run.
+
+After the runs are aquired, the investigator gets the files. This is done mostly with a simple sql query as shown in listing \ref{lst:file:query}. Which joins the file table with itself on the inode address or path and name. This way the system can make good use of the indices that were created on this table. After the files get fetched, they are parsed and put into a list of tuples with the matching files. This process takes some time for a long list of files. 
+
+\begin{lstlisting}[language=sql, numbers=left, caption=SQL Querry for files, label=lst:file:query]
+SELECT * FROM FIDS_FILE first 
+	LEFT JOIN FIDS_FILE second 
+		on (first.meta_addr=second.meta_addr or 
+			first.path=second.path and 
+			first.name_name=second.name_name)
+	WHERE first.run_id = ? and second.run_id=? 
+		or second.run_id is null;
+\end{lstlisting}
+
+After the files have been parsed the actual investigator starts executing. The first thing that gets checked is the configuration hash. This can be deactivated, but it increases the security by making sure that the configuration file has not changed since the last run.
+
+Then each file gets checked for each rule. This is done by using the previously generated greater and equals list. Each attribute in either list is checked for the appropriate usecase. Should something not be correct an alert is created. Those alerts can then in the end be used to generate a report. 
+
+Finally, the alerts are used to generate a report. Currently this report is only written to stdout. This means that no real alerts are generated. Those can be generated though by using the output of this system as an input for another tool.
