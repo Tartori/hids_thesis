@@ -128,3 +128,9 @@ Risk Based Approach
 * Draft of poster - discussion on friday 25.05. <- sending it before
 * recursive fix
 * searching
+
+## meeting
+
+* add SamHain hids
+* overview hids --> problems
+* proposed solution -> high level
