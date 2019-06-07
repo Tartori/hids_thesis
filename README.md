@@ -134,3 +134,12 @@ Risk Based Approach
 * add SamHain hids
 * overview hids --> problems
 * proposed solution -> high level
+* ports and attack surface
+* setuid --> not root
+* discussion general problems
+* conclusion -> future work
+* 3.3 examples // security -> 3.4
+* method of querying stuff
+* timerange
+* other stuff
+* maybe timeline
