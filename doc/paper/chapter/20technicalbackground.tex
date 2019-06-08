@@ -89,12 +89,12 @@ This decision was not made very lightly. Other programming languages were consid
 
 Pytsk3 is the library mentioned above that creates bindings for python to the \gls{api} of \gls{tsk}. As \gls{tsk} this library is \gls{opensource} and is still active. It is hosted on \gls{github} and offers most of the functionality of the \gls{tsk} \gls{api}. Pytsk3 is used extensively in the scanner part of the implementation. For further information refer to section \ref{sec:Scanner}.
 
-\section{Host based intrusion detection system}
+\section{Proposed solution}
 \label{sec:hids}
 
 The main principle behind a \gls{hids} is the detection of changed files. As already discussed in section \ref{sec:def:hids}, most tools rely on the calculation of hashes. This is generally a good approach since changes can be found very reliably; however, as already mentioned, it can drastically hinder the performance of the \gls{hids}. Sadly the actual performance lost cannot be clearly stated, as it heavily depends on what hardware is in use. However, considering the computational overhead of calculating a \gls{hash} it is clear that the time it takes grows with bigger \glspl{fs}. As \gls{storagemedia} has grown from a \gls{mb} to \gls{tb} so has the requirement to store more data. Creating hashes over such big systems is not viable as it can take a long time to create a hash of big amounts of data. \cite{hash:slow, hash:veryslow, hash:speed}
 
-\subsection{Proposed solution for time issue}
+\subsection{Time issues}
 
 In this thesis, I propose a different approach. Ignore the hashing and the file content and focus on the \gls{fs} \gls{metadata} instead. This approach should be sufficient to find intrusions and thanks to not creating hashes, the \gls{hids} can execute more often. If a conventional \gls{hids} might take several days to complete a run on a \gls{fs} with multiple \gls{tb} of data, the proposed approach would take some minutes to hours. It could then be run multiple times a day and find new and changed files within a short amount of time. It is possible that the \gls{hids} misses some changes if the attacker can change all the relevant \gls{metadata} before the system rechecks the same file, but this is a risk that has to be taken to gain the opportunity to scan large \gls{fs}. It is also possible to scan highly critical sections of a system with a traditional \gls{hids} and the rest with the proposed solution. This way, one has both advantages. The whole system can be checked in a timely fashion with the proposed solution, and for certain smaller parts of the system, a general \gls{hids} can detect changes by using strong \glspl{hash}.
 

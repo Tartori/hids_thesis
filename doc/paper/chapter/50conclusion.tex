@@ -1,0 +1,18 @@
+
+\chapter{Conclusion}
+\label{sec:Conclusion}
+
+In this thesis the goal was to create a \gls{hids} which finds intrusions in big \gls{fs} fast and helps with forensic investigation. Such a system was built. I am using \gls{tsk} to only check \gls{fs} \gls{metadata} to find intrusions. This way the system is extremely fast compared to systems that use \glspl{hash}. My system thus takes a risk based approach to finding intrusions. It will not find them as reliably as other systems, but it will find them faster. 
+
+\section{Future Work}
+\label{sec:future:work}
+
+It would make sense to extend this \gls{hids} to extend past the \gls{fs}. It would be great if the scanner can also scan the processes and network connections. Not only would this data be important to finding intrusions by the system, but it could also give investigators much more information. Information which they are currently mostly missing.
+
+The system should also be extensively tested. For this it needs to run for a prolonged time in a productive system. The output and the found intrusions would then need to be compared to other system to gain important information about how fast and how many intrusions are found using this system. 
+
+One other path that could be improved on would be the investigator. Currently it operates only on a configuration which someone must write. It would be great to autonomously analyse the scanner output and find anomalies on them. This could be done if a lot of data has already been collected on many different types of hosts. The types could then be grouped and an algorithm could detect similar patterns to find simmilar intrusions. 
+
+Generally, the field of finding intrusions has a lot of opportunities for research. This system can be one part of an extensive system that checks for intrusions. Especially since disk sizes and data usage is still growing it is important to have such a system that can find intrusions fast.
+
+It would also be interesting to add the output of the scanner to a super timeline. It would help seeing what happened on the host at any point in time. 
