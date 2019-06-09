@@ -30,24 +30,39 @@ In a \gls{hids} that operates on the \gls{fs}, all the valuable information come
 
 A good \gls{hids} should be able to handle such valid changes without much change. Additionally, it should be able to find intrusions reliably and in a timely fashion. Maybe it is too late if the \gls{hids} finds an intrusion a week after it infected the system. To detect changes on the files reliably popular \gls{hids} calculate a hash of the files and compares that hash to previous runs. If a \gls{hash} is used, each file always generates a unique hash which can not be forged. The main drawback of using good \glspl{hash} is that they take a longer time. Some implementations thus use weaker implementations of \gls{hash} or even \gls{nonhash}. The obvious drawback of this approach is that a collision can be generated and such a file can be altered or replaced without the \gls{hids} noticing.
 
-In the following sections, I present two of the most used \gls{hids}, Tripwire, and Aide. They built the main competition of the integration developed in this thesis.
+In the following sections, I present three of the most used \gls{hids}, Tripwire, Aide, and Samhain. They built the main competition of the integration developed in this thesis.
 
 \subsubsection{Tripwire}
 \label{sec:tripwire}
 
 In 1992 the first \gls{hids} named tripwire was created and publicly released as a free tool. In 1997 the creator of tripwire then created the company Tripwire Inc. and bought the naming rights for tripwire. The free version was monetized, and they released new versions of tripwire. \cite{Tripwire:Impl, Tripwire:company} Now they mostly market to enterprise and industrial customer and have more products than only one for file integrity. \cite{tripwire}
 
-As it is a commercial product, it is hard to see how they work in detail since most of the information is only available to paying customer. 
+From the documentation that they provide to potential customer it is unclear how their product works exactly. This makes sense, because this way they can keep competitors at bay. However, they have some information about how their product works to attract new customers. They claim to find changed data in real time. Additionally, they seem to be able to know what part of the documents changed. They then use another product of theirs called ChangeIQ to determine if the change was malicious or not. \cite{tripwire:fim:datasheet, tripwire:true:intent}
+
+For this approach to work they need to create a big database with the content of each file. Then they probably are hooked into the kernel to find out about changes to the \gls{fs} in real time. This approach has benefits over hashing and over checking attributes because it is faster than the fromer and more reliable than the latter. However, for that to work the system needs to be running at all times. I could not find out how they find intrusions should they ever be shut down and restarted at a later time. 
+
+What has to be said, tripwire does not directly compete with my solution. They build a comercial product with integration and fancy user interfaces. They have a lot of financial incentive to continiously improve their product and have great integration with a whole suite of security tools. I encourage people working for big companies to have a look at tripwire. However, they mainly focus on those big coperate customer. My \gls{hids} is more focused on smaller companies, teams within bigger companies and participants of the \gls{opensource} community. 
+
+Even though the direct comparison might not even be relevant, my system has some advantages. It does not need a large amount of storage. For tripwire to work it needs to store files or the content of files to properly compare them to previous states. This might not be a problem for small files, but it does take a lot of space if many machines are scanned. My system only saves the \gls{metadata}, which is considerably less space. Additionally, my system does not need to run at all times. This reduces load of high performance machines, especially if they have a lot of read write operations. One final advantage is the fact that my system is \gls{opensource}. With that any potential interested party can look at the source code and see if the product is interesting to them. Thus, information is publicly available and not hidden behind a paywall.
 
 \subsubsection{AIDE}
 \label{sec:aide}
 
-Aide is an \gls{opensource} alternative to tripwire. It was created after tripwire went commercial. \cite{aide:totherescue, aide:github}
+Aide is an \gls{opensource} alternative to tripwire. It was created after tripwire went commercial. As aide is \gls{opensource}, it is easier to find information about how it works. \cite{aide:totherescue, aide:github}
 
-When aide is first executed, it generates a reference database. This database contains all the information for each file that is within a path of interest. Depending on the config it contains more or less information, including \glspl{hash}. Each subsequent execution then compares the files found to this initially created database. The database needs to be updated manually if the system has a scheduled change. It generates a log of all the changes and distributes that per email or similar depending on the configuration. Both the configuration and the database are usually stored on the file system that is scanned. \cite{aide, aide:doc}
+When aide is first executed, it generates a reference database. This database contains all the information for each file that is within a path of interest. Depending on the config it contains more or less information, including \glspl{hash}. Each subsequent execution then compares the files found to this initially created database. The database needs to be updated manually if the system has a scheduled change. It generates a log of all the changes and alerts all of the changes at once. Both the configuration and the database are usually stored on the file system that is scanned. \cite{aide, aide:doc}
 
-Aide can compare multiple \glspl{hash} and \glspl{nonhash} and some \gls{metadata}. It runs on many modern Unix system \cite{aide} and uses GPG keys to sign their releases. It has a strong community behind it, but only offers a \gls{cli} and has no fancy user interface and is written in C. \cite{aide:github} 
+Aide can compare multiple \glspl{hash} and \glspl{nonhash} and some \gls{fs} \gls{metadata}. It runs on many modern Unix system \cite{aide} and uses GPG keys to sign their releases. It has a strong community behind it, but only offers a \gls{cli} and has no fancy user interface and is written in C. \cite{aide:github} 
 
+Aide also features a rich configuration. It is based on rules. There are some preconfigured rules for each hashing function and for the checked \gls{fs} \gls{metadata}. Those rules can then be combined in new rules to make it easier for referencing them. Finally, the configuration offers the possibility to specify paths which should be scanned with the rules that should be applied. This way different directories can be scanned with different settings. \cite{aide:conf}
+
+\subsubsection{SAMHAIN}
+
+Samhain is another \gls{opensource} \gls{hids}. In comparison to aide it has a company backing it which offers support for companies. However, other than tripwire it is not necessary to use their services to run samhain. For that they have a lot of publicly available documentation and community support. \cite{samhain:company}
+
+Samhain has a big focus on centralized management of the \gls{hids}. All hosts run the system and report their findings to a single instance which is used for management and monitoring. The hosts also get the configuration from the server. For the scanning it has two modes. Firstly, it can scan the system simmilarly to aide by going through all the files and mostly generating hashes. However, it can also create a hook in the linux kernel to find changes live. It uses both approaches to find intrusions. It offers more functionality than \gls{fim} and can check open ports, processes and more. 
+
+Compared to my system it can leverage the kernel integration to find intrusions faster. However, it still relies on hashing for scanning big parts of the system. This part of samhain is improved by my system. Overall, samhain offers more functionality than only \gls{fim}. For the kernel integration part it needs to be running at all times, which can be a drawback. 
 
 \subsection{NIDS}
 \label{sec:def:nids}

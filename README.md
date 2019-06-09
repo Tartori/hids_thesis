@@ -131,14 +131,15 @@ Risk Based Approach
 
 ## meeting
 
-* add SamHain hids
+* add SamHain hids --> done
 * overview hids --> problems
 * proposed solution -> high level --> done
 * ports and attack surface
 * setuid --> not root
+* attack mittigation not correctly worded --> done
 * discussion general problems
 * conclusion -> future work  --> done
-* 3.3 examples // security -> 3.4 
+* 3.3 examples // security -> 3.4 --> done
 
 Tool 
 
