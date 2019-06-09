@@ -16,7 +16,7 @@ There is one section per week where I worked on the thesis. Each section starts 
         \begin{tabular}{l|c|c|c|c|c}
             \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
         \hline
-            01  & - & - & 5 & 5 & Yes \\
+        01 & - & - & 8 & 8 & Yes \\
         \end{tabular}
     \end{center}
 \end{table}
@@ -34,51 +34,603 @@ I did not face any problems in the first week.
 
 \begin{table}[!ht]
     \begin{center}
-        \caption{Week 01}
-        \label{tab:journal:week01}
+        \caption{Week 02}
+        \label{tab:journal:week02}
         \begin{tabular}{l|c|c|c|c|c}
             \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
         \hline
-            01  & - & - & 5 & 5 & Yes \\
-            02  & - & - & 7 & 12 & Yes \\
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
         \end{tabular}
     \end{center}
 \end{table}
 
 \subsubsection{Tasks}
 
+This week the unofficial kickoff with \gls{bn} took place. We met in Bern and talked a lot about how we want to manage the project. The full meeting notes are available in section \ref{sec:meeting01}. I also took some time after the meeting for postprocessing of the meeting. Then I started by creating the initial draft of the \LaTeX documentation by taking the \gls{bfh} template and scaling it down to my needs. I also created a rough draft of the high level requirements and created a \href{https://github.com/Tartori/hids_thesis}{github repository}. 
+
+\subsubsection{Problems}
+
+The \LaTeX document was initially to complex and I did not understand all the packages. After some trial and error and reinstalling of packages I was able to get it to run. 
+
+\section{Week 03 04.03.-10.03.}
+\label{sec:journal:week03}
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 03}
+        \label{tab:journal:week03}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+The main task that I did this week was the problem statement and the requirements that I needed to prepare for the second meeting. This is not in the workpackages. Then I needed to prepare for the meeting and postprocess it again. The meeting notes are in section \ref{sec:meeting02}. Overall, I continued gathering information about \gls{hids}, \gls{fs} and \gls{nids}.
+
+\subsubsection{Problems}
+
+I had no problems in week three.
+
+\section{Week 04 11.03.-17.03.}
+\label{sec:journal:week04}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 04}
+        \label{tab:journal:week04}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I wanted to improve the \LaTeX documentation. Additionally, I started working on the workpackages and milestones.
+
+For non project management tasks, I started researching other \gls{hids} that are available. Mainly I focussed on tripwire and aide. I also started researching \gls{tsk} and its \gls{api}
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item Splitting the work into actionable workpackages
+    \item Table formating in \LaTeX
+    \item Milestone formatting in \LaTeX
+    \item Almost no publicly available information on tripwire.
+
+\end{itemize}
+
+\section{Week 05 18.03.-24.03.}
+\label{sec:journal:week05}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 05}
+        \label{tab:journal:week05}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+With the knowledge of \gls{tsk} I was able to search for libraries that support the \gls{tsk} \gls{api} for the different languages that I wanted to evaluate and then I decided the language. Before the meeting, I decided on the programming language, Python. The full reasoning is available in section \ref{sec:decisions:language}.
+
+I also had to prepare for the meeting this week. The outline is shown in section \ref{sec:meeting03}.
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item Finding good \gls{tsk} libraries was not possible for all languages
+    \item Tutorial on Go was harder than anticipated.
+\end{itemize}
+
+\section{Week 06 25.03.-31.03.}
+\label{sec:journal:week06}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 06}
+        \label{tab:journal:week06}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I started by contacting \gls{ab}. We then decided for a meeting in the same week. I then used time to prepare for said meeting. Additionally, I started to create a local developer environment with the correct libraries and tools. With that I completed Milestone 00. Then I had the meeting with \gls{ab} which needed a lot of postprocessing. The meeting notes are available in section \ref{sec:meetingexpert}.
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item I needed a lot of time to research certain uncertanties that appeared after talking with \gls{ab}
+\end{itemize}
+
+
+\section{Week 07 01.04.-07.04.}
+\label{sec:journal:week07}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 07}
+        \label{tab:journal:week07}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I realized that I am already behind schedule. I started by going through the goals and rework some of them to increase the clarity. I also rushed into trying to get the initial functionality going. This was not as easy as I anticipated and I lost a lot of time trying to get the output of \gls{pytsk} that I needed. This was tough and I frequently checked the source code of \gls{pytsk} to find solutions. 
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item I was not able to find the correct way to use \gls{pytsk} to walk through the \gls{fs}
+\end{itemize}
+
+\section{Week 08 08.04.-14.04.}
+\label{sec:journal:week08}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 08}
+        \label{tab:journal:week08}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I started frustrated because I was not able to implement the file walking ability. However, after getting to it with a fresh mind I was able to find the solution by finding a new source of documentation. I was glad that I could find it. However, I still could not get all the information that I needed out of the \gls{pytsk} or rather I did not yet know how to get to all the data.
+
+Then I started preparing for the meeting with both \gls{ab} and \gls{bn}.
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item I could not get to all the data.
+\end{itemize}
+
+\section{Week 09 15.04.-21.04.}
+\label{sec:journal:week09}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 09}
+        \label{tab:journal:week09}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week was a very low week. I was frustrated by the inability to get \gls{pytsk} to work the way I wanted and didn't have much motivation to work on the documentation. I took it slow and would regret it in the following weeks.
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item I had issues with motivation.
+\end{itemize}
+
+\section{Week 10 22.04.-28.04.}
+\label{sec:journal:week10}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 10}
+        \label{tab:journal:week10}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I knew that I had to finish the file scanning ability. Especially after slacking off the week before I started researching and trying until I found the correct search query which lead me to the documentation of \gls{tsk} \gls{api} for the file struct. I felt very stupid because I had not found it before. With this documentation I could make sense of the output of \gls{pytsk} and I was able to create an appropriate python class with the most important fields of a \gls{tsk} file.  
 
 
 \subsubsection{Problems}
 
-I did not face any problems in the first week.
-\section{Week 03 04.03.-10.03.}
-\label{sec:journal:week03}
-\section{Week 04 11.03.-17.03.}
-\label{sec:journal:week04}
-\section{Week 05 18.03.-24.03.}
-\label{sec:journal:week05}
-\section{Week 06 25.03.-31.03.}
-\label{sec:journal:week06}
-\section{Week 07 01.04.-07.04.}
-\label{sec:journal:week07}
-\section{Week 08 08.04.-14.04.}
-\label{sec:journal:week08}
-\section{Week 09 15.04.-21.04.}
-\label{sec:journal:week09}
-\section{Week 10 22.04.-28.04.}
-\label{sec:journal:week10}
+\begin{itemize}
+    \item At first I could not find the correct documentation.
+    \item I struggeled with the datatypes of how the permissions were stored before I realized that it is a base 10 representation of the base8 permissions.
+    \item Debugging was quite a challenge since the code needs root access to connect to the local harddrive.
+\end{itemize}
+
 \section{Week 11 29.04.-05.05.}
 \label{sec:journal:week11}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 11}
+        \label{tab:journal:week11}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+After feeling the relief from last week and the pressure from being rather far behind I really wanted to finish Milestone 01. I did this by creating the database, a configuration to connect to the database and then storing the results of the file walk. For both the configuration and the database I had to first define which I wanted to use. For the configuration it was clear pretty fast that \gls{yaml} seems the appropriate choice. For the \gls{dbms} I was more unsure. I first wanted to implement both, \gls{sqlite} and postgres. However, I could not bring postgres to run on my developer environment. Considering the time and the other functionality, I decided to drop postgres and focus on \gls{sqlite}.
+
+Besides that, I also had another meeting. I really wanted to show my first prototype and thus I forced throguh all hardships. I also had other things to prepare for the meeting, but finally I was able to gain valuable feedback for my prototype. The notes for this meeting are listed in section \ref{sec:meeting05}
+
+Also, I was able to fix the debugging challenge. I simply created an image of an usb stick on which I then run the code. This had two advantages. Firstly, it did not need root access. Secondly, it was faster since the stick was smaller than the harddisk.
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item Postgres would not run on local machine. 
+    \item Database schema needed some trial and error until it worked properly.
+\end{itemize}
+
 \section{Week 12 06.05.-12.05.}
 \label{sec:journal:week12}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 12}
+        \label{tab:journal:week12}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+In this week I wanted to implement the changes proposed by \gls{bn}. I did this by first adding all the information to the python class and then adding it to the database. This actually required some trial and error since it was not always easy to find the correct values. Also, I did it twice, since I forgot to push it to the github repo and then was not sure if I already did it on the second machine. 
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item I did the work twice because I forgot to push it on my home pc.
+    \item The USB Stick Image workaround did not work for everything as the \gls{fs} on it did not contain all required attributes.
+    \item Sometimes I had issues with the Python module handling. I was not always able to import the classes correctly.
+\end{itemize}
+
 \section{Week 13 13.05.-19.05.}
 \label{sec:journal:week13}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 13}
+        \label{tab:journal:week13}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        13 & A03, I04, I05, V00 & 02 & 32 & 252 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+In this week I was able to get a lot of momentum. Firstly I created a new directory for the system. This way the thesis documentation and the \gls{hids} were split. Then I looked deeper into python modules and how to manage the imports properly. By doing that I was able to fix some issues of files sometimes not getting imported correctly. Also, I found some more information in the \gls{tsk} \gls{api} which I had not seen before. I added this information. Also, I added the errors that were thrown as to not lose information. I then followed with a bigger testing period on my local machine. This resulted in frustratingly many errors, which as I later found out were a direct result of how my filewalking process worked. I was able to solve all those errors and then added the first draft of finding intrusions. This config was harder to draft, but I came up with a implementation that would cover many usecases. I also implemented a first draft of the investigator, which for the moment takes a very long time.
+
+In project management view I created a first draft of the thesis documentation and prepared for the meeting that would be on the start of next week.
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item The system took about 15 minutes to complete on my local machine which resulted in long waiting periods
+    \item The investigator config was rather hard to design
+    \item The investigator took extremely long itself
+\end{itemize}
+
 \section{Week 14 20.05.-26.05.}
 \label{sec:journal:week14}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 14}
+        \label{tab:journal:week14}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        13 & A03, I04, I05, V00 & 02 & 28 & 252 & No \\
+        14 & - & - & 16 & 268 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+In this week I started writing in the documentation by creating the first draft of the introduction. 
+
+However, I mainly focussed in bringing the scanning time down. I tried many approaches and wanted to find out where the issue lies. After clarifying with the main developer of \gls{pytsk} it was clear that a direct filewalk on the disk image was not possible. However, on the same day I found a slightly tweaked version of my implementation that would result in an incredible performance boost. I no longer would use the directory paths but the directories that I already had. This way the runtime of the scanner went from about 15 minutes on my home machine to about 30 seconds. Sadly, I only realized that after a longer time. At first I had the investigator running as well as the scanner. This resulted in extremely long runtime. After I deactivated the investigator I realized how much faster it had become. 
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item By running both the scanner and the investigator I did not initially see the performance boost of the scanner.
+    \item \gls{pytsk} does not support a direct file walk.
+\end{itemize}
+
 \section{Week 15 27.05.-02.06.}
 \label{sec:journal:week15}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 15}
+        \label{tab:journal:week15}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        13 & A03, I04, I05, V00 & 02 & 28 & 252 & No \\
+        14 & - & - & 16 & 268 & Yes \\
+        15 & D05 & - & 40 & 308 & No \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I started focussing on the documentation. So far this was not a priority for me. I took all week to come up with a version of the documentation that would be viable as a first draft. I also created the Poster in this week. 
+
+\subsubsection{Problems}
+
+Besides some \LaTeX issues everything went fine this week. (Appart from the obvious issue that I should have started with this much earlier...)
+
 \section{Week 16 03.06.-09.06.}
 \label{sec:journal:week16}
+
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 16}
+        \label{tab:journal:week16}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        13 & A03, I04, I05, V00 & 02 & 28 & 252 & No \\
+        14 & - & - & 16 & 268 & Yes \\
+        15 & D05 & - & 40 & 308 & No \\
+        16 & A03, I04, I05, V00, I06, A04, I07, V01 & 03, (04) & 40 & 348 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I focussed on both. First I wanted to bring the \gls{hids} to an appropriate end. I did this by first redefining the rules and investigations to better match what is required. I adjusted them several times until they resulted in the final version that is available now. Additionally, I reworked the way the investigator finds relations between the files. By passing that task to the database I could gain increadible performance increases. I also verified the system by letting it run and then changing files. This way I reworked milestone 02, implemented milestone 03 and partially implemented milestone 04. 
+
+In the documentation I also changed a lot. I added many chapters while improving most already created ones. I also created the abstract and added that to the book tool from the \gls{bfh}.
+
+\subsubsection{Problems}
+
+This week was very productive and I did not really have any big issues. After so much time working with \gls{pytsk} and \gls{tsk} I was able to quickly maneuver through the code. Also changing the milestone 02 was not that big after I realized what the biggest issues were. 
+
+In short, I did not really have issues.
+
 \section{Week 17 10.06.-16.06.}
 \label{sec:journal:week17}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 17}
+        \label{tab:journal:week17}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        13 & A03, I04, I05, V00 & 02 & 28 & 252 & No \\
+        14 & - & - & 16 & 268 & Yes \\
+        15 & D05 & - & 40 & 308 & No \\
+        16 & A03, I04, I05, V00, I06, A04, I07, V01 & 03, (04) & 40 & 348 & Yes \\
+        17 & A05, I10, D03, D04 & 06, 07 & 40 & 388 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+This week I needed to finish both, thesis and the system.
+
+For the system, I implemented the python packaging guide. This way the system is available through the python packaging system. I also added a \gls{pgp} signature with a new private public keypair. This way the software is at least somewhat hardened. 
+
+For the documentation. I finished it. Also I finished the presentation and held it on the day after handing this documentation in. Hopefully it went well.
+
+\subsubsection{Problems}
+
+
+\section{Week 18 17.06.-23.06.}
+\label{sec:journal:week18}
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Week 18}
+        \label{tab:journal:week18}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Week} & \textbf{\gls{cwp}} & \textbf{\gls{rm}} & \textbf{\gls{hw}} & \textbf{\gls{thw}} & \textbf{Meeting}\\
+        \hline
+        01 & - & - & 8 & 8 & Yes \\
+        02 & D00 & - & 12 & 20 & Yes \\
+        03 & - & - & 12 & 32 & Yes \\
+        04 & D01, A00 & - & 24 & 56 & No \\
+        05 & A01 & - & 24 & 80 & Yes \\
+        06 & I00 & 00 & 12 & 92 & Yes \\
+        07 & - & - & 32 & 124 & No \\
+        08 & - & - & 20 & 144 & Yes \\
+        09 & - & - & 4 & 148 & No \\
+        10 & I01 & - & 20 & 168 & No \\
+        11 & A02, I02, I03 & 01 & 32 & 200 & Yes \\
+        12 & - & - & 20 & 220 & No \\
+        13 & A03, I04, I05, V00 & 02 & 28 & 252 & No \\
+        14 & - & - & 16 & 268 & Yes \\
+        15 & D05 & - & 40 & 308 & No \\
+        16 & A03, I04, I05, V00, I06, A04, I07, V01 & 03, (04) & 40 & 348 & Yes \\
+        17 & A05, I10 & 06, 07 & 40 & 388 & Yes \\
+        18 & - & - & 16 & 404 & Yes \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\subsubsection{Tasks}
+
+It is actually hard to describe what I do this week, because as of writing this it is still in the future. What I need to do is prepare for the bachelor thesis defense and actually holding that. I assume to take 16 hours for preparation and for the defense itself. 
+
+Besides that I also need to create a video of this thesis. 
+
+\subsubsection{Problems}
+
+\begin{itemize}
+    \item I have no experience in video editing and creation. Thus, I expect this task to be quite challenging.
+\end{itemize}
