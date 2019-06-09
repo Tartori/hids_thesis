@@ -1,8 +1,122 @@
 \chapter{Implementation Decisions}
 \label{sec:decisions}
 
+For this thesis there were some things that had to be defined during the thesis. Some decisions were already made before the thesis began. Those were mainly to only focus on the \gls{fs} and to use \gls{tsk}. Most other things were deliberately left open, so that they could still change if need be. The biggest decisions, which are listed here, were the programming language, the language and format of the configuration, the \gls{dbms} and the output. Those are described in the following sections. 
+
+Each of the decisions were made using a table with the criteria and the candidates. Each candidate has a ranking of 1-5 for each criteria where 1 is the lowest and 5 is the highest ranking. The rankings are then summed up and the highest candidate was chosen. 
+
 \section{Programming Language}
 \label{sec:decisions:language}
 
+For the programming language any general purpose language would be applicable. I focus mostly on Python, Java, Go and C/C++. Those languages were chosen to further look into based on my knowledge, fit for the job and interest. There are some criteria on which I evaluated them listed below.
+
+\begin{itemize}
+    \item Fit for the system
+    \item Investigation community acceptance / community resources
+    \item Personal experience and interest
+    \item Learning potential
+\end{itemize}
+
+Those categories were not chosen at random. Each plays an important part in a successful thesis. The fit for the system is a generally important part. Some languages like C\# don't really fit the system because it has historically been a windows only language. Although this is less true now, but because of that I excluded that specific language.
+
+The acceptance of the investigation community has a direct link to the amount of community resources available. It is important that there exists a library that can be used to access the \gls{tsk} \gls{api}. If this was not the case I would need to create the bindings in the thesis which would be a lot of extra work. Additionally, if I use an exotic language, the chance that the system is actually used is smaller, because there will be no community backing it.
+
+Personal experience and interest plays a role in any software development project. If the developer has no interest or experience in a language it takes longer until anything is completed. This is doubly true if the developer works alone. 
+
+Learning potential is also important. The developer, me, is more engaged if he can learn something while writing the code and thus is faster. This might be counterintuitive, as he needs more time because there are some unknowns. However, challenging oneself and learning is a big part of any developer.
+
+In table \ref{tab:dec:language} I evaluated the mentioned languages on those attributes. Python achieves the highest score with 21. This is mainly because on the one hand it has a lot of community support and an active library to interact with \gls{tsk}. Additionally, I already have some experience in it but not to much. This way starting off is easier and I can still learn a lot. 
+
+While Go and C/C++ interest me and would be a rather good fit, I have nearly no experience in either of them. Additionally, go doesn't have any community resources and bindings for \gls{tsk}. For C/C++ what mostly brought me to give them such low rankings is the fact, that they are very easily exploitable. 
+
+With Java I have a lot of experience, also it has a reasonably good fit and comunity. However, the motivation to do yet another java project was what lead me against this language. Additionally, the investigation community currently really likes python and not java.
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Comparison of programming languages}
+        \label{tab:dec:language}
+        \begin{tabular}{l|c|c|c|c|c|c}
+            \textbf{Name} & \textbf{Fit} & \textbf{Community} & \textbf{Experience} & \textbf{Interest} & \textbf{Learning} & \textbf{Total}\\
+        \hline
+            Python  & 4 & 5 & 4 & 4 & 4 & 21 \\
+            Go      & 5 & 1 & 1 & 4 & 5 & 16 \\
+            C/C++   & 3 & 3 & 2 & 3 & 5 & 16 \\
+            Java    & 4 & 3 & 5 & 1 & 1 & 14 \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+
+
 \section{Language for Configuration File}
 \label{sec:decisions:config:language}
+
+The language of the configuration file is at the same time less and more important than the programming language. For the developer it is less important. As long as it is managable it is ok. It needs good integration with the programming language and then everything would be fine. On the other hand, for the user it is more important. He does not care which language the software was written in. However, he might need to change the configuration file relatively often. 
+
+I tried to bring both needs together. The categories that I used here are integration with python, readability, writeability and prevalence. The read and writeability is the amount of work that a user has to put in to read or write a configuration. This includes the likelyhood of syntax errors and the overall awkwardnes of the language. The prevalence is about how well know the configuration language is. This is important because it increases all three other parts.
+
+For the languages that are evaluated I chose \gls{yaml}, \gls{json}, ini and \gls{xml}. Those are the recommended languages for python. In table \ref{tab:dec:config:language} I evaluated each language for each attribute. 
+
+\gls{yaml} emerges victorious. This is mostly because it was made to be human readable. Other than \gls{xml} and \gls{json}. It is also easily extensible and does not require much syntax knowledge. \gls{xml} and \gls{json} contain a lot of additional symbols that need to be defined correctly. For configuration that is mainly for humans this is a big drawback. The INI format could also work. However, this format is not widely used.
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Comparison of configuration languages}
+        \label{tab:dec:config:language}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Name} & \textbf{Integration} & \textbf{readability} & \textbf{writeability} & \textbf{prevalence} & \textbf{Total}\\
+        \hline
+            YAML    & 4 & 5 & 5 & 5 & 19 \\
+            JSON    & 4 & 5 & 3 & 5 & 17 \\
+            XML     & 3 & 5 & 1 & 3 & 12 \\
+            INI     & 5 & 3 & 3 & 1 & 12 \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\section{Database Management System}
+\label{sec:decisions:dbms}
+
+The \gls{dbms} used has more requirements than the programming and configuration languages. There are many competeing \gls{dbms} which all would be viable. This decision is focussed on the primary \gls{dbms} used in this implementation, meaning the one that will be used in the thesis. The system should afterwards be extended to support many, if not most, of the different \gls{dbms} to give the user the possibility to configure the system the way that makes the most sense for them. 
+
+The criteria for the first \gls{dbms} are simplicity, performance, support for prototyping, attack surface and usability on different systems. The \gls{dbms} analyzed all need to be \gls{opensource} or at least free of royalties. Chosen were \gls{sqlite}, MariaDB and PostgreSQL. As a note, only relational databases were chosen because of my experience. 
+
+In table \ref{tab:dec:dbms} the results can be seen. \gls{sqlite} has won mainly because it has a high simplicity and good support for prototyping. Additionally, it also works on systems that need to be extremely encapsulated because of the data they store. This way it is harder to exfiltrate data from those high security systems. As said before, more \gls{dbms} should be added to the system after the thesis ends. Other \gls{dbms} have benefits especially in the performance, but \gls{sqlite} was chosen as dbms for the implementation in this thesis.
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Comparison of \gls{dbms}}
+        \label{tab:dec:dbms}
+        \begin{tabular}{l|c|c|c|c|c|c}
+            \textbf{Name} & \textbf{Simplicity} & \textbf{Performance} & \textbf{Prototyping} & \textbf{Attack Surface} & \textbf{Usability} & \textbf{Total}\\
+        \hline
+            SQLite      & 5 & 2 & 5 & 5 & 5 & 22 \\
+            PostgreSQL  & 3 & 5 & 3 & 3 & 2 & 16 \\
+            MariaDB     & 3 & 4 & 3 & 3 & 2 & 15 \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\section{Output / Alerting}
+\label{sec:decisions:output}
+
+The output or alerting is simmilar to the \gls{dbms}. There is not one correct choice. Multiple different ways need to be implemented if the system should become popular. This decision was mostly about the way of alerting that was implemented in this thesis. After the completion, most of the alerting methods should be supported, but it does not make sense to implement many of them during the thesis to not sway to far from the main topic.
+
+The criteria for the output are extensibility, complexity for implementation, complexity for configuration and support for low configuration. Extensibility is mostly about how easily can it be extended into another form of alerting. Complexity is mostly about how much time is needed to implement it and what requirements does it require on the host system. For instance, for sending mails, an smtp server needs to be configured. The support for low configuration goes into how the type of alerting can be used if the user did not change the configuration a lot, or at all. This is true for when he just installed the system and wants to try it out. 
+
+The candidates for output and alerting are console output, rest interface, email and writing to a log file. The results can be seen in table \ref{tab:dec:output}. Interestingly, output to the console has won easily. The biggest advantage from that is that this output can be handed over to any other application or script. This means that all the other candidates can be done by writing a script for them. This increases the extensibility enormly. Also, the complexity for both implementation and configuration is extremely low. A good console output is required for prototyping anyway, using it as alerting by letting the user handing it over to another tool seems to be the most sensible approach. Still, in the future additional alerting functions should be built in.
+
+\begin{table}[!ht]
+    \begin{center}
+        \caption{Comparison of output and alerting functions}
+        \label{tab:dec:output}
+        \begin{tabular}{l|c|c|c|c|c}
+            \textbf{Name} & \textbf{Extensible} & \textbf{Complex Impl} & \textbf{Complex Conf} & \textbf{Support no conf} & \textbf{Total}\\
+        \hline
+            Console Output  & 5 & 5 & 5 & 5 & 20 \\
+            Log File        & 2 & 5 & 4 & 4 & 15 \\
+            Rest Interface  & 4 & 3 & 1 & 1 & 9 \\
+            Email           & 1 & 3 & 3 & 1 & 8 \\
+        \end{tabular}
+    \end{center}
+\end{table}

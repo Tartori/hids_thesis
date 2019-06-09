@@ -28,15 +28,9 @@ The configuration file is provided in \gls{yaml}. \gls{yaml} is a human friendly
 
 \subsubsection{Database Configuration}
 
-The configuration consists of three parts. The first part is the database configuration. Options are to either use the system with a \gls{sqlite} database file, which is the most simple solution, or to use it with a \gls{postgres} database server. For the sqlite configuration only the filename is required as seen in listing \ref{lst:cfg:sqlite}. For a postgres server there needs to be more configuration. The host and port need to be provided, as well as the database, the user and a password as evident in listing \ref{lst:cfg:postgres}. This configuration defines where the data will be sent to and read from in the scanner and investigator parts respectively. As both parts need access to the database this part of the configuration is in a seperate part. It is possible to extend the system to use more \gls{dbms}, it is not part of the scope of this thesis though.
+The configuration consists of three parts. The first part is the database configuration. The current implementation suports only sqlite, as this is the most basic and easy to use format. Additionally, it doesn't require any connection to any external entity. For more information on why sqlite was chosen apendix section \ref{sec:decisions:dbms} contains more information. For the configuration only the filename is required as seen in listing \ref{lst:cfg:sqlite}. This configuration defines where the data will be sent to and read from in the scanner and investigator parts respectively. As both parts need access to the database this part of the configuration is in a seperate part. It is possible and already prepared to extend the system to use more \gls{dbms}. However, this is not part of the scope of this thesis.
 
 \begin{lstlisting}[language=yaml, numbers=left, caption=SQLite Configuration, label=lst:cfg:sqlite]
-sqlite:
-	filename: fids_db3.db
-\end{lstlisting}
-
-
-\begin{lstlisting}[language=yaml, numbers=left, caption=Postgres Configuration, label=lst:cfg:postgres]
 sqlite:
 	filename: fids_db3.db
 \end{lstlisting}
