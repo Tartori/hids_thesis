@@ -2,6 +2,7 @@
 
 \newacronym{cli}{CLI}{comand line interface}
 \newacronym{sha256}{SHA-256}{Secure Hashing Algorithm - 256}
+\newacronym{os}{OS}{Operating System}
 
 \newacronym{ids}{IDS}{intrusion detection system}
 \newacronym{apt}{APT}{advanced persistant threat}
@@ -12,6 +13,7 @@
 \newacronym{owasp}{OWASP}{Open Web Application Security Project}
 \newacronym{it}{IT}{Information Security}
 \newacronym{tb}{TB}{Terrabyte}
+\newacronym{gb}{GB}{Gigabyte}
 \newacronym{mb}{MB}{Megabyte}
 \newacronym{kb}{KB}{Kilobyte}
 \newacronym{itsec}{ITSec}{\gls{it} Security}
@@ -23,28 +25,31 @@
 \newacronym{json}{JSON}{JavaScript Object Notation}
 \newacronym{xml}{XML}{eXtensive Markup Language}
 \newacronym{loa}{LoA}{Level of Assurance}
-\newacronym{hdd}{HDD}{Hard Disk Drive}
-\newacronym{ssd}{SSD}{Solid State Drive}
+\newacronym{hdd}{HDD}{Hard Disk Drives}
+\newacronym{ssd}{SSD}{Solid State Drives}
 \newacronym{dbms}{DBMS}{DataBase Management System}
 \newacronym{id}{ID}{IDentifier}
 \newacronym{uuid}{UUID}{Universaly Unique IDentifier}
-\newacronym{cd}{CD}{Compact Disc}
-\newacronym{dvd}{DVD}{Digital Versatile Disc}
+\newacronym{cd}{CD}{Compact Discs}
+\newacronym{dvd}{DVD}{Digital Versatile Discs}
 \newacronym{usb}{USB}{Universal Serial Bus}
-\newacronym{ioc}{IoC}{Indicator of Compromise}
+\newacronym{ioc}{IoC}{Indicators of Compromise}
 \newglossaryentry{sql}{name=SQL, description={A domain specific language used for querying a relational database.}}
 \newglossaryentry{unixts}{name=UNIX timestamp, description={The number of seconds since 00:00:00 on the 1st of January 1970}}
 \newglossaryentry{hex}{name=hexadecimal, description={A number system with 16 digits. It uses the numbers 0-9 and the Letters A-F.}}
 
+\newglossaryentry{opensource}{name=open source, description={Software where both the source and the software is freely accessible and changable.}}
+\newglossaryentry{aide}{name=aide, description={\Gls{opensource} \gls{hids} using \gls{fim} to detect intrusions.}}
+\newglossaryentry{tripwire}{name=tripwire, description={Comercial \gls{hids} with good integration in other tools from the tripwire company.}}
+\newglossaryentry{samhain}{name=samhain, description={\Gls{opensource} \gls{hids} which mainly uses kernel hook to find intrusions and contains extensive centralization support for configuration and alerting.}}
 
 \newglossaryentry{pgp}{type=\acronymtype, name={PGP}, description={Pretty Good Privacy}, first={Pretty Good Privacy (PGP)\glsadd{pgpg}}, see=[Glossary:]{pgpg}}
 \newglossaryentry{}{name=, description={}}
 \newglossaryentry{pgpg}{name=PGP, description={Standard for encryption and signatures defined in RFC4880}}
-\newglossaryentry{postgres}{name=postgres, description={An opensource database server. It is rather lightweight and heavily used.}}
+\newglossaryentry{postgres}{name=postgres, description={An ope\gls{opensource} database server. It is rather lightweight and heavily used.}}
 \newglossaryentry{sqlite}{name=sqlite, description={A very lightweight relational database implemnentation. It does not have a dedicated server but instead writes the database to a file which is written to the local host.}}
-\newglossaryentry{opensource}{name=opensource, description={Software where both the source and the software is freely accessible and changable.}}
 \newglossaryentry{github}{name=github, description={A platform for \gls{opensource} projects. It is free to use and hosts the source code for many projects.}}
-\newglossaryentry{storagemedia}{name=storage media, description={media that is used to store data in a computer system.}}
+\newglossaryentry{storagemedia}{name=storage medium,plural=storage media,description={media that is used to store data in a computer system.}}
 \newglossaryentry{malware}{name=malware, description={Malware is any program that is designed to harm a computer system. The term includes well known terms like Virus, Worm, Adware, Keylogger, Trojan, etc. Malware usually tries to hide it's traces to achieve longer infection periods of time. }}
 \newglossaryentry{collision}{name=collision, plural=collisions, description={Multiple different inputs with the same hash value.}}
 
