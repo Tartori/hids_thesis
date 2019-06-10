@@ -2,75 +2,71 @@
 \section{Application Flow}
 \label{sec:flow}
 
-The main application flow consists of first reading the config file. If no config file path is passed the default path is used. It then starts the scanner if a scan configuration is found. After the scanner is completed it starts the investigator if the detection config is found. It works if any of the two configs are found. If none is found then the system will simply do nothing. 
+The main application flow consists of first reading the config file. \gls{fids} used the default config path if not overwritten by passing the attribute. Then it starts the scanner if appropriate. After that, it starts the investigator if required. If any of the two configurations do not exist, the \gls{fids} does not execute the respective component. If both are missing, it does neither scan nor investigate.
 
+By passing the timeline flag, the \gls{hids}-flow gets ignored. Instead, the \gls{fids} creates the timeline and finishes the run.
 
 \subsection{Scanner}
 \label{sec:Scanner}
 
-The scanner component is the first specific component. It is executed when the system is run and a scan config is available. It is responsible for getting all the information from the \gls{fs} for the configured paths. It has multiple stages.
+The scanner component is the first component of the \gls{hids} path. It is responsible for getting all the information from the \gls{fs} for the configured paths. It has multiple stages.
 
 \begin{enumerate}
-	\item Initialization
-	\item Scan
-	\item Error Logging
-	\item Storing
-	\item Error Logging
-	\item Finalizing
+    \item Initialization
+    \item Scan
+    \item Error Logging
+    \item Storing
+    \item Error Logging
+    \item Finalizing
 \end{enumerate}
 
-In the initialization phase the scanner creates a run object. This object is already saved to the database. This way user know just by looking at the database if there are any runs still running. This also creates a first opportunity to look for inconsistencies. If there are a lot of started runs, something suspicious might be going on. It also creates the hash of the configuration and already saves it to the database.
+In the initialization phase, the scanner creates a run object. The scanner immediately saves the run to the database. This way, users know just by looking at the database if there are any yet incompleted runs. This data also creates the first opportunity to look for inconsistencies. If there are a lot of started runs, something suspicious might be going on. It also creates the hash of the configuration and already saves it to the database.
 
-The scan phase has more steps to it. First it creates the \gls{pytsk} object called `img\_info'. This is done by passing the path to the disk image to \gls{pytsk}. Then the actually important `fs\_info' object is created by passing the img info object. This way we have access to the \gls{fs}. The scan actually starts by calling `open\_directory\_rec' for each scan path. This function keeps track of all diretories it already traversed into as to avoid circular loops and unnecessary steps. Then it checks if the path is in the ignored paths. It then iterates over all objects in the directory. 
+The scan phase has more steps to it. First it creates the \gls{pytsk} object called `img\_info'. \Gls{pytsk} returns that when it receives the path to the disk image. Then the important `fs\_info' object is created by passing the img\_info object. This way, the scanner has access to the \gls{fs}. The scan starts by calling `open\_directory\_rec' for each scan path. This function keeps track of all directories it already traversed into as to avoid circular loops and unnecessary steps. Then it checks if the path is in the ignored paths. It then iterates over all objects in the directory.
 
-For all entries it checks if it is a valid entry with the required attributes to continue. Afterwards it checks if it is a directory. For all the directories the function first checks if the directory has already been visited and if not it calls itself with the new directory as the parameter. If the entry is a file, it is parsed into a python object and then stored into a local list of found files. Any errors that occur are saved by creating an error object that is stored into a list of errors.
+For all entries, it then checks if it is a valid entry with the required attributes to continue. Afterward, it checks if it is a directory. For all directories, the function first checks if it already visited the directory and if not it calls itself with the new directory as the parameter. If the entry is a file, it is parsed into a python object and then stored into a local list of found files. It also saves any errors that occur by creating an error object and storing them in a list of errors.
 
-In the error logging phase all errors that have occured in the scan process are stored in the database. This is done by iterating over all the errors and saving them one by one. The database is then commited and even if the files can't be saved for some reason, the errors will be persisted.
+In the error logging phase, the scanner stores all errors that have occurred in the scan process to the database by iterating over them and saving one by one. Even if the scanner crashes when storing the files for some reason, it already persisted the errors.
 
-After the first error logging phase is the file saving phase. Here the files are saved again by iterating over them and saving one by one. Should any additional error occur while saving the files, they are again added to a list of errors. 
+The file saving phase occurs after the first error logging phase. Here the files are saved like the errors by iterating over them and saving one by one. Should any additional error occur while saving the files, the scanner adds them to a new list of errors. 
 
-There is a second error logging phase. In this phase the errors that occured while saving the files get stored into the database. The functionality is the same as for the first error logging phase.
+There is a second error logging phase. In this phase, the errors that occurred while saving the files get stored into the database. The functionality is the same as for the first error logging phase.
 
-In the finalizing phase the run object gets updated and the endtime added. It is then also updated on the database. At this point the scanner is finished. It has written all the files from the \gls{fs} to the database. Also all errors that occured during this process are logged. The run object on the database will have a valid start and end timestamp. 
+In the finalizing phase, the run object gets updated, and the end timestamp added. It is then updated on the database. At this point, the scanner finished. It has written all the appropriate files from the \gls{fs} and all errors that occurred to the database. The run object on the database has a fitting start and end timestamp. 
 
 
 \subsection{Investigator}
 \label{sec:Investigator}
 
-The investigator component is responsible for finding intrusions. As discussed in section \ref{sec:conf:investigator} it does so with predefined rules and investigations. To best explain how the investigator works it is best to split it into different steps as with the scanner.
+The investigator component is responsible for finding intrusions. As discussed in section \ref{sec:conf:investigator} it does so with predefined rules and investigations. To explain how the investigator works, I split it into different steps as with the scanner.
 
 \begin{enumerate}
-	\item Parsing configuration
-	\item Fetching runs
-	\item Fetching files
-	\item Parsing top level information
-	\item Iterate through the files
-	\item Create alert
+    \item Parsing configuration
+    \item Fetching runs
+    \item Fetching files
+    \item Investigation
+    \item Report generation
 \end{enumerate}
 
-First the investigator needs to parse the configuration. This is more work than the other configuration parts of the system, because of the alerts. One investigation path has none or many alerts, which themselves can have multiple alerts again. To break this structure into a less complex structure the first step is to flatten it out. Simply, by eliminating the nesting of alerts and creating one list of alerts this can be done. Then to make it even simpler, the configurations in each alert are taken out so that the investigation has one list for equal and one for greater. Those lists are then pruned by removing duplicates and by making sure that each database column only appears at most once. 
+First, the investigator needs to parse the configuration. The investigator configuration is more intricate than the other configurations. Because of that, parsing needs more steps. The \gls{fids} first flattens the alerts by expanding the `greater' and `equals' list appropriately to the sub-rules. Afterward, it expands the investigations by adding the configuration from the alerts directly to the investigations. This way, it is easier to access them in the following steps. The lists are continuously updated not to contain duplicates.
 
-Afterwards, the run ids need to be fetched. By default all the runs are fetched and the most recent is compared to the second most recent. This can be changed if the validation run configuration is set. Then this will be taken as comparison for the most recent run.
+The investigator then fetches all run \gls{id} and selects the correct ones by finding the most recent finished runs. If the validation_run property is set, it takes that one as the reference instead of the second most recent one. The investigator always takes the most recent for validation.
 
-After the runs are aquired, the investigator gets the files. This is done mostly with a simple sql query as shown in listing \ref{lst:file:query}. Which joins the file table with itself on the inode address or path and name. This way the system can make good use of the indices that were created on this table. After the files get fetched, they are parsed and put into a list of tuples with the matching files. This process takes some time for a long list of files. 
+After the runs are acquired, the investigator retrieves the files by executing the \gls{sql} query shown in listing \ref{lst:file:query}, which joins the file table with itself on the inode address or path and name. This way, the investigator can make good use of the indices that exist on this table. After the files get fetched, they are parsed and put into a list of tuples. This process takes some time for a large number of files. 
 
 \begin{lstlisting}[language=sql, numbers=left, caption=SQL Querry for files, label=lst:file:query]
 SELECT * FROM FIDS_FILE first 
-	LEFT JOIN FIDS_FILE second 
-		on (first.meta_addr=second.meta_addr or 
-			first.path=second.path and 
-			first.name_name=second.name_name)
-	WHERE first.run_id = ? and second.run_id=? 
-		or second.run_id is null;
+    LEFT JOIN FIDS_FILE second 
+        on (first.meta_addr=second.meta_addr or 
+            first.path=second.path and 
+            first.name_name=second.name_name)
+    WHERE first.run_id = ? and second.run_id=? 
+        or second.run_id is null;
 \end{lstlisting}
 
-After the files have been parsed the actual investigator starts executing. The first thing that gets checked is the configuration hash. This can be deactivated, but it increases the security by making sure that the configuration file has not changed since the last run.
+After that, the investigator starts the comparison. It first checks the configuration hashes of the two runs. Then it goes through each file and checks if it needs checking in any investigation by validating the path and \gls{regex} whitelist. Then, it validates if the file has been renamed, created or deleted. It then checks the blacklist for a match.  Next, it checks all the `equal' and `greater' attributes. For each check, it creates a detection error if necessary. 
 
-Then each file gets checked for each rule. This is done by using the previously generated greater and equals list. Each attribute in either list is checked for the appropriate usecase. Should something not be correct an alert is created. Those alerts can then in the end be used to generate a report. 
-
-Finally, the alerts are used to generate a report. Currently this report is only written to stdout. This means that no real alerts are generated. Those can be generated though by using the output of this system as an input for another tool.
-
-
+Ultimately, the alerts are used to generate a report. It then prints that report to the standard output and is meant to be used for further processing. 
 
 \subsection{Timeline creator}
 \label{sec:Timeliner}
