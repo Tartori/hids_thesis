@@ -1,15 +1,15 @@
 \section{Examples}
 \label{sec:Exaples}
 
-In this section I will give some general usecases and the configuration that would be used. This is to make it easier to understand the \gls{hids} and how it can be used. I will mainly use the apache webserver as an example. There will be some assumptions on the directories and contents for both scenarios. Additionally I assume that the file system is accessible through `/dev/sda1' 
+In this section, I give some general use cases and the relevant configuration. I mainly use the Apache web server as an example. There are some assumptions on the directories and contents for both scenarios. Additionally, I assume that the file system is accessible through `/dev/sda1'.
 
-For additional help there is also a user documentation in apendix section \ref{sec:userdocu}
+For additional help, there is also a user-documentation in appendix section \ref{sec:userdocu}
 
 \subsection{Webpage hosted in Apache}
 
-For those examples I will take the assumption that the apache webserver is installed and has a htdocs directory that is located in `/var/www/'. I assume that there is a webpage running with some php files. It also has html, css, javascript and image files in a static folder. Then it has a log directory where the webpage itself stores all the logs and an upload directory where the user can upload all kind of files. There are 4 types of files that are watched, some more and some less closely. Example Configurations will be given for each type. For the scanner config the config in listing \ref{lst:example:scanner} can be used.
+For those examples, I work under the assumption that the Apache web server is installed and has an `htdocs' directory that is located in `/var/www/'. I assume that there is a webpage running with some PHP files. It also has HTML, CSS, javascript, and image files in a static folder. Then it has a log directory where the webpage itself stores all the logs and an upload directory where the user can upload all kind of files. 4 types of files are watched, some more and some less closely. I give Example Configurations each type. For the scanner, the configuration in listing \ref{lst:example:scanner} is appropriate.
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:scanner]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Example Scanner Configuration, label=lst:example:scanner]
 
 sqlite:
     filename: apache.db
@@ -25,15 +25,16 @@ scan:
 
 \subsubsection{PHP files}
 
-The webserver has some php files in different directories. Those are used for varios purposes, but they should never change, except for an update to the webpage. All of them lie in some subdirectory of the htdocs directory. Thus they all are covered in the scan from the configuration in listing \ref{lst:example:scanner}. 
+The web server has some PHP files in different directories. Those are used for various purposes, but they should never change, except for an update to the webpage. All of them lie in some subdirectory of the `htdocs' directory. Thus they all are covered in the scan from the configuration in listing \ref{lst:example:scanner}. 
 
-The tricky part is, that we have multiple different php files in different directories. The configuration should cover that even if the exact location and folder structure changes a bit and new folder are added. As the scanner automatically scans recursively, the exact folder structure does not really matter. The files will be found when they are in the htdocs directory. As the files should not change but might be accessed at any time, watching everything should be what we want. Especially important are the modified, changed and created times. Also important are size, path, name and inode.
+The tricky part is that we have multiple different PHP files in different directories. The configuration should cover that even if the exact location and folder structure changes a bit and new folders are added. As the scanner automatically scans recursively, the exact folder structure does not matter. The files are found when they are in the `htdocs' directory. As the files should not change but might be accessed at any time, watching everything should be what we want. Especially noteworthy are the modified, changed, and created times. Also important are size, path, name, and inode.
 
-This much for the rule, the investigation is then relatively easy. There is not a special path that has to be watched since the scanner was configured only to scan htdocs. By using the same database, the investigator will only validate this data as well. Important though is the whitelist. There is an upload directory in which we expect changes. Thus a file name regex of `.php\$' will only validate php files.
+This much for the rule, the investigation is then relatively easy. There is not a particular path that has to be watched since the scanner was configured only to scan `htdocs'. By using the same database, the investigator only validates this data as well. Important though is the whitelist. There is an upload directory in which we expect changes. Thus a file name regex of `.php\$' successfully narrows the files to only the required ones.
 
-An example investigator configuration is listed in listing \ref{lst:example:php}. For this configuration I did not use the preconfigured rules.
+An example investigator configuration is listed in listing \ref{lst:example:php}. For this configuration, I did not use the preconfigured rules.
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:php]
+
+\begin{lstlisting}[language=yaml, numbers=left, caption=Example PHP File Configuration, label=lst:example:php]
 sqlite:
     filename: apache.db
 
@@ -62,11 +63,11 @@ investigator:
 
 \subsubsection{Upload directory}
 
-As already mentioned, there is an upload directory. This is more tricky, since there files might get upladed and deleted all the time. What we do care about is that there are no php files uploaded. This way an intruder could create a reverse shell in the browser. That would be very bad and we definitely want to detect that with every scan even. It would be cought with the rule from listing \ref{lst:example:php} because this scanns for all php files. However, as an exercise and even just to ensure it is actually caught there is another rule for the upload directory.
+As already mentioned, there is an upload directory. Creating a correct configuration for this directory is more challenging than for the PHP files since any files might get uploaded and deleted from there all the time. The critical part here is that no one can upload a PHP file. If this was possible, an intruder could create any mischief. This intrusion already gets caught by the rule from listing \ref{lst:example:php} because it already scans for PHP files in the whole directory. It is still viable to create an additional rule that only catches those types of intrusions. Maybe this investigation is then executed more often than the other. Additionally, this configuration also checks for additional properties and alerts a PHP file in the upload directory until it has been deleted
 
-For the rule we definitely need to add the special rules `new\_files\_ok' and `deleted\_files\_ok' since both is actually ok. Then generally greater access and modification times are ok. For the investigation, a file regex blacklist will be added. Additionally only the upload directory needs to be searched. With that php files can easily be excluded. The example configuration is shown in  listing \ref{lst:example:upload} 
+For the rule we need to add the special rules `new\_files\_ok' and `deleted\_files\_ok' since both are valid in this directory. Then generally greater access and modification times are ok. For the investigation, a file regex blacklist is added. Additionally only the upload directory needs to be searched. With that, valid PHP files in other directories are easily excluded. The example configuration is shown in  listing \ref{lst:example:upload} 
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:upload]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Example Upload Directory Configuration, label=lst:example:upload]
     sqlite:
         filename: apache.db
     
@@ -92,9 +93,9 @@ For the rule we definitely need to add the special rules `new\_files\_ok' and `d
 
 \subsubsection{HTML, CSS, Javascript and images}
 
-The webpage also has some static context, namely HTML, CSS, Javascript and image files. Those are in a directory called `static'. Those files are like the php files, they should not change unless someone creates an update to the page. This is rare. In this static folder only those files are acceptible, in the configuration this results in a blacklist for those file types which is negated. This way files that don't equal these file types are alerted. Additionally the previously used rule named `equal\_but\_accessible' should do the trick to find modified files. An example configuration is shown in listing \ref{lst:example:static} 
+The webpage also has some static context, namely HTML, CSS, Javascript, and image files. Those are in a directory called `static'. Those files are like the PHP files; they should not change unless someone creates an update to the page. In this static folder, only those files are acceptable, in the configuration, this results in a blacklist for those file types which is negated. This way, files that don't equal these file types are alerted. Additionally, the previously used rule named `equal\_but\_accessible' should do the trick to find modified files. An example configuration is shown in listing \ref{lst:example:static} 
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:static]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Example Static Files Configuration, label=lst:example:static]
     sqlite:
         filename: apache.db
     
@@ -128,9 +129,9 @@ The webpage also has some static context, namely HTML, CSS, Javascript and image
 
 \subsubsection{Log directory}
 
-The last directory that is not yet checked is the log directory. Log files usually grow in size until they reach a certain limit. Then they stay static and a new file is created, which then again grows. To create a configuration for that it is important to check the size for growing. Additionally, all the timestamps should also only grow. The file ending could also be checked, if wished this can be copied from the other configurations. One important detail is the `file\_rename\_ok' rule as the rolled over log files might be changed. Also the `new\_files\_ok' rule needs to be added. The example configuration is available in listing \ref{lst:example:log}
+With that, the upload directory remains. Log files usually grow in size until they reach a certain limit. Then they stay static, and a new file is created, which then again grows. To create a configuration for that, it is important to check the size for growing. Additionally, all the timestamps should also only grow. One important detail is the `file\_rename\_ok' rule as the name of rolled over log files might change. Also, the `new\_files\_ok' rule needs to be added. The example configuration is available in listing \ref{lst:example:log}
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:log]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Example Log Directory Configuration, label=lst:example:log]
     sqlite:
         filename: apache.db
     
@@ -143,7 +144,6 @@ The last directory that is not yet checked is the log directory. Log files usual
                 - path
                 - meta_addr
               greater:
-                - meta_creation_time_nano
                 - meta_modification_time
                 - meta_changed_time
                 - meta_size
@@ -163,7 +163,7 @@ The last directory that is not yet checked is the log directory. Log files usual
 
 The partial configurations can then be combined into one bigger configuration. Some rules can be reused, which makes everything a bit easier. The complete configuration is shown in listing \ref{lst:example:complete}.
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:complete]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Complete Example Configuration, label=lst:example:complete]
     sqlite:
         filename: apache.db
     
@@ -202,7 +202,6 @@ The partial configurations can then be combined into one bigger configuration. S
                 - path
                 - meta_addr
               greater:
-                - meta_creation_time_nano
                 - meta_modification_time
                 - meta_changed_time
                 - meta_size
@@ -238,9 +237,9 @@ The partial configurations can then be combined into one bigger configuration. S
 
 \subsection{SSH private keypairs}
 
-Another example in which the \gls{hids} can be used is the tracking of private and public keypairs. Usually they are read when a webserver is started. Afterwards it is cached in the memory of the webserver and the actual files should not be read again. This makes an updated access time a possible intrusion. For this scenario I assume that the keypair is located in the directory `/var/www/.ssh/'. An example configuration is shown in listing \ref{lst:example:keys}.
+Another example for the \gls{fids} is the tracking of private and public key pairs. Usually, the web server reads them when it is started. Afterward, it caches them in the memory, and the actual files should not be reread. This situation causes an updated access time to be an \gls{ioc} of a possible intrusion. For this scenario, I assume that the key pair is located in the directory `/var/www/.ssh/'. An example configuration is shown in listing \ref{lst:example:keys}.
 
-\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:example:keys]
+\begin{lstlisting}[language=yaml, numbers=left, caption=Example SSH Keypair Configuration, label=lst:example:keys]
     sqlite:
         filename: ssh.db
         

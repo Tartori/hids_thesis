@@ -96,12 +96,14 @@ investigator:
 	investigations:
 		- paths:
 			- '/etc'
+		  whitelist_inverted: false
 		  fileregexwhitelist:
 			- '*.php'
 		  rules:
 			- php
 		- fileregexwhitelist: '/*'
 		  fileregexblacklist: '*evilfile*'
+		  blacklist_inverted: false
 		  rules:
 			- logs
 \end{lstlisting}
@@ -176,7 +178,9 @@ The investigation configuration defines the objects which are scanned for intrus
     \item [paths] For investigations different paths can be defined. This setting changes the behavior in such a way that only the specified path are investigated. Useful if certain paths need different observations.
     \item [rules] The rules which are used within this investigation is based on are defined here. They are referenced by name.
     \item [fileregexwhitelist] The \gls{regex} whitelist works similarly to the paths config. Only files are analyzed that match this \gls{regex}. It is parsed before the blacklist.
+    \item [whitelist\_inverted] This configuration is to invert the whitelist to match all files that are not covered in the \gls{regex}.
     \item [fileregexblacklist] The \gls{regex} blacklist is used to detect files based on their filename. If their path with filename results in a match with this \gls{regex} it is alerted. Especially useful for finding unexpected files in locations that have frequent changes.
+    \item [blacklist\_inverted] This configuration is to invert the blacklist to match all files that are not covered in the \gls{regex}.
 \end{description}
 
 \subsection{Database}
