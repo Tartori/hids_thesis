@@ -50,7 +50,7 @@ The investigator component is responsible for finding intrusions. As discussed i
 
 First, the investigator needs to parse the configuration. The investigator configuration is more intricate than the other configurations. Because of that, parsing needs more steps. The \gls{fids} first flattens the alerts by expanding the `greater' and `equals' list appropriately to the sub-rules. Afterward, it expands the investigations by adding the configuration from the alerts directly to the investigations. This way, it is easier to access them in the following steps. The lists are continuously updated not to contain duplicates.
 
-The investigator then fetches all run \gls{id} and selects the correct ones by finding the most recent finished runs. If the validation_run property is set, it takes that one as the reference instead of the second most recent one. The investigator always takes the most recent for validation.
+The investigator then fetches all run \gls{id} and selects the correct ones by finding the most recent finished runs. If the `validation\_run' property is set, it takes that one as the reference instead of the second most recent one. The investigator always takes the most recent for validation.
 
 After the runs are acquired, the investigator retrieves the files by executing the \gls{sql} query shown in listing \ref{lst:file:query}, which joins the file table with itself on the inode address or path and name. This way, the investigator can make good use of the indices that exist on this table. After the files get fetched, they are parsed and put into a list of tuples. This process takes some time for a large number of files. 
 
