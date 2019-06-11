@@ -1,2 +1,171 @@
 \chapter{User Documentation}
 \label{sec:userdocu}
+
+\section{Manpage}
+
+Usage: 
+fids.py [-m] [--config=PATH] 
+
+-m = creation of timeline basedata used as input for timeline creation service like mactime.
+
+--config = path to the configuration if defaultpath is not used.
+
+\section{Configuration}
+\label{sec:userdocu:Configuration}
+
+The configuration file is provided in \gls{yaml}. \gls{yaml} is a human-friendly data serialization language with support for many programming languages. Its main advantage over other languages for configuration files is the readability and the ease to extend already existing configuration files. There were more reasons why \gls{yaml} is used documented in appendix section \ref{sec:decisions:config:language}.
+
+\subsection{Database Configuration}
+
+The configuration consists of three parts. The first part is the database configuration. The current implementation supports only \gls{sqlite}, as this is the most basic and easy to use format. Additionally, it doesn't require any connection to an external entity. For more information on why \gls{sqlite} was chosen see appendix section \ref{sec:decisions:dbms}. For the configuration, only the filename is required as seen in listing \ref{lst:cfg:sqlite}. This configuration defines where the data will be sent to and read from in the scanner and investigator parts, respectively. As both parts need access to the database, this part of the configuration is in a separate part. It is possible and already prepared to extend the system to use more \gls{dbms}. However, this is not part of the scope of this thesis.
+
+\begin{lstlisting}[language=yaml, numbers=left, caption=SQLite Configuration, label=lst:cfg:sqlite]
+sqlite:
+	filename: fids_db3.db
+\end{lstlisting}
+
+\subsection{Scanner Configuration}
+
+The second part of the configuration is the part that defines the scanner. An example config can be seen in listing \ref{lst:cfg:scanner}. It consists of one main key, which is named scan. If this config entry is missing, the scanner part of the \gls{hids} is not executed by default. Beneath this top key it contains the following subkeys:
+
+\begin{description}
+	\item [image\_path] Path to the \gls{fs} that is used for the scan.
+	\item [scan\_paths] List of paths to scan. Paths are scanned recursively. "/" thus scans all available paths.
+	\item [ignore\_paths] Paths that should not be scanned. Can be any directory. The recursion stops once this path is reached and does not continue downwards. Practical if certain directories are not interesting for intrusion detection.
+\end{description}
+
+\begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:cfg:scanner]
+scan:
+	image_path: /dev/nvme0n1p1
+	scan_paths: 
+		[
+			"/",
+			"/nonExisting",
+		]
+	ignore_paths: 
+		[
+			"/temp/"
+		]
+\end{lstlisting}
+
+\subsection{Investigator Configuration}
+\label{sec:conf:investigator}
+
+The investigator configuration is similar to the scanner configuration in the way that it contains a top-level node called investigator. If this is missing the investigator part does not start. As can be seen in listing \ref{lst:cfg:investigator} it is a lot more complicated than the scanner configuration. 
+
+\begin{description}
+    \item [same\_config] This configuration specifies whether a changed config should result in an alert. Defaults to True.
+    \item [validation\_run] This can define a run that is used for validation. If empty the second last one will automatically be used.
+    \item [\nameref{sec:config:rules}] Rules are ways to create templates on how changed files should be found. \nameref{sec:config:rules} are explained more through below.
+    \item [\nameref{sec:config:investigations}] Investigations define which paths and which files should be checked for intrusions. \nameref{sec:config:investigations} are explained more through below.
+\end{description}
+
+\begin{lstlisting}[language=yaml, numbers=left, caption=Investigator Configuration, label=lst:cfg:investigator]
+investigator:
+	same_config: True
+	validation_run: 
+	rules: 
+		- name: php
+		  rules: 
+			- m
+			- i
+			- l
+			- n
+			- a
+		  equal:
+			- meta_creation_time
+			- meta_size
+		- name: logs
+		  greater:
+			- meta_size
+		  equal:
+			- meta_creation_time
+	investigations:
+		- paths:
+			- '/etc'
+		  whitelist_inverted: false
+		  fileregexwhitelist:
+			- '*.php'
+		  rules:
+			- php
+		- fileregexwhitelist: '/*'
+		  fileregexblacklist: '*evilfile*'
+		  blacklist_inverted: false
+		  rules:
+			- logs
+\end{lstlisting}
+
+\subsubsection{Rules}
+\label{sec:config:rules}
+
+Rules represent templates that are later used in the investigations to find anomalies. Rules can be based upon other rules to extend them. Recursive rules are allowed, they simply extend each other. An example of the rule configuration can be seen in listing \ref{lst:cfg:investigator}, the fields are explained below.
+
+\begin{description}
+	\item [name] Each rule has a name. If two rules with the same name are defined, the behavior might be inconsistent. The name is used to extend rules.
+	\item [rules] The rules which are used as a basis for this rule. They are referenced by name.
+	\item [greater] The properties which are allowed to grow between the runs. Greater also includes equal.
+	\item [equal] The properties that are supposed to stay equal during all runs.
+\end{description}
+
+Additionally, there are some predefined rules. The aide configuration heavily influenced which rules got predefined. The preconfigured rules are listed in listing \ref{lst:cfg:precon}.
+\begin{lstlisting}[language=yaml, numbers=left, caption=Preconfigured Rules, label=lst:cfg:precon]
+rules: 
+	- name: p
+	  equal:
+		- meta_mode
+	- name: ftype
+	  equal:
+		- meta_conten
+	- name: i
+	  equal:
+		- meta_addr
+	- name: l
+	  equal:
+		- meta_link
+	- name: n
+	  equal:
+		- meta_nlink 
+	- name: g
+	  equal:
+		- meta_gid
+	- name: s
+	  equal:
+		- meta_size
+	- name: m
+	  equal:
+		- meta_modification_time
+		- meta_modification_time_nano
+	- name: a
+	  equal:
+		- meta_access_time
+		- meta_access_time_nano
+	- name: c
+	  equal:
+		- meta_changed_time
+		- meta_changed_time_nano
+	- name: S
+	  greater:
+		- meta_size
+\end{lstlisting}
+	
+Additional to those, there are some rules which do not directly check the \gls{fs} \gls{metadata}. There are three of them which change the behavior of the investigator. They must be configured on the investigation level. They are directly referenced by the investigator to specify if the related events should result in an alert or not. 
+
+\begin{description}
+    \item [file\_rename\_ok]    Usually a changed filename leads to an alert. This behavior is deactivated by setting this rule.
+    \item [new\_files\_ok]    Usually a new file leads to an alert. This behavior is deactivated by setting this rule.
+    \item [deleted\_files\_ok]    Usually a deleted file leads to an alert. This behavior is deactivated by setting this rule.
+\end{description}
+
+\subsubsection{Investigations}
+\label{sec:config:investigations}
+
+The investigation configuration defines the objects which are scanned for intrusion, as well as how they are scanned. They contain rules and some configuration on what should be scanned. An example of the investigation configuration can be seen in listing \ref{lst:cfg:investigator}, the fields are explained below.
+
+\begin{description}
+    \item [paths] For investigations different paths can be defined. This setting changes the behavior in such a way that only the specified path are investigated. Useful if certain paths need different observations.
+    \item [rules] The rules which are used within this investigation is based on are defined here. They are referenced by name.
+    \item [fileregexwhitelist] The \gls{regex} whitelist works similarly to the paths config. Only files are analyzed that match this \gls{regex}. It is parsed before the blacklist.
+    \item [whitelist\_inverted] This configuration is to invert the whitelist to match all files that are not covered in the \gls{regex}.
+    \item [fileregexblacklist] The \gls{regex} blacklist is used to detect files based on their filename. If their path with filename results in a match with this \gls{regex} it is alerted. Especially useful for finding unexpected files in locations that have frequent changes.
+    \item [blacklist\_inverted] This configuration is to invert the blacklist to match all files that are not covered in the \gls{regex}.
+\end{description}
