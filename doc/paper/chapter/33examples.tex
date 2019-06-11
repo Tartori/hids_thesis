@@ -273,3 +273,12 @@ Another example for the \gls{fids} is the tracking of private and public key pai
 
 \end{lstlisting}
 
+\section{Timeline Creation}
+
+The Timeline creator works by taking the database output of the scanner and transforming the file relation into the body format used by tools like mactime. This way, the \gls{fids} can create an output which can be parsed by many tools with ease. For creating a timeline the \gls{fids} offers a command line flag -m. For the configuration only the sqlite filename is needed, as shown in listing \ref{lst:example:timelineconf}
+
+\begin{lstlisting}[language=yaml, numbers=left, caption=, label=lst:example:timelineconf]
+  sqlite:
+      filename: apache.db
+
+\end{lstlisting}
