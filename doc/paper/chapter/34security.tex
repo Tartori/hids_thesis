@@ -66,7 +66,7 @@ Any \gls{hids} that uses \gls{fim} needs access to the files. Depending on the d
 The system needs access to the disk image which is mounted. To gain access to that, it needs to run with administrative privileges. With those permissions, the system could theoretically do anything on the host. The best way would be to limit the amount of time that it is executing with those privileges. To do that the scanner and the investigator can be executed in different processes where only the scanner has administrative access. The investigator only needs to read the database and send alerts, for neither it needs administrative privileges.
 
 \subsubsection{Exploiting of the system}
-\label{sec:risk:unknowncode}
+\label{sec:risk:exploiting}
 
 As with any system, it is possible that an attacker can exploit the \gls{fids}. This way he can run arbitrary code on the host. This risk is higher than for most applications since the \gls{fids} runs with administrative privileges.
 
