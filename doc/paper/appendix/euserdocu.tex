@@ -3,12 +3,32 @@
 
 \section{Manpage}
 
-Usage: 
-fids.py [-m] [--config=PATH] 
+\begin{lstlisting}
+FIDS.PY
 
--m = creation of timeline basedata used as input for timeline creation service like mactime.
+NAME
+       fids - Detect intrusions by using forensic techniques.
 
---config = path to the configuration if defaultpath is not used.
+SYNOPSIS
+       fids.py [-m] [--config=path]
+
+DESCRIPTION
+        fids is used to detect intrusions by analyzing filesystem
+        metadata. It can also generate a timeline when used with 
+        a tool like mactime
+
+ARGUMENTS
+       -m
+              Generate the bodyfile output for timeline creation
+
+       --config=path
+              Specify the location of the config file.  fids
+              uses this config file instead of the default location
+
+AUTHOR
+       Tartori
+
+\end{lstlisting}
 
 \section{Configuration}
 \label{sec:userdocu:Configuration}
