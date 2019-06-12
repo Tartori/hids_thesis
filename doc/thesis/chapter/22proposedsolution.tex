@@ -15,9 +15,9 @@ The \gls{fids} uses \gls{tsk} via \gls{pytsk} to extract the \gls{fs} \gls{metad
 \subsection{Investigation capabilities}
 \label{sec:investigation:capabilities}
 
-Another improvement upon existing \gls{hids}, is that investigation capabilities are built in from the start. Traditional \gls{hids} are good at finding intrusions and alerting them. However, they don't offer much support for the investigation of the incident. They don't have information beyond what was configured. This lack of information makes sense if  \glspl{hash} have to be calculated. If something was incorrectly configured, an investigator does not have any useful output of those systems to gain further knowledge. They generate alerts and not much beyond that.
+Another improvement upon existing \gls{hids}, is that investigation capabilities are built in from the start. Traditional \gls{hids} are good at finding intrusions and alerting them. However, they don't offer much support for the investigation of the incident. They don't have information beyond what was configured. This lack of information makes sense if most of the information that is used comes from calculated \glspl{hash}, because storing the hash value does not help. In such a system, if something was incorrectly configured, an investigator does not have any useful output to gain further knowledge. They generate alerts and not much beyond that.
 
-The \gls{fids} stores all the available \gls{metadata} for each scanned file for every run. This way, an investigator can use this database to gain more information about how the attacker proceeded. He can look at the changes of permissions, modification of files, and more, even if the system did not find any intrusions. It is also possible to generate a timeline out of this data to form an expansive view on what happened when on the \gls{fs}. 
+The \gls{fids} stores all the available \gls{metadata} for each scanned file for every run. This way, an investigator can use this database to gain more information about how the attacker proceeded. He can look at the changes of permissions, modification of files, and more, even if the system did not find any intrusions. It also supports the generation of a timeline out of this data to form an expansive view on what happened when on the \gls{fs}. 
 
 \subsection{Flexibility}
 

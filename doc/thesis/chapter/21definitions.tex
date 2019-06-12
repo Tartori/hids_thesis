@@ -85,7 +85,7 @@ In this thesis, \gls{nids} are not in the center. The implementation doesn't loo
 
 \gls{tsk} is an \gls{opensource} toolkit used to investigate disk images. It is based on \gls{tct} \cite{tct} and contains multiple command line interfaces and an \gls{api} for various purposes \cite{tsk, tsk:about}. It is mainly written in the programming language C, runs on most \gls{os} and is used to analyze numerous \glspl{fs}. It is heavily used in forensic investigations to find deleted or corrupted files and for other information gatherings on a disk image.
 
-It contains many tools which are used for specific purposes. Those include analysis of partitions, blocks, inodes, filenames, journaling \gls{fs}, timelines, and more. In this thesis, I am mainly concerned with the tool that operates on filenames. This tool is called fls, which I described in the next section.
+It contains many tools which are used for specific purposes. Those include analysis of partitions, blocks, inodes, filenames, journaling \gls{fs}, timelines, and more. In this thesis, I am mainly concerned with the tool that operates on filenames. This tool is called fls, which I described in the next section. It also contains a mactime utility which is described in section \nameref{sec:mactime}.
 
 \subsubsection{fls}
 \label{sec:fls}
@@ -93,6 +93,11 @@ It contains many tools which are used for specific purposes. Those include analy
 Fls can be used to access directories, files, and their attributes. With it, the directories can be displayed recursively, and for each file, the attributes can be printed to the console. \cite{tsk:fls} 
 
 This tool also can be accessed via the \gls{api} and is used in the \gls{hids} implementation to retrieve the directories, files, and attributes. The process of how this is achieved is explained in section \ref{sec:Scanner}.
+
+\subsubsection{mactime}
+\label{sec:mactime}
+
+Mactime is a utility for timeline creation. It takes data in a format they call body file and convert it to a ascii timeline. \cite{tsk:mactime, tsk:bodyfile}
 
 \subsection{Python}
 \label{sec:python}
