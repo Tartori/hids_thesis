@@ -1,0 +1,248 @@
+\documentclass{beamer}
+
+% Code Segments
+\usepackage{listings}
+\input{json-highlighting.tex}
+
+% Images
+\usepackage{graphicx}
+
+% Sequence Diagram
+\usepackage{geometry}
+\usepackage{pgf-umlsd}
+\usetikzlibrary{calc}
+
+\usecolortheme{beaver}
+
+\AtBeginSection
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\setbeamertemplate{itemize items}{\textbullet}
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-8pt}
+    \insertshorttitle\hfill\insertshortauthor\hfill\insertframenumber
+  }
+}
+\setbeamertemplate{navigation symbols}{}
+
+\begin{document}
+
+\title{Alternative scalable HIDS with investigation capability}
+\subtitle{Forensic based intrusion detection}
+\author{Julian Stampfli}
+
+\frame{\titlepage}
+
+
+\begin{frame}
+  \frametitle{Table of Contents}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Intrusions}
+  \begin{itemize}
+    \item What?
+    \begin{itemize}
+      \item Malware
+      \item Hacker
+      \item More Buzzwords?
+    \end{itemize}
+    \pause
+    \item Protection 
+    \begin{itemize}
+      \item Firewals
+      \item Least privilege
+    \end{itemize}
+
+    \item Secure\pause ?
+    \begin{itemize}
+      \item Open Ports
+      \item Weak Passwords
+      \item Insecure Applications
+      \item ...
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Intrusion Detection}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      Network-Based
+      \begin{itemize}
+        \item Central scanning
+        \item Uses
+        \begin{itemize}
+          \item Traffic Load
+          \item Connections
+          \item Inspection
+        \end{itemize}
+        \item Mainly pattern driven
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      Host-Based
+      \begin{itemize}
+        \item Distributed Scanning 
+        \item Uses
+        \begin{itemize}
+          \item Processes
+          \item Files
+          \item Network Configuration
+        \end{itemize}
+        \item Change driven
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{HIDS}
+  \begin{columns}
+    \begin{column}{1\textwidth}
+      Finding Changes
+      \begin{itemize}
+        \item Hashing to the rescue! \pause or not?
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hashing}
+  \begin{columns}
+    \begin{column}{1\textwidth}
+      \begin{itemize}
+        \item Highly reliable
+        \item Used for cryptographic use cases
+        \item Fast? \pause - Yes but not really.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{HIDS}
+  \begin{columns}
+    \begin{column}{1\textwidth}
+      Finding Changes
+      \begin{itemize}
+        \item Hashing
+        \item Filesystem attributes to the rescue
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{TSK}
+  \begin{columns}
+    \begin{column}{1\textwidth}
+      The Sleuth Kit.
+      \begin{itemize}
+        \item Opensource
+        \item Disk analyzis utility
+        \item Used in forensics
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{FIDS}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[fragile]
+  \frametitle{FIDS - Architecture}
+  \begin{columns}
+    \begin{column}{1\textwidth}
+      \begin{figure}[ht]
+        \includegraphics[width=8cm]{../img/Overview_FIDS.png}
+        \centering
+        \caption{System Architecture}
+        \label{fig:systemArchitecture}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{FIDS - Scanner}
+  \begin{columns}
+    \begin{column}{1\textwidth}
+      \begin{itemize}
+        \item Scanner
+        \begin{itemize}
+          \item Collects Data from Files System through TSK
+          \item Saves data to Database
+        \end{itemize}
+        \pause
+        \item Investigator
+        \begin{itemize}
+          \item Compares Runs
+          \item Creates a list of anomalies
+          \item Based on Config
+        \end{itemize}
+        \pause
+        \item Timeline Creator
+        \begin{itemize}
+          \item Creates a Timeline
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary/Conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Conclusion}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      Summary
+      \begin{itemize}
+          \item Fast Scans
+          \item Intrusion Detection Possible
+          \item Support for Forensic Investigation
+      \end{itemize}
+    \end{column}
+    \pause
+    \begin{column}{0.5\textwidth}
+      Conclusion
+      \begin{itemize}
+        \item Risk-Based Approach
+        \item Speed vs Reliability
+        \item Opensource
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Further Research}
+    \begin{itemize}
+      \item Extension beyond Files
+      \item Extensive Testing in a Live Environment
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Thank you for listening / Demo?}
+  \url{https://github.com/Tartori/fids}
+\end{frame}
+
+\end{document}
