@@ -1,7 +1,7 @@
 
 \chapter{Conclusion}
 \label{sec:Conclusion}
-In this thesis, the goal was to create a \gls{hids} which finds intrusions in big \gls{fs} fast and helps with forensic investigation. I created the \gls{fids} which uses \gls{tsk} to check \gls{fs} \gls{metadata} for \gls{fim}. This way, it has low execution times compared to systems that use \glspl{hash}. By taking the risk-based approach of not having the reliance from hashing, I gained much speed. This speed can be used to find intrusions faster and decrease the reaction time. 
+In this thesis, the goal was to create a \gls{hids} which finds \glspl{intrusion} in big \gls{fs} fast and helps with forensic investigation. I created the \gls{fids} which uses \gls{tsk} to check \gls{fs} \gls{metadata} for \gls{fim}. This way, it has low execution times compared to systems that use \glspl{hash}. By taking the risk-based approach of not having the reliance from hashing, I gained much speed. This speed can be used to find \glspl{intrusion} faster and decrease the reaction time. 
 
 To help with investigations, the \gls{fids} contains a component which produces the output needed for timeline creation. Timelines are an essential tool in forensics to find out what happened at what times. Especially, with the timeline output from the \gls{fids}, investigators can validate which files changed at what times more accurately than if they only have the output of the current state on the \gls{fs}. 
 
@@ -9,10 +9,10 @@ To help with investigations, the \gls{fids} contains a component which produces 
 \label{sec:future:work}
 
 
-It would make sense to extend this \gls{hids} to extend past the \gls{fs}. It would be great if the scanner can also scan the processes and network connections. Not only would this data be crucial to finding intrusions by the system, but it could also give investigators much more information which they are currently mostly missing.
+It would make sense to extend this \gls{hids} to extend past the \gls{fs}. It would be great if the scanner can also scan the processes and network connections. Not only would this data be crucial to finding \glspl{intrusion} by the system, but it could also give investigators much more information which they are currently mostly missing.
 
-The system should also be extensively tested. For this, it needs to run for a prolonged time in a productive system. The output and the found intrusions would then need to be compared to other systems to gain important information about how fast and how many intrusions are found using this system. 
+The system should also be extensively tested. For this, it needs to run for a prolonged time in a productive system. The output and the found \glspl{intrusion} would then need to be compared to other systems to gain important information about how fast and how many \glspl{intrusion} are found using this system. 
 
 As already implied, it would be helpful for the system to integrate with other \gls{dbms}. This way it could cover more use cases easier. 
 
-One other path that could be improved on would be the investigator. Currently, it operates only on a configuration which someone must write. It would be great to analyze the scanner output and find anomalies on them autonomously. This could be done if many data has already been collected on many different types of hosts. The types could then be grouped, and an algorithm could detect similar patterns to find similar intrusions. 
+One other path that could be improved on would be the investigator. Currently, it operates only on a configuration which someone must write. It would be great to analyze the scanner output and find anomalies on them autonomously. This could be done if many data has already been collected on many different types of hosts. The types could then be grouped, and an algorithm could detect similar patterns to find similar \glspl{intrusion}. 

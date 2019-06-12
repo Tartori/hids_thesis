@@ -63,7 +63,7 @@ investigator:
 
 \subsubsection{Upload directory}
 
-As already mentioned, there is an upload directory. Creating a correct configuration for this directory is more challenging than for the PHP files since any files might get uploaded and deleted from there all the time. The critical part here is that no one can upload a PHP file. If this was possible, an intruder could create any mischief. This intrusion already gets caught by the rule from listing \ref{lst:example:php} because it already scans for PHP files in the whole directory. It is still viable to create an additional rule that only catches those types of intrusions. Maybe this investigation is then executed more often than the other. Additionally, this configuration also checks for additional properties and alerts a PHP file in the upload directory until it has been deleted
+As already mentioned, there is an upload directory. Creating a correct configuration for this directory is more challenging than for the PHP files since any files might get uploaded and deleted from there all the time. The critical part here is that no one can upload a PHP file. If this was possible, an intruder could create any mischief. This \gls{intrusion} already gets caught by the rule from listing \ref{lst:example:php} because it already scans for PHP files in the whole directory. It is still viable to create an additional rule that only catches those types of \glspl{intrusion}. Maybe this investigation is then executed more often than the other. Additionally, this configuration also checks for additional properties and alerts a PHP file in the upload directory until it has been deleted
 
 For the rule we need to add the special rules `new\_files\_ok' and `deleted\_files\_ok' since both are valid in this directory. Then generally greater access and modification times are ok. For the investigation, a file regex blacklist is added. Additionally only the upload directory needs to be searched. With that, valid PHP files in other directories are easily excluded. The example configuration is shown in  listing \ref{lst:example:upload} 
 
@@ -237,7 +237,7 @@ The partial configurations can then be combined into one bigger configuration. S
 
 \subsection{SSH private keypairs}
 
-Another example for the \gls{fids} is the tracking of private and public key pairs. Usually, the web server reads them when it is started. Afterward, it caches them in the memory, and the actual files should not be reread. This situation causes an updated access time to be an \gls{ioc} of a possible intrusion. For this scenario, I assume that the key pair is located in the directory `/var/www/.ssh/'. An example configuration is shown in listing \ref{lst:example:keys}.
+Another example for the \gls{fids} is the tracking of private and public key pairs. Usually, the web server reads them when it is started. Afterward, it caches them in the memory, and the actual files should not be reread. This situation causes an updated access time to be an \gls{ioc} of a possible \gls{intrusion}. For this scenario, I assume that the key pair is located in the directory `/var/www/.ssh/'. An example configuration is shown in listing \ref{lst:example:keys}.
 
 \begin{lstlisting}[language=yaml, numbers=left, caption=Example SSH Keypair Configuration, label=lst:example:keys]
     sqlite:

@@ -44,7 +44,7 @@ The second part of the configuration is the part that defines the scanner. An ex
 \begin{description}
 	\item [image\_path] Path to the \gls{fs} that is used for the scan.
 	\item [scan\_paths] List of paths to scan. Paths are scanned recursively. "/" thus scans all available paths.
-	\item [ignore\_paths] Paths that should not be scanned. Can be any directory. The recursion stops once this path is reached and does not continue downwards. Practical if certain directories are not interesting for intrusion detection.
+	\item [ignore\_paths] Paths that should not be scanned. Can be any directory. The recursion stops once this path is reached and does not continue downwards. Practical if certain directories are not interesting for \gls{intrusion} detection.
 \end{description}
 
 \begin{lstlisting}[language=yaml, numbers=left, caption=Scanner Configuration, label=lst:cfg:scanner]
@@ -70,7 +70,7 @@ The investigator configuration is similar to the scanner configuration in the wa
     \item [same\_config] This configuration specifies whether a changed config should result in an alert. Defaults to True.
     \item [validation\_run] This can define a run that is used for validation. If empty the second last one will automatically be used.
     \item [\nameref{sec:config:rules}] Rules are ways to create templates on how changed files should be found. \nameref{sec:config:rules} are explained more through below.
-    \item [\nameref{sec:config:investigations}] Investigations define which paths and which files should be checked for intrusions. \nameref{sec:config:investigations} are explained more through below.
+    \item [\nameref{sec:config:investigations}] Investigations define which paths and which files should be checked for \glspl{intrusion}. \nameref{sec:config:investigations} are explained more through below.
 \end{description}
 
 \begin{lstlisting}[language=yaml, numbers=left, caption=Investigator Configuration, label=lst:cfg:investigator]
@@ -172,7 +172,7 @@ Additional to those, there are some rules which do not directly check the \gls{f
 \subsubsection{Investigations}
 \label{sec:config:investigations}
 
-The investigation configuration defines the objects which are scanned for intrusion, as well as how they are scanned. They contain rules and some configuration on what should be scanned. An example of the investigation configuration can be seen in listing \ref{lst:cfg:investigator}, the fields are explained below.
+The investigation configuration defines the objects which are scanned for \gls{intrusion}, as well as how they are scanned. They contain rules and some configuration on what should be scanned. An example of the investigation configuration can be seen in listing \ref{lst:cfg:investigator}, the fields are explained below.
 
 \begin{description}
     \item [paths] For investigations different paths can be defined. This setting changes the behavior in such a way that only the specified path are investigated. Useful if certain paths need different observations.

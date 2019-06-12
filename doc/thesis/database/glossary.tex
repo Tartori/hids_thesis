@@ -4,12 +4,12 @@
 \newacronym{sha256}{SHA-256}{Secure Hashing Algorithm - 256}
 \newacronym{os}{OS}{Operating System}
 
-\newacronym{ids}{IDS}{intrusion detection system}
+\newacronym{ids}{IDS}{\gls{intrusion} detection system}
 \newacronym{apt}{APT}{advanced persistant threat}
 \newacronym{fim}{FIM}{file integrity monitoring} 
-\newacronym{fids}{FIDS}{forensics-based intrusion detection system} 
-\newacronym{hids}{HIDS}{host-based intrusion detection system} 
-\newacronym{nids}{NIDS}{network-based intrusion detection system} 
+\newacronym{fids}{FIDS}{forensics-based \gls{intrusion} detection system} 
+\newacronym{hids}{HIDS}{host-based \gls{intrusion} detection system} 
+\newacronym{nids}{NIDS}{network-based \gls{intrusion} detection system} 
 \newacronym{nist}{NIST}{National Institute of Standards and Technology}
 \newacronym{owasp}{OWASP}{Open Web Application Security Project}
 \newacronym{it}{IT}{Information Security}
@@ -18,7 +18,7 @@
 \newacronym{mb}{MB}{Megabyte}
 \newacronym{kb}{KB}{Kilobyte}
 \newacronym{itsec}{ITSec}{\gls{it} Security}
-\newglossaryentry{regex}{name=regex, description={Regular Expressions are a standard way to find certain patterns in a string.}}
+\newglossaryentry{regex}{name=regex, description={Regular Expressions are a standard way to find certain patterns in a string}}
 \newacronym{tsk}{TSK}{The Sleuth Kit}
 \newacronym{tct}{TCT}{The Coroner's Toolkit}
 \newacronym{tls}{TLS}{Transport Layer Security}
@@ -35,14 +35,14 @@
 \newacronym{dvd}{DVD}{Digital Versatile Discs}
 \newacronym{usb}{USB}{Universal Serial Bus}
 \newacronym{ioc}{IoC}{Indicators of Compromise}
-\newglossaryentry{sql}{name=SQL, description={A domain specific language used for querying a relational database.}}
+\newglossaryentry{sql}{name=SQL, description={A domain specific language used for querying a relational database}}
 \newglossaryentry{unixts}{name=UNIX timestamp, description={The number of seconds since 00:00:00 on the 1st of January 1970}}
-\newglossaryentry{hex}{name=hexadecimal, description={A number system with 16 digits. It uses the numbers 0-9 and the Letters A-F.}}
+\newglossaryentry{hex}{name=hexadecimal, description={A number system with 16 digits. It uses the numbers 0-9 and the Letters A-F}}
 
-\newglossaryentry{opensource}{name=open source, description={Software where both the source and the software is freely accessible and changable.}}
-\newglossaryentry{aide}{name=aide, description={\Gls{opensource} \gls{hids} using \gls{fim} to detect intrusions.}}
+\newglossaryentry{opensource}{name=open source, description={Software where both the source and the software is freely accessible and changable}}
+\newglossaryentry{aide}{name=aide, description={\Gls{opensource} \gls{hids} using \gls{fim} to detect \glspl{intrusion}}}
 \newglossaryentry{tripwire}{name=tripwire, description={Comercial \gls{hids} with good integration in other tools from the tripwire company.}}
-\newglossaryentry{samhain}{name=samhain, description={\Gls{opensource} \gls{hids} which mainly uses kernel hook to find intrusions and contains extensive centralization support for configuration and alerting.}}
+\newglossaryentry{samhain}{name=samhain, description={\Gls{opensource} \gls{hids} which mainly uses kernel hook to find \glspl{intrusion} and contains extensive centralization support for configuration and alerting}}
 
 \newglossaryentry{pgp}{type=\acronymtype, name={PGP}, description={Pretty Good Privacy}, first={Pretty Good Privacy (PGP)\glsadd{pgpg}}, see=[Glossary:]{pgpg}}
 \newglossaryentry{yaml}{type=\acronymtype, name={YAML}, description={YAML Ain't Markup Language}, first={YAML Ain't Markup Language (YAML)\glsadd{yyaml}}, see=[Glossary:]{yyaml}}
@@ -52,36 +52,36 @@
 standard for all programming languages.}}
 \newglossaryentry{postgres}{name=postgres, description={An ope\gls{opensource} database server. It is rather lightweight and heavily used.}}
 \newglossaryentry{sqlite}{name=SQLite, description={A very lightweight relational database implemnentation. It does not have a dedicated server but instead writes the database to a file which is written to the local host.}}
-\newglossaryentry{github}{name=github, description={A platform for \gls{opensource} projects. It is free to use and hosts the source code for many projects.}}
-\newglossaryentry{storagemedia}{name=storage medium,plural=storage media,description={media that is used to store data in a computer system.}}
-\newglossaryentry{malware}{name=malware, description={Malware is any program that is designed to harm a computer system. The term includes well known terms like Virus, Worm, Adware, Keylogger, Trojan, etc. Malware usually tries to hide it's traces to achieve longer infection periods of time. }}
+\newglossaryentry{github}{name=github, description={A platform for \gls{opensource} projects. It is free to use and hosts the source code for many projects}}
+\newglossaryentry{storagemedia}{name=storage medium,plural=storage media,description={media that is used to store data in a computer system}}
+\newglossaryentry{malware}{name=malware, description={Malware is any program that is designed to harm a computer system. The term includes well known terms like Virus, Worm, Adware, Keylogger, Trojan, etc. Malware usually tries to hide it's traces to achieve longer infection periods of time}}
 \newglossaryentry{collision}{name=collision, plural=collisions, description={Multiple different inputs with the same hash value.}}
 
 \newglossaryentry{anomaly}{
 name=anomaly, 
 plural=anomalies,
-description={An unexpected change in the file system. For a change to be unexpected it needs to be covered by the configuration changes are unexpected only if the configuration says so. Some examples that might cause anomalies, changed rights, new files, deleted files. }}
+description={An unexpected change on a system. For a change to be unexpected it needs to be covered by the configuration changes are unexpected only if the configuration says so. Some examples that might cause anomalies on the \gls{fs}, changed permissions, new files, deleted files}}
 \newglossaryentry{intrusion}{
 name=intrusion, 
 plural=intrusions,
-description={An unauthorized access to a system or to data. }}
+description={An unauthorized access to a system or to data}}
 \newglossaryentry{investigation}{
 name=investigation, 
 plural=investigations,
-description={The process of finding out what exactly happened after an incident.}}
+description={The process of finding out what exactly happened after an incident}}
 \newglossaryentry{hash}{
 name=cryptographic hash function, 
 plural=cryptographic hash functions,
-description={A deterministic one way function that fullfills collision resistance and other cryptographic properties. Implementations are the SHA-2 and SHA-3 families.}}
+description={A deterministic one way function that fullfills collision resistance and other cryptographic properties. Implementations are the SHA-2 and SHA-3 families}}
 \newglossaryentry{nonhash}{
 name=non-cryptographic hash function, 
 plural=non-cryptographic hash functions,
-description={A deterministic one way function that does not the hard to achieve properties that make a \gls{hash}. Often used when speed is more important than collision resistance.}}
+description={A deterministic one way function that does not the hard to achieve properties that make a \gls{hash}. Often used when speed is more important than collision resistance}}
 \newglossaryentry{fs}{
 name=file system, 
-description={A file system is used to create a layer of abstraction between the hardware of the storage medium and the operating system. There are multiple file system types which are in use with different capabilities. Additionally to the files the file systems keep track of meta data to each file. This meta data includes some timestamps (created, last accessed, etc) and more.}}
+description={A file system is used to create a layer of abstraction between the hardware of the storage medium and the operating system. There are multiple file system types which are in use with different capabilities. Additionally to the files the file systems keep track of meta data to each file. This meta data includes some timestamps (created, last accessed, etc) and more}}
 \newglossaryentry{pytsk}{name=pytsk3, description={Python bindings for \gls{tsk}}}
-\newglossaryentry{metadata}{name=metadata, description={Data that gives information on other data. In this thesis it is mostly used to describe attributes of the \gls{fs} that describes files. Exmaples are creation date and permissions.}}
+\newglossaryentry{metadata}{name=metadata, description={Data that gives information on other data. In this thesis it is mostly used to describe attributes of the \gls{fs} that describes files. Exmaples are creation date and permissions}}
 \newglossaryentry{git}{name=git, description={A distributed version-control system used for source code tracking in software engineering. Nicknamed \'the stupid content tracker\', stands for either \'global information tracker\' or \'goddamn idiotic truckload of s...\'}}
 
 
