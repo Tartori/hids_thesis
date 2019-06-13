@@ -33,7 +33,7 @@
 \begin{document}
 
 \title{Alternative scalable HIDS with investigation capability}
-\subtitle{FIDS - Forensic based intrusion detection}
+\subtitle{FIDS - Forensic-based intrusion detection}
 \author{Julian Stampfli}
 
 \frame{\titlepage}
@@ -55,6 +55,7 @@
     \begin{itemize}
       \item Malware
       \item Hacker
+      \item Insider Threats
       \item More Buzzwords?
     \end{itemize}
     \pause
@@ -62,6 +63,7 @@
     \begin{itemize}
       \item Firewals
       \item Least privilege
+      \item ...
     \end{itemize}
 
     \item Secure\pause ?
@@ -107,7 +109,7 @@
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{HIDS}
+  \frametitle{HIDS - FIM}
   \begin{columns}
     \begin{column}{1\textwidth}
       Finding Changes
@@ -126,13 +128,19 @@
         \item Highly reliable
         \item Used for cryptographic use cases
         \item Fast? \pause - Yes but not really.
+        \item FIM using Hashing?
+        \begin{itemize}
+          \item Tripwire - 1992 - Gone comercial
+          \item Aide / Samhain - Current Opensource alternatives
+        \end{itemize}
       \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
 
+
 \begin{frame}[fragile]
-  \frametitle{HIDS}
+  \frametitle{HIDS - FIM}
   \begin{columns}
     \begin{column}{1\textwidth}
       Finding Changes
@@ -197,7 +205,7 @@
         \pause
         \item Timeline Creator
         \begin{itemize}
-          \item Creates a Timeline
+          \item ``Time Machine Format" (Forensic Timelining)
         \end{itemize}
       \end{itemize}
     \end{column}
