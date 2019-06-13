@@ -71,5 +71,4 @@ Ultimately, the alerts are used to generate a report. It then prints that report
 \subsection{Timeline creator}
 \label{sec:Timeliner}
 
-The timeline creator part is quite straightforward. It first retrieves all the data for all files from the database. It then goes through each and prints a list with the body file format. This way, the output of the timeline creator can be passed to the `mactime' utility, which parses the input automatically and creates an ASCII timeline. The only special part is the retrieval of the files. Instead of storing them in a list, the system stores them in a set. This way duplicated files with the same attributes are not considered twice. The set uses a \gls{nonhash} for duplication detection.
-
+The timeline creator part is quite straightforward. It first retrieves all the data for all files from the database. It then goes through each and prints a list in the time machine format. This way, the output of the timeline creator can be used by many tools like the `mactime' utility, which parses the input automatically and creates an ASCII timeline. The only special part is the retrieval of the files. Instead of storing them in a list, the system stores them in a set. This way duplicated files with the same attributes are not considered twice. The set uses a \gls{nonhash} for duplication detection.

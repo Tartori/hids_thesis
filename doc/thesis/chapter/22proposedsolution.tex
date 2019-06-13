@@ -2,7 +2,7 @@
 \section{Proposed solution - FIDS}
 \label{sec:fids}
 
-The main principle behind a \gls{hids} is the detection of changed files. As already discussed in section \ref{sec:def:hids}, most tools rely on the calculation of hashes. This process is generally a good approach since changes can be found very reliably; however, as already mentioned, it can drastically hinder the performance of the \gls{hids}. Sadly the actual performance lost cannot be clearly stated, as it heavily depends on what hardware is in use. However, considering the computational overhead of calculating a \gls{hash} it is clear that the time it takes grows with bigger \glspl{fs}. As \gls{storagemedia} has grown from a \gls{mb} to \gls{tb} so has the requirement to store more data. Calculating hashes over such big systems is not viable as it can take a very long time. \cite{hash:slow, hash:veryslow, hash:speed}
+The main principle behind a \gls{hids} that is based on \gls{fim} is the modified of changed files. As already discussed in section \ref{sec:def:hids}, most tools rely on the calculation of hashes. This process is generally a good approach since changes can be found very reliably; however, as already mentioned, it can drastically hinder the performance of the \gls{hids}. Sadly the actual performance lost cannot be clearly stated, as it heavily depends on what hardware is in use. However, considering the computational overhead of calculating a \gls{hash} it is clear that the time it takes grows with bigger \glspl{fs}. As \gls{storagemedia} has grown from a \gls{mb} to \gls{tb} so has the requirement to store more data. Calculating hashes over such big systems is not viable as it can take a very long time. \cite{hash:slow, hash:veryslow, hash:speed}
 
 The name of this proposed solution is the \gls{fids}
 
@@ -29,5 +29,6 @@ The \gls{fids} does not have this issue, at least not as strongly. As all the da
 
 In this project I create a \gls{hids} which uses \gls{tsk} to detect changes named \gls{fids}. It covers the three main changes discussed in section \ref{sec:fids}. The \gls{fids} uses a \gls{sql} database to store the executed runs. It includes user documentation and this thesis documentation. It also contains the creation of a timeline for investigation purposes mentioned in section \ref{sec:investigation:capabilities}.
 
-Out of scope are extensive alerting functionality and extensive example configurations for commonly used \gls{os} and tools. Furthermore, any big data analysis of the runs, while very interesting, are also out of scope.
+Out of scope are extensive alerting functionality and extensive example configurations for commonly used \gls{os} and tools. Software hardening falls in that category as well. Furthermore, any big data analysis of the runs, while very interesting, are also out of scope.
+
 

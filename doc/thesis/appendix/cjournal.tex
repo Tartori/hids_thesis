@@ -1,7 +1,7 @@
 \chapter{Journal}
 \label{sec:journal}
 
-In this section I list a journal of my work with aproximate hours I worked on the thesis with the total that I have worked until then. Those numbers are not extremely exact, as I did not use a time measurement tool. I am mainly listing challenges I faced and decisions I made. I will also list the meetings I had with \gls{bn} and \gls{ab} as well as a short meeting summary. I will also list the workpackages that were worked on and, if applicable, completed. Additionally I will also list milestones that were reached, postponed or cancelled.
+In this section I list a journal of my work with aproximate hours I worked on the thesis with the total that I have worked until then. Those numbers are not extremely exact, as I did not use a time measurement tool. I am mainly listing challenges I faced and decisions I made. I will also list if I had a meeting with \gls{bn} or \gls{ab} for the meeting summaries view chapter \ref{sec:meeting:notes}. I will also list the workpackages and milestones that were worked completed.
 
 There is one section per week where I worked on the thesis. Each section starts with a table that is running. The columns are \gls{cwp}, \gls{rm}, \gls{hw}, \gls{thw} and whether there was a meeting or not.
 
@@ -47,7 +47,7 @@ I did not face any problems in the first week.
 
 \subsubsection{Tasks}
 
-This week the unofficial kickoff with \gls{bn} took place. We met in Bern and talked a lot about how we want to manage the project. The full meeting notes are available in section \ref{sec:meeting01}. I also took some time after the meeting for postprocessing of the meeting. Then I started by creating the initial draft of the \LaTeX documentation by taking the \gls{bfh} template and scaling it down to my needs. I also created a rough draft of the high level requirements and created a \href{https://github.com/Tartori/hids_thesis}{github repository}. 
+This week the unofficial kickoff with \gls{bn} took place. We met in Bern and talked a lot about how we want to manage the project. The full meeting notes are available in section \ref{sec:meeting01}. I also took some time after the meeting for postprocessing of the meeting. Then I started by creating the initial draft of the \LaTeX documentation by taking the \gls{bfh} template and scaling it down to my needs. I also created a rough draft of the high level requirements and created a \gls{git} repository on \href{https://github.com/Tartori/hids_thesis}{github}. 
 
 \subsubsection{Problems}
 
@@ -71,7 +71,7 @@ The \LaTeX document was initially to complex and I did not understand all the pa
 
 \subsubsection{Tasks}
 
-The main task that I did this week was the problem statement and the requirements that I needed to prepare for the second meeting. This is not in the workpackages. Then I needed to prepare for the meeting and postprocess it again. The meeting notes are in section \ref{sec:meeting02}. Overall, I continued gathering information about \gls{hids}, \gls{fs} and \gls{nids}.
+The main task that I did this week was the problem statement and the requirements that I needed to prepare for the second meeting. Then I needed to prepare for the meeting and postprocess it again. The meeting notes are in section \ref{sec:meeting02}. Overall, I continued gathering information about \gls{hids}, \gls{fs} and \gls{nids}.
 
 \subsubsection{Problems}
 
@@ -97,9 +97,9 @@ I had no problems in week three.
 
 \subsubsection{Tasks}
 
-This week I wanted to improve the \LaTeX documentation. Additionally, I started working on the workpackages and milestones.
+This week I improved the \LaTeX documentation. Additionally, I started working on the workpackages and milestones.
 
-For non project management tasks, I started researching other \gls{hids} that are available. Mainly I focussed on tripwire and aide. I also started researching \gls{tsk} and its \gls{api}
+For non project management tasks, I started researching other \gls{hids} that are available. Mainly I focussed on \gls{tripwire} and \gls{aide}. I also started researching \gls{tsk} and its \gls{api}
 
 \subsubsection{Problems}
 
@@ -108,7 +108,6 @@ For non project management tasks, I started researching other \gls{hids} that ar
     \item Table formating in \LaTeX
     \item Milestone formatting in \LaTeX
     \item Almost no publicly available information on tripwire.
-
 \end{itemize}
 
 \section{Week 05 18.03.-24.03.}
@@ -132,7 +131,7 @@ For non project management tasks, I started researching other \gls{hids} that ar
 
 \subsubsection{Tasks}
 
-With the knowledge of \gls{tsk} I was able to search for libraries that support the \gls{tsk} \gls{api} for the different languages that I wanted to evaluate and then I decided the language. Before the meeting, I decided on the programming language, Python. The full reasoning is available in section \ref{sec:decisions:language}.
+With the knowledge of \gls{tsk} I was able to search for libraries that support the \gls{tsk} \gls{api} for the different languages that I wanted to evaluate and then, before the meeting, I chose the language, Python. The full reasoning is available in section \ref{sec:decisions:language}.
 
 I also had to prepare for the meeting this week. The outline is shown in section \ref{sec:meeting03}.
 
@@ -197,7 +196,7 @@ This week I started by contacting \gls{ab}. We then decided for a meeting in the
 
 \subsubsection{Tasks}
 
-This week I realized that I am already behind schedule. I started by going through the goals and rework some of them to increase the clarity. I also rushed into trying to get the initial functionality going. This was not as easy as I anticipated and I lost a lot of time trying to get the output of \gls{pytsk} that I needed. This was tough and I frequently checked the source code of \gls{pytsk} to find solutions. 
+This week I realized that I am already behind schedule. I started by going through the goals and rework some of them to increase the clarity. I also rushed into trying to get the initial functionality going. This was not as easy as I anticipated and I lost a lot of time trying to get the output of \gls{pytsk} that I needed. This was tough and I frequently needed to checked the source code of \gls{pytsk} to find solutions. 
 
 \subsubsection{Problems}
 
@@ -336,7 +335,7 @@ This week I knew that I had to finish the file scanning ability. Especially afte
 
 \subsubsection{Tasks}
 
-After feeling the relief from last week and the pressure from being rather far behind I really wanted to finish Milestone 01. I did this by creating the database, a configuration to connect to the database and then storing the results of the file walk. For both the configuration and the database I had to first define which I wanted to use. For the configuration it was clear pretty fast that \gls{yaml} seems the appropriate choice. For the \gls{dbms} I was more unsure. I first wanted to implement both, \gls{sqlite} and postgres. However, I could not bring postgres to run on my developer environment. Considering the time and the other functionality, I decided to drop postgres and focus on \gls{sqlite}.
+After feeling the relief from last week and the pressure from being rather far behind I really wanted to finish Milestone 01. I did this by creating the database, a configuration to connect to the database and then storing the results of the file walk. For both the configuration and the database I had to first define which I wanted to use. For the configuration it was clear pretty fast that \gls{yaml} seems the appropriate choice. For the \gls{dbms} I was more unsure. I first wanted to implement both, \gls{sqlite} and \gls{postgres}. However, I could not bring \gls{postgres} to run on my developer environment. Considering the time and the other functionality, I decided to drop \gls{postgres} and focus on \gls{sqlite}.
 
 Besides that, I also had another meeting. I really wanted to show my first prototype and thus I forced throguh all hardships. I also had other things to prepare for the meeting, but finally I was able to gain valuable feedback for my prototype. The notes for this meeting are listed in section \ref{sec:meeting05}
 
@@ -416,14 +415,14 @@ In this week I wanted to implement the changes proposed by \gls{bn}. I did this 
 
 \subsubsection{Tasks}
 
-In this week I was able to get a lot of momentum. Firstly I created a new directory for the system. This way the thesis documentation and the \gls{hids} were split. Then I looked deeper into python modules and how to manage the imports properly. By doing that I was able to fix some issues of files sometimes not getting imported correctly. Also, I found some more information in the \gls{tsk} \gls{api} which I had not seen before. I added this information. Also, I added the errors that were thrown as to not lose information. I then followed with a bigger testing period on my local machine. This resulted in frustratingly many errors, which as I later found out were a direct result of how my filewalking process worked. I was able to solve all those errors and then added the first draft of finding intrusions. This config was harder to draft, but I came up with a implementation that would cover many usecases. I also implemented a first draft of the investigator, which for the moment takes a very long time.
+In this week I was able to get a lot of momentum. Firstly I created a new directory for the system. This way the thesis documentation and the \gls{fids} were split. Then I looked deeper into python modules and how to manage the imports properly. By doing that I was able to fix some issues of files sometimes not getting imported correctly. Also, I found some more information in the \gls{tsk} \gls{api} which I had not seen before. I added this information. Also, I added the errors that were thrown as to not lose information. I then followed with a bigger testing period on my local machine. This resulted in frustratingly many errors, which as I later found out were a direct result of how my filewalking process worked. I was able to solve all those errors and then added the first draft of finding intrusions. This config was harder to draft, but I came up with a implementation that would cover many usecases. I also implemented a first draft of the investigator, which for the moment takes a very long time.
 
 In project management view I created a first draft of the thesis documentation and prepared for the meeting that would be on the start of next week.
 
 \subsubsection{Problems}
 
 \begin{itemize}
-    \item The system took about 15 minutes to complete on my local machine which resulted in long waiting periods
+    \item The system took about 15 minutes to complete for only the scan on my local machine which resulted in long waiting periods
     \item The investigator config was rather hard to design
     \item The investigator took extremely long itself
 \end{itemize}
@@ -466,7 +465,7 @@ However, I mainly focussed in bringing the scanning time down. I tried many appr
 
 \begin{itemize}
     \item By running both the scanner and the investigator I did not initially see the performance boost of the scanner.
-    \item \gls{pytsk} does not support a direct file walk.
+    \item \Gls{pytsk} does not support a direct file walk.
 \end{itemize}
 
 \section{Week 15 27.05.-02.06.}
@@ -539,7 +538,7 @@ Besides some \LaTeX issues everything went fine this week. (Appart from the obvi
 
 \subsubsection{Tasks}
 
-This week I focussed on both. First I wanted to bring the \gls{hids} to an appropriate end. I did this by first redefining the rules and investigations to better match what is required. I adjusted them several times until they resulted in the final version that is available now. Additionally, I reworked the way the investigator finds relations between the files. By passing that task to the database I could gain increadible performance increases. I also verified the system by letting it run and then changing files. This way I reworked milestone 02, implemented milestone 03 and partially implemented milestone 04. 
+This week I focussed on both. First I wanted to bring the \gls{fids} to an appropriate end. I did this by first redefining the rules and investigations to better match what is required. I adjusted them several times until they resulted in the final version that is available now. Additionally, I reworked the way the investigator finds relations between the files. By passing that task to the database I could gain incredible performance increases. I also verified the system by letting it run and then changing files. This way I reworked milestone 02, implemented milestone 03 and partially implemented milestone 04. 
 
 In the documentation I also changed a lot. I added many chapters while improving most already created ones. I also created the abstract and added that to the book tool from the \gls{bfh}.
 
@@ -584,12 +583,13 @@ In short, I did not really have issues.
 
 This week I needed to finish both, thesis and the system.
 
-For the system, I implemented the python packaging guide. This way the system is available through the python packaging system. I also added a \gls{pgp} signature with a new private public keypair. This way the software is at least somewhat hardened. 
+For the system, I implemented the python packaging guide. This way the system is available through the python packaging system. I also added the timeline creator to the system.
 
 For the documentation. I finished it. Also I finished the presentation and held it on the day after handing this documentation in. Hopefully it went well.
 
 \subsubsection{Problems}
 
+I did not face any problems in this week.
 
 \section{Week 18 17.06.-23.06.}
 \label{sec:journal:week18}

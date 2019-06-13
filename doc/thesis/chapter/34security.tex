@@ -2,7 +2,7 @@
 \section{Security}
 \label{sec:Security}
 
-A \gls{hids} is a system that tries to improve the security of a host by detecting \glspl{intrusion}. Thus, it is essential to evaluate the security of such a system. This evaluation is the goal of this section. First, I show some limitations of the \gls{fids}. It has some downsides, and it is necessary to look at them. After that, I describe some risk associated with running the \gls{fids}. Those risks might be associated with all \gls{hids}. Then I give some attack scenarios. Those include some scenarios where the \gls{fids} is better suited than other \gls{hids}, but also some that explicitly attack the limitations and risks. Lastly, I give examples of how to circumvent those attack scenarios. Some might be defeated if we change some small things, while some cannot be avoided work.
+A \gls{hids} is a system that improves the security of a host by detecting \glspl{intrusion}. Thus, it is essential to evaluate the security of such a system. This evaluation is the goal of this section. First, I show some limitations of the \gls{fids}. It has some downsides, and it is necessary to look at them. After that, I describe some risk associated with running the \gls{fids}. Those risks might be associated with all \gls{hids}. Then I give some attack scenarios. Those include some scenarios where the \gls{fids} is better suited than other \gls{hids}, but also some that explicitly attack the limitations and risks. Lastly, I give examples of how to circumvent those attack scenarios. Some might be defeated if we change some small things, while some cannot be avoided.
 
 \subsection{Limitations}
 \label{sec:Limitations}
@@ -12,11 +12,11 @@ There are some limitations that I list below. I reference those in the attack sc
 \subsubsection{Changing Attributes}
 \label{sec:limitation:chattr}
 
-As already mentioned multiple times, the proposed system doesn't use \glspl{hash} for the detection of \glspl{intrusion}. This approach can be an issue as it means that changed files might not be found. Attributes can be changed, which could lead the \gls{fids} to miss an \gls{intrusion}.  \cite{chaning:times, changing:attributes}
+As already mentioned multiple times, the proposed system doesn't use \glspl{hash} for the detection of \glspl{intrusion}. This approach can be an issue as it means that changed files might not be found. Attributes can be changed maliciously, which could lead the \gls{fids} to miss an \gls{intrusion}.  \cite{chaning:times, changing:attributes}
 
-It is possible to change the \gls{fs} attributes. However, it is not trivial to change all of those attributes. The changing of some leaves traces and for some attributes root access is required. Additionally, the attacker would first need to remember the times which are correct such that he can correctly reset them. 
+Even though it is possible to change the \gls{fs} attributes it is not trivial to change all of them. The changing of some leaves traces and for some attributes root access is required. Additionally, the attacker would first needs to remember the exact previous values such that he can correctly reset them.  \cite{chaning:times, changing:attributes}
 
-Lastly, it is possible that the attacker does not change all attributes or that he sets them incorrectly, such that the \gls{fids} can still discover the changes. Some changes to the attributes leave other traces, such as kernel-level logs. Those can be evaluated by an appropriate tool to find this kind of \gls{intrusion}.
+Lastly, it is possible that the attacker does not change all attributes or that he sets them incorrectly, such that the \gls{fids} can still discover the \gls{intrusion}. Some changes to the attributes leave other traces, such as kernel-level logs. Those can be evaluated by an appropriate tool to find this kind of \gls{intrusion}.
 
 \subsubsection{Non file based \gls{intrusion}}
 \label{sec:limitation:nonFileBased}
@@ -26,23 +26,30 @@ Those kind of \glspl{intrusion} are getting more frequent and as already said, c
 
 \subsubsection{Intrusion in non watched location}
 \label{sec:limitation:nonWatched}
-When the scanner is started it is fed with which paths to scan and which to ignore. If an \gls{intrusion} injects a file in a place that is not watched, it cannot be found. This limitation comes from an incorrect configuration.
+When the scanner is started it is fed with the paths to scan and which to ignore. If an \gls{intrusion} injects a file in a place that is not watched, it cannot be found. This limitation comes from an incorrect configuration.
 
-For non-watched locations, it is as if the host would not run a \gls{hids}. Maybe the \gls{intrusion} will at some point, write or read something in a watched location, but otherwise, the threat can go unnoticed for a long time. I recommend that at least the scanner part of the \gls{hids} on the whole system. Then the attacks can at least be discovered by analyzing the timeline. Additionally, it is recommended to run the investigator on the whole system as well, but maybe with a lower frequency.
+For non-watched locations, it is as if the host does not run a \gls{hids}. Maybe the \gls{intrusion} will at some point, write or read something in a watched location, but otherwise, the threat can go unnoticed for a long time. I recommend that at least the scanner part of the \gls{hids} runs on the whole system. Then the attacks can at least be discovered by analyzing the timeline. Additionally, it is recommended to run the investigator on the whole system as well, but maybe with a lower frequency.
 
 \subsubsection{Preexisting \glspl{intrusion}}
 \label{sec:limitation:preexisting}
 The system can only detect \gls{intrusion} by unexpected changes. If it starts on an already running host, it is possible that this host is already infected. This infection cannot be seen by the system, as long as the files from the \gls{intrusion} stay consistent. 
 
-Preexisting \glspl{intrusion} are hard to detect if they don't alter their files. Luckily, malware behaves like a typical software project. At some point, it needs to update its executable. It might also read or write other files that seem suspicious. Additionally, if the \gls{fids} is deployed with new machines as well as to the already running machines, those are going to detect the \gls{intrusion} as soon as the already infected hosts try to infect the newly deployed ones.
+Preexisting \glspl{intrusion} are hard to detect if they don't alter their files. Luckily, malware behaves like a typical software project. At some point, it needs to update its executable. It might also read or write other files that can trigger an alert. Additionally, if the \gls{fids} is deployed with new machines as well as to the running and infected machines, the new machines are detecting the \gls{intrusion} as soon as the already infected hosts infect the newly deployed ones.
 
 \subsubsection{Shut down \gls{fids}}
 \label{sec:limitation:noscan}
-The system relies on the running of the scanner. On a host, this would probably be done by creating a cronjob. If this can be disabled, then the scanner will no longer run, and no further \glspl{intrusion} are detected. Additionally, the investigator could also be stopped. This situation would lead to the same issue.
+The system relies on a running scanner. On a host, this would probably be done by creating a cronjob or some form of sheduled task. If this can be disabled, then the scanner will no longer run, and no further \glspl{intrusion} are detected. Additionally, the investigator could also be stopped. This situation would lead to the same result with the difference, that the database is still written.
 
 Should the scanner be shut down, then the investigator will no longer find any \glspl{intrusion}. This can be detected if the database is checked on new entries from another source. This is easiest done when an external database is used or when the \gls{sqlite} file is copied from the host to an external machine at some points. Also, if logs are configured to be written after each execution, it can be suspicious if those entries are missing or are showing to be evaluating the same runs over and over again. 
 
 This limitation is not highly likely, because the intruder first needs to get administrative access to the host to be able to shut down the cronjob. This is not always easy to achieve, and once the attacker has administrative access, he can do whatever he wants on the system. 
+
+\subsubsection{Delete DB or change Configuration}
+\label{sec:limitation:delete}
+
+The intruder could also change the database and remove his traces or change the configuration to not include his files. The configuration file can be seen on the database due to the config hash that is included in each run. The db modification can not be detected, however, it needs to be changed in just the correct moment, after the scanner is completed and before the investigator has started. This timewindow is rather small for an attacker to exploit.
+
+To protect from either attack the configuration and database could be changed in a way that they need administrative privileges to write. This way the attacker first needs to get those privileges and once he got those, he can control the system and do what he wants anyways.
 
 \subsection{Risks}
 \label{sec:risk}
@@ -75,7 +82,7 @@ The best way to limit that risk is, again to limit the parts that run with admin
 \subsection{Attack Scenarios}
 \label{sec:attack_scenarios}
 
-In this section, I describe several attack scenarios. I only explain what the intruder does and how he does it. I might give some description of the host and which processes are running. I also list which limitations or which risks the attacker uses. In section \ref{sec:mittigations} I explain how those attacks can be avoided or detected and what is needed for the detection. Finally, in the discussion, I give a summary of how my system stands against other systems like Aide. 
+In this section, I describe several attack scenarios. I only explain what the intruder does and how he does it. I might give some description of the host and which processes are running. I also list which limitations or which risks the attacker uses. In section \ref{sec:mittigations} I explain how those attacks can be avoided or detected and what is needed for the detection. Finally, in the discussion, I give a summary of how my system stands against other systems like \gls{aide}. 
 
 \subsubsection{Classic Intrusion with persistance}
 \label{sec:attack:classic}
@@ -132,7 +139,7 @@ In this scenario, the attacker can somehow exploit the \gls{fids} to gain admini
 
 Risks and limitations:
 \begin{itemize}
-	\item \nameref{sec:limitation:nonFileBased}
+	\item \nameref{sec:risk:exploiting}
 	\item \nameref{sec:risk:root}
 	\item \nameref{sec:risk:unknowncode}
 \end{itemize}
@@ -157,7 +164,7 @@ To detect the attacks described in \nameref{sec:attack_scenarios}, there are mul
 \subsubsection{Classic Intrusion with persistance}
 \label{sec:defense:classic}
 
-This attack scenario is the easiest. The \gls{fids} detects this kind of \gls{intrusion} if the configuration is correct. Compared to other \gls{hids}, this kind of attack is found faster, because the system can executes faster. 
+This attack scenario is the easiest. The \gls{fids} detects this kind of \gls{intrusion} if the configuration is correct. Compared to other \gls{hids}, this kind of attack is found faster, because the system executes faster by not calculating \glspl{hash}. 
 
 \subsubsection{Intrusion with persistance, attacker changes all metadata}
 \label{sec:defense:changeattr}

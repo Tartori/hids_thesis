@@ -1,9 +1,9 @@
 
 \chapter{Conclusion}
 \label{sec:Conclusion}
-In this thesis, the goal was to create a \gls{hids} which finds \glspl{intrusion} in big \gls{fs} fast and helps with forensic investigation. I created the \gls{fids} which uses \gls{tsk} to check \gls{fs} \gls{metadata} for \gls{fim}. This way, it has low execution times compared to systems that use \glspl{hash}. By taking the risk-based approach of not having the reliance from hashing, I gained much speed. This speed can be used to find \glspl{intrusion} faster and decrease the reaction time. 
+In this thesis, the goal was to create a \gls{hids} which finds \glspl{intrusion} in big \gls{fs} fast and helps with forensic investigation. I created the \gls{fids} which uses \gls{tsk} to check \gls{fs} \gls{metadata} for \gls{fim}. This way, it has low execution times compared to systems that use \glspl{hash}. By taking the risk-based approach of not having the reliance from hashing, I gained speed. This speed can be used to find \glspl{intrusion} faster and decrease the reaction time. 
 
-To help with investigations, the \gls{fids} contains a component which produces the output needed for timeline creation. Timelines are an essential tool in forensics to find out what happened at what times. Especially, with the timeline output from the \gls{fids}, investigators can validate which files changed at what times more accurately than if they only have the output of the current state on the \gls{fs}. 
+To help with investigations, the \gls{fids} contains a component which converts the database into the time machine format which is used for timeline creation. Timelines are an essential tool in forensics to find out what happened at what times. Especially, with the timeline output from the \gls{fids}, investigators can validate which files changed at what times more accurately and further back in time than if they only have the output of the current state on the \gls{fs}. 
 
 \section{Future Work}
 \label{sec:future:work}
@@ -16,3 +16,5 @@ The system should also be extensively tested. For this, it needs to run for a pr
 As already implied, it would be helpful for the system to integrate with other \gls{dbms}. This way it could cover more use cases easier. 
 
 One other path that could be improved on would be the investigator. Currently, it operates only on a configuration which someone must write. It would be great to analyze the scanner output and find anomalies on them autonomously. This could be done if many data has already been collected on many different types of hosts. The types could then be grouped, and an algorithm could detect similar patterns to find similar \glspl{intrusion}. 
+
+One final change is the hardening of the software. Currently the \gls{fids} does not protect itself from changes on itself. This could be improved heavily in many ways. 

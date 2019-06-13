@@ -31,7 +31,7 @@ A \gls{hids} works by detecting changes on the local host. It does that by looki
 
 In a \gls{hids} that uses \gls{fim}, all the relevant information comes from unexpected changes to the \gls{fs}. Many hosts do not have any changes on the \gls{fs} except for software updates. Additionally, the \gls{fs} usually contains too much information to cover in a handwritten configuration. Thus, the easiest approach is to compare the current state of the \gls{fs} to a previous one. If it has changed significantly or in an unexpected way, something foul might have happened or might still be happening. The negative side effect of this approach is the false positives that come from legitimately changing the host. Those legitimate changes could be new versions of the webpage that is running, newly updated configuration or updated ssh keypairs. However, those changes are scheduled, and the alerts can then be quickly checked and acknowledged.
 
-A good \gls{hids} should be able to handle such valid changes without change on the configuration or other changes on the system. Additionally, it should be able to find intrusions reliably and in a timely fashion. Maybe, it is too late if the \gls{hids} finds an intrusion a week after the infection. To detect changes on the \gls{fs} reliably prominent \gls{hids} calculate a hash for each file and compares that hash to previous runs. If a \gls{hash} is used, each file always generates a unique hash which can not be forged. The main drawback of using \glspl{hash} is that they take a long time to compute for significant amounts of data. Some implementations thus offer to use \glspl{nonhash}. The obvious drawback of this approach is that a \gls{collision} can be generated and such a file can be altered or replaced without the \gls{hids} noticing.
+A good \gls{hids} should be able to handle such valid changes without change on the configuration or other changes on the system. Additionally, it should be able to find intrusions reliably and in a timely fashion. Maybe, it is too late if the \gls{hids} finds an intrusion a week after the infection. To detect changes on the \gls{fs} reliably, prominent \gls{hids} focus mainly on calculateing a hash for each file and compareing that hash to previous runs. If a \gls{hash} is used, each file always generates a unique hash which can not be forged. The main drawback of using \glspl{hash} is that they take a long time to compute for significant amounts of data. Some implementations thus offer to use \glspl{nonhash}. The obvious drawback of this approach is that a \gls{collision} can be generated and such a file can be altered or replaced without the \gls{hids} noticing.
 
 In the following sections, I present three of the most used \gls{hids}, \nameref{sec:tripwire}, \nameref{sec:aide}, and \nameref{sec:samhain}. They built the main competition of the integration developed in this thesis.
 
@@ -97,7 +97,7 @@ This tool also can be accessed via the \gls{api} and is used in the \gls{hids} i
 \subsubsection{mactime}
 \label{sec:mactime}
 
-Mactime is a utility for timeline creation. It takes data in a format they call body file and convert it to a ascii timeline. \cite{tsk:mactime, tsk:bodyfile}
+Mactime is a utility for timeline creation. It takes data in a format called time machine format and convert it to a ascii timeline. \cite{tsk:mactime, tsk:bodyfile}
 
 \subsection{Python}
 \label{sec:python}
@@ -115,7 +115,7 @@ Python was the programming language of choice for this product. Python offers ma
 
 This decision was not made very lightly. Other programming languages were considered. For more information on those refer to appendix section \ref{sec:decisions:language}.
 
-\subsection{pytsk3}
+\subsection{pytsk}
 \label{sec:pytsk3}
 
-Pytsk3 is the library mentioned above that creates bindings for python to the \gls{api} of \gls{tsk}. As \gls{tsk}, this library is \gls{opensource} and is still active. It is hosted on \gls{github} and offers most of the functionality of the \gls{tsk} \gls{api}. Pytsk3 is used extensively in the scanner part of the implementation. For further information refer to section \ref{sec:Scanner}.
+\Gls{pytsk} is the library mentioned above that creates bindings for python to the \gls{api} of \gls{tsk}. As \gls{tsk}, this library is \gls{opensource} and is still active. It is hosted on \gls{github} and offers most of the functionality of the \gls{tsk} \gls{api}. \Gls{pytsk} is used extensively in the scanner part of the implementation. For further information refer to section \ref{sec:Scanner}.
